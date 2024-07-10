@@ -21,6 +21,8 @@ const config = {
 
 		alias: {
 			'@/*': './path/to/lib/*',
+			'$stores/*': 'src/stores/*',
+			'$utils/*': 'src/utils/*',
 		}
 	},
 };

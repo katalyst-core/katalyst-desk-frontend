@@ -1,0 +1,94 @@
+<script>
+  import { defaults, setError, superForm } from 'sveltekit-superforms';
+	import { zod, zodClient } from 'sveltekit-superforms/adapters';
+	import toast from 'svelte-french-toast';
+	import { goto } from '$app/navigation';
+
+	import { signInSchema } from '$lib/schema';
+  import { Button } from '$lib/components/ui/button';
+  import { Input } from '$lib/components/ui/input';
+  import { Label } from '$lib/components/ui/label';
+  import { fetchApi } from '$lib/custom-fetch';
+	import { onMount } from 'svelte';
+	import LoadingPage from '$lib/components/module/page/LoadingPage.svelte';
+	import PasswordInput from '$lib/components/module/ui/PasswordInput.svelte';
+
+  let isRequestLoading = false;
+  let isFormLoading = true;
+
+  const { form, errors, enhance } = superForm(defaults(zod(signInSchema)), {
+    SPA: true,
+    validators: zodClient(signInSchema),
+    async onUpdate({ form }) {
+      if (!form.valid) {
+        return;
+      }
+
+      isRequestLoading = true;
+
+      const response = await fetchApi('/auth/login', {
+        method: 'POST',
+        noRefresh: true,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: form.data.username,
+          password: form.data.password
+        })
+      });
+
+      const result = await response.json();
+
+      isRequestLoading = false;
+
+      if (!response.ok) {
+        let message = result.message;
+
+        const code = result.error.code;
+        if (code === 'UNABLE_TO_FIND_ACCOUNT') {
+          message = 'Invalid username or password';
+        }
+
+        toast.error(message);
+        setError(form, message);
+
+        return;
+      }
+
+      const newUrl = '/app/dashboard';
+      window.location.href = newUrl;
+    }
+  });
+
+  onMount(() => {
+    if (form) {
+      isFormLoading = false;
+    }
+  });
+</script>
+
+<LoadingPage bind:loading={isFormLoading}>
+  <div class="flex justify-center items-center w-screen h-screen">
+    <div class="flex flex-col items-center gap-5">
+      <div class="text-center">
+        <h1 class="font-bold">Welcome</h1>
+        <p class="text-gray-500">Please sign-in to continue</p>
+      </div>
+      <form method="POST" use:enhance class="flex flex-col w-96 gap-3">
+        <div>
+          <Label for="username">Username / Email</Label>
+          <Input id="username" bind:value={$form.username} placeholder="Username / Email" class={ $errors.username ? 'error' : '' } />
+          {#if $errors.username}<p class="text-red-600 ml-[2px]">{ $errors.username }</p>{/if}
+        </div>
+        <div>
+          <Label for="password">Password</Label>
+          <PasswordInput id="password" bind:value={$form.password} placeholder="Password" class={ $errors.password ? 'error' : '' } />
+          {#if $errors.password}<p class="text-red-600 ml-[2px]">{ $errors.password }</p>{/if}
+        </div>
+        <Button type="submit" bind:loading={isRequestLoading} class="w-full">Sign In</Button>
+      </form>
+      <p>Don't have an account? <a href="/auth/sign-up" class="text-gray-600">Sign Up</a></p>
+    </div>
+  </div>
+</LoadingPage>
