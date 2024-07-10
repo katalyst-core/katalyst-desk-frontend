@@ -22,6 +22,31 @@
   }
 }
 
+@layer components {
+  .sidebar-item {
+    @apply flex;
+    @apply h-11;
+    @apply opacity-65;
+    @apply select-none;
+  }
+
+  .sidebar-item > a {
+    @apply flex;
+    @apply items-center;
+    @apply w-full;
+    @apply h-full;
+    @apply px-3;
+    @apply cursor-pointer;
+    @apply rounded-xl;
+    @apply transition-all;
+    @apply hover:sidebar-item-selected;
+  }
+
+  .sidebar-item-selected {
+    @apply opacity-100;
+    @apply bg-gray-200;
+  }
+}
  
 @layer base {
   :root {

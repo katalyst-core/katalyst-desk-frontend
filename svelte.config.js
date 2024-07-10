@@ -16,7 +16,7 @@ const config = {
 			assets: 'build',
 			trailingSlash: 'always',
 			precompress: false,
-			fallback: '404.html'
+			fallback: '/'
 		}),
 
 		alias: {

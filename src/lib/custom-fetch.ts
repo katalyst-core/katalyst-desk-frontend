@@ -18,7 +18,7 @@ export async function fetchApi(input: RequestInfo | URL, init?: RequestConfig): 
       const refreshPath = `${PUBLIC_BASE_API}/auth/refresh`;
       const refresh = await fetch(refreshPath, { method: 'POST' });
 
-      if (refresh.ok) {
+      if (!refresh.ok) {
         const logoutPath = `${PUBLIC_BASE_API}/auth/logout`;
         await fetch(logoutPath, { method: 'POST' });
 
@@ -26,7 +26,7 @@ export async function fetchApi(input: RequestInfo | URL, init?: RequestConfig): 
       }
 
       // Retry request
-      response = await fetch(input, init);
+      response = await fetch(originalPath, init);
     }
   }
 
