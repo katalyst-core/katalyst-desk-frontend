@@ -3,7 +3,7 @@
   import { ChevronUp } from 'lucide-svelte';
 
   import * as Avatar from '$lib/components/ui/avatar';
-	import { getTextInitials } from '$lib/utils';
+	import { getTextInitials } from '$utils/index';
   import { user } from '$stores/user';
 	import UserMenu from './UserMenu.svelte';
 	import type { User } from './types';

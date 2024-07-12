@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 
   import * as Avatar from '$lib/components/ui/avatar';
-	import { getTextInitials, textToColor } from '$lib/utils';
+	import { getTextInitials, textToColor } from '$utils/index';
 	import { Check, Plus } from 'lucide-svelte';
 
   export let name: string | null;

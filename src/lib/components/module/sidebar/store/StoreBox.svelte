@@ -7,7 +7,7 @@
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import type { StoreObject } from '$types/store';
 	import StoreMenu from './StoreMenu.svelte';
-	import { getTextInitials, textToColor } from '$lib/utils';
+	import { getTextInitials, textToColor } from '$utils/index';
 
   let storeList: StoreObject[] | null = null;
   let activeStoreData: StoreObject | null = null;
