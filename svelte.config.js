@@ -16,13 +16,14 @@ const config = {
 			assets: 'build',
 			trailingSlash: 'always',
 			precompress: false,
-			fallback: '/'
+			fallback: '404.html'
 		}),
 
 		alias: {
 			'@/*': './path/to/lib/*',
 			'$stores/*': 'src/stores/*',
 			'$utils/*': 'src/utils/*',
+			'$types/*': 'src/types/*',
 		}
 	},
 };

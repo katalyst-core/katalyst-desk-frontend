@@ -1,6 +1,7 @@
 <script lang="ts">
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import type { StoreObject } from '$lib/types';
+  import CreateStoreDialog from '$lib/components/module/modal/CreateStoreDialog.svelte';
+	import type { StoreObject } from '$types/store';
 	import { activeStore } from '$stores/store';
 	import StoreItem from './StoreItem.svelte';
 
@@ -8,6 +9,10 @@
   export let disabled = false;
   export let storeList: StoreObject[] | null = null;
   export let activeStoreData: StoreObject | null;
+
+  let openCreateStoreDialog: boolean = false;
+
+  const toggleCreateStoreDialog = () => openCreateStoreDialog = !openCreateStoreDialog;
 
   const setActiveStore = (storeId: string) => {
     if (activeStoreData && activeStoreData.id === storeId) {
@@ -34,8 +39,10 @@
         </DropdownMenu.Item>
       {/each}
     {/if}
-    <DropdownMenu.Item>
+    <DropdownMenu.Item on:click={toggleCreateStoreDialog}>
       <StoreItem name={null} />
     </DropdownMenu.Item>
   </DropdownMenu.Content>
 </DropdownMenu.Root>
+
+<CreateStoreDialog bind:open={openCreateStoreDialog} />

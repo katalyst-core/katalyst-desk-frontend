@@ -5,7 +5,7 @@
 	import { stores, activeStore } from '$stores/store';
   import * as Avatar from '$lib/components/ui/avatar';
 	import { Skeleton } from '$lib/components/ui/skeleton';
-	import type { StoreObject } from '$lib/types';
+	import type { StoreObject } from '$types/store';
 	import StoreMenu from './StoreMenu.svelte';
 	import { getTextInitials, textToColor } from '$lib/utils';
 

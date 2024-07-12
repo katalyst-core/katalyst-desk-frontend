@@ -18,7 +18,7 @@
   });
 </script>
 
-<div class="flex bg-gray-100">
+<div class="flex w-full h-full bg-gray-100">
   <div class="flex flex-col justify-between w-72 h-screen px-2 py-4 bg-gray-50 border-r-2 border-gray-200">
 
     <!-- Top -->

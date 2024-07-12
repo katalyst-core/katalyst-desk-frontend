@@ -1,13 +1,14 @@
 <script lang="ts">
 	import { House, Library, Clock } from "lucide-svelte";
 
+	import { onMount } from "svelte";
+
 	import Sidebar from "$lib/components/module/sidebar/Sidebar.svelte";
 	import type { SItems } from "$lib/components/module/sidebar/navigation/types";
-	import { onMount } from "svelte";
-	import { fetchApi } from "$lib/custom-fetch";
-	import toast from "svelte-french-toast";
-	import { activeStore, stores } from "$stores/store";
-	import type { StoreObject } from "$lib/types";
+	import { stores } from "$stores/store";
+	import { fetchStores } from "$lib/services/store";
+	import LoadingPage from "$lib/components/module/page/LoadingPage.svelte";
+	import CreateStoreDialog from "$lib/components/module/modal/CreateStoreDialog.svelte";
 
   const sidebarItems = [
     {
@@ -37,41 +38,35 @@
     }
   ] satisfies SItems;
 
-  const getStores = async () => {
-    const response = await fetchApi('/store/list');
-
-    if (!response.ok) {
-      toast.error('Unable to retrieve stores');
-      return;
-    }
-
-    const result = await response.json();
-    const data = result.data as StoreObject[];
-
-    stores.set(data);
-
-    activeStore.update((store) => {
-      if (data.length === 0) {
-        return null;
-      }
-
-      if (store == null) {
-        return data[0].id;
-      }
-
-      if (!data.find((d: StoreObject) => d.id == store)) {
-        return data[0].id;
-      }
-
-      return store;
-    })
-  };
+  let hasStores = true;
+  let openCreateStoreDialog = false;
 
   onMount(async () => {
-    getStores();
+    stores.subscribe((stores) => {
+      if (!stores) {
+        hasStores = false;
+        return;
+      }
+
+      if (stores.length === 0) {
+        hasStores = false;
+        openCreateStoreDialog = true;
+        return;
+      }
+
+      hasStores = true;
+    });
+
+    fetchStores();
   });
 </script>
 
 <Sidebar items={sidebarItems}>
-  <slot />
+  <div class="w-full h-full">
+    <LoadingPage loading={!hasStores}>
+      <slot />
+    </LoadingPage>
+  </div>
 </Sidebar>
+
+<CreateStoreDialog bind:open={openCreateStoreDialog} closeable={false} />

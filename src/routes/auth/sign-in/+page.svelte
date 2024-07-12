@@ -2,7 +2,6 @@
   import { defaults, setError, superForm } from 'sveltekit-superforms';
 	import { zod, zodClient } from 'sveltekit-superforms/adapters';
 	import toast from 'svelte-french-toast';
-	import { goto } from '$app/navigation';
 
 	import { signInSchema } from '$lib/schema';
   import { Button } from '$lib/components/ui/button';
@@ -41,9 +40,9 @@
 
         const result = await response.json();
 
-        isRequestLoading = false;
-
         if (!response.ok) {
+          isRequestLoading = false;
+
           let message = result.message;
 
           const code = result.error.code;
@@ -83,12 +82,12 @@
       <form method="POST" use:enhance class="flex flex-col w-96 gap-3">
         <div>
           <Label for="username">Username / Email</Label>
-          <Input id="username" bind:value={$form.username} placeholder="Username / Email" class={ $errors.username ? 'error' : '' } />
+          <Input id="username" bind:value={$form.username} placeholder="Username / Email" disabled={isRequestLoading} class={ $errors.username ? 'error' : '' } />
           {#if $errors.username}<p class="text-red-600 ml-[2px]">{ $errors.username }</p>{/if}
         </div>
         <div>
           <Label for="password">Password</Label>
-          <PasswordInput id="password" bind:value={$form.password} placeholder="Password" class={ $errors.password ? 'error' : '' } />
+          <PasswordInput id="password" bind:value={$form.password} placeholder="Password" disabled={isRequestLoading} class={ $errors.password ? 'error' : '' } />
           {#if $errors.password}<p class="text-red-600 ml-[2px]">{ $errors.password }</p>{/if}
         </div>
         <Button type="submit" bind:loading={isRequestLoading} class="w-full">Sign In</Button>
