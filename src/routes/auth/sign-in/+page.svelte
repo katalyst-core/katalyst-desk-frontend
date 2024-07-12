@@ -26,38 +26,43 @@
 
       isRequestLoading = true;
 
-      const response = await fetchApi('/auth/login', {
-        method: 'POST',
-        noRefresh: true,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: form.data.username,
-          password: form.data.password
-        })
-      });
+      try {
+        const response = await fetchApi('/auth/login', {
+          method: 'POST',
+          noRefresh: true,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            username: form.data.username,
+            password: form.data.password
+          })
+        });
 
-      const result = await response.json();
+        const result = await response.json();
 
-      isRequestLoading = false;
+        isRequestLoading = false;
 
-      if (!response.ok) {
-        let message = result.message;
+        if (!response.ok) {
+          let message = result.message;
 
-        const code = result.error.code;
-        if (code === 'UNABLE_TO_FIND_ACCOUNT') {
-          message = 'Invalid username or password';
+          const code = result.error.code;
+          if (code === 'UNABLE_TO_FIND_ACCOUNT') {
+            message = 'Invalid username or password';
+          }
+
+          toast.error(message);
+          setError(form, message);
+
+          return;
         }
 
-        toast.error(message);
-        setError(form, message);
-
-        return;
+        const newUrl = '/app/dashboard';
+        window.location.href = newUrl;
+      } catch (_) {
+        isRequestLoading = false;
+        toast.error('An error occurred');
       }
-
-      const newUrl = '/app/dashboard';
-      window.location.href = newUrl;
     }
   });
 

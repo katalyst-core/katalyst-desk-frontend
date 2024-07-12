@@ -2,21 +2,17 @@
 	import { onMount } from 'svelte';
   import { ChevronUp } from 'lucide-svelte';
 
-  import { user } from '$stores/user';
   import * as Avatar from '$lib/components/ui/avatar';
+	import { getTextInitials } from '$lib/utils';
+  import { user } from '$stores/user';
 	import UserMenu from './UserMenu.svelte';
 	import type { User } from './types';
-	import Button from '$lib/components/ui/button/button.svelte';
 
   let userData: User | null = null;
   let name = '';
   let username = '';
   let initials = '';
   let buttonWidth: number;
-
-  const getInitials = (name: string) => {
-    return name.split(' ').slice(0, 2).map((name) => name[0].toUpperCase()).join('');
-  };
 
   onMount(() => {
     user.subscribe((user) => userData = user);
@@ -25,7 +21,7 @@
 
     name = userData.name;
     username = userData.username;
-    initials = getInitials(userData?.name);
+    initials = getTextInitials(userData?.name);
   });
 </script>
 
