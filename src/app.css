@@ -26,7 +26,6 @@
   .sidebar-item {
     @apply flex;
     @apply h-11;
-    @apply opacity-65;
     @apply select-none;
   }
 

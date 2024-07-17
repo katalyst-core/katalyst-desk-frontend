@@ -8,13 +8,15 @@
   import { fetchApi } from '$lib/custom-fetch';
 	import { SortHeader, TableSortHeader } from '$lib/components/module/table';
 	import { currentStore } from '$stores/store';
-	import { getTableOptions, initTableData, subscribePlugins, type TableData } from '$utils/table';
+	import { getTableOptions, getItemsSelected, initTableData, subscribePlugins, type TableData, subscribeItemsSelected } from '$utils/table';
 	import { CheckboxCell, CheckboxHeader, Table as Table } from '$lib/components/module/table';
+	import { Button } from '$lib/components/ui/button';
 
   let data: TableData = initTableData();
   let tableStates: PluginStates<AnyPlugins> | null;
   let currentStoreId: string;
   let isRequestLoading = true;
+  let selectedItems: unknown[] = [];
 
   const columnBuilder = (table: TableType<never, any>) => table.createColumns([
     table.column({
@@ -74,23 +76,18 @@
     });
 
     subscribePlugins(tableStates, () => fetchProducts());
+    subscribeItemsSelected(tableStates, data, (selected) => selectedItems = selected);
   });
-
-  const selectedItems = () => {
-    if (!tableStates) {
-      return;
-    }
-
-    console.log(tableStates);
-
-    const { allRowsSelected } = tableStates.select;
-
-    allRowsSelected.subscribe((test) => console.log(test));
-  }
 </script>
 
-<div class="rounded-md bg-gray-50 p-3">
-  <button on:click={selectedItems}>Check</button>
+<div class="flex flex-col w-full h-full gap-2">
+  <div class="flex w-full justify-end gap-2">
+    {#if selectedItems.length > 0}
+      <Button class="bg-red-700">Delete Product</Button>
+    {/if}
+    <Button>Add Product</Button>
+  </div>
+
   <Table
     bind:tableStates
     {columnBuilder}

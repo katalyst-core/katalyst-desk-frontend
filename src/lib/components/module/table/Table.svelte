@@ -42,65 +42,67 @@
   });
 </script>
 
-<div class="flex flex-col gap-1">
-  <Table.Root {...$tableAttrs} class="border rounded-md">
-    <Table.Header>
-      {#each $headerRows as headerRow}
-        <Subscribe rowAttrs={headerRow.attrs()}>
-          <Table.Row>
-            {#each headerRow.cells as cell (cell.id)}
-              <Subscribe
-                attrs={cell.attrs()}
-                let:attrs
-              >
-                <Table.Head {...attrs}>
-                  <Render of={cell.render()} />
-                </Table.Head>
+<div class="space-y-2">
+  <div class="border rounded-md">
+    <Table.Root {...$tableAttrs}>
+      <Table.Header>
+        {#each $headerRows as headerRow}
+          <Subscribe rowAttrs={headerRow.attrs()}>
+            <Table.Row>
+              {#each headerRow.cells as cell (cell.id)}
+                <Subscribe
+                  attrs={cell.attrs()}
+                  let:attrs
+                >
+                  <Table.Head {...attrs}>
+                    <Render of={cell.render()} />
+                  </Table.Head>
+                </Subscribe>
+              {/each}
+            </Table.Row>
+          </Subscribe>
+        {/each}
+      </Table.Header>
+
+      <Table.Body {...$tableBodyAttrs}>
+        {#if !loading}
+          {#if $pageRows.length}
+            {#each $pageRows as row (row.id)}
+              <Subscribe rowAttrs={row.attrs()} let:rowAttrs>
+                <Table.Row {...rowAttrs}>
+                  {#each row.cells as cell (cell.id)}
+                    <Subscribe attrs={cell.attrs()} let:attrs>
+                      <Table.Cell {...attrs}>
+                        <Render of={cell.render()} />
+                      </Table.Cell>
+                    </Subscribe>
+                  {/each}
+                </Table.Row>
               </Subscribe>
             {/each}
-          </Table.Row>
-        </Subscribe>
-      {/each}
-    </Table.Header>
-
-    <Table.Body {...$tableBodyAttrs}>
-      {#if !loading}
-        {#if $pageRows.length}
-          {#each $pageRows as row (row.id)}
-            <Subscribe rowAttrs={row.attrs()} let:rowAttrs>
-              <Table.Row {...rowAttrs}>
-                {#each row.cells as cell (cell.id)}
-                  <Subscribe attrs={cell.attrs()} let:attrs>
-                    <Table.Cell {...attrs}>
-                      <Render of={cell.render()} />
-                    </Table.Cell>
-                  </Subscribe>
-                {/each}
-              </Table.Row>
-            </Subscribe>
-          {/each}
+          {:else}
+            <Table.Row>
+              <Table.Cell
+                colspan={columns.length}
+                class="text-center"
+              >
+                No results
+              </Table.Cell>
+            </Table.Row>
+          {/if}
         {:else}
           <Table.Row>
             <Table.Cell
               colspan={columns.length}
               class="text-center"
             >
-              No results
+              Loading...
             </Table.Cell>
           </Table.Row>
         {/if}
-      {:else}
-        <Table.Row>
-          <Table.Cell
-            colspan={columns.length}
-            class="text-center"
-          >
-            Loading...
-          </Table.Cell>
-        </Table.Row>
-      {/if}
-    </Table.Body>
-  </Table.Root>
+      </Table.Body>
+    </Table.Root>
+  </div>
 
   <Pagination.Root count={$totalItem} perPage={$pageSize} page={$pageIndex} onPageChange={(page) => $pageIndex = page} let:pages let:currentPage class="items-end">
     <Pagination.Content>

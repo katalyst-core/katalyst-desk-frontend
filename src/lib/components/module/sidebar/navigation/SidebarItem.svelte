@@ -17,7 +17,7 @@
 <li class="sidebar-item">
   <a href={!hasChildren ? path : null} on:click={() => open = !open} class="justify-between {browserPath == path ? 'sidebar-item-selected' : ''}">
     <div class="flex gap-4">
-      <svelte:component this={icon} class="w-6 h-6 text-gray-700" />
+      <svelte:component this={icon} class="w-6 h-6" />
       <span>{label}</span>
     </div>
     {#if hasChildren}

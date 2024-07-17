@@ -1,5 +1,29 @@
-import type { AnyPlugins, PaginationState, PluginStates, SortByState } from "svelte-headless-table/plugins";
+import type { AnyPlugins, PaginationState, PluginStates, SortByState, SelectedRowsState } from "svelte-headless-table/plugins";
 import { get, writable, type Writable } from "svelte/store";
+
+export type TableData = {
+  table: Writable<never[]>;
+  pagination: Writable<PaginationData>;
+}
+
+export type PaginationData = {
+  current_page: number;
+  per_page: number;
+  total_item: number;
+  total_page: number;
+};
+
+export const initTableData = () => ({
+  table: writable([]),
+  pagination: writable(
+    {
+      current_page: 1,
+      per_page: 10,
+      total_item: 0,
+      total_page: 1
+    }
+  )
+});
 
 export const subscribePlugins = (pluginStates: PluginStates<AnyPlugins> | null, run: () => void | Promise<void>) => {
   if (!pluginStates) {
@@ -57,26 +81,39 @@ export const getTableOptions = (pluginStates: PluginStates<AnyPlugins> | null): 
   return query;
 };
 
-export type TableData = {
-  table: Writable<never[]>;
-  pagination: Writable<PaginationData>;
+export const getItemsSelected = (pluginStates: PluginStates<AnyPlugins> | null, data: TableData) => {
+  if (!pluginStates) {
+    return [];
+  }
+
+  const select: SelectedRowsState<unknown> | null = pluginStates.select;
+
+  if (!select) {
+    return [];
+  }
+
+  const selectedRows = get(select.selectedDataIds);
+  const tableData = get(data.table);
+
+  return tableData.filter((_, idx) => selectedRows[idx]);
 }
 
-export type PaginationData = {
-  current_page: number;
-  per_page: number;
-  total_item: number;
-  total_page: number;
-};
+export const subscribeItemsSelected = (pluginStates: PluginStates<AnyPlugins> | null, data: TableData, run: (selected: unknown[]) => void) => {
+  if (!pluginStates) {
+    return;
+  }
 
-export const initTableData = () => ({
-  table: writable([]),
-  pagination: writable(
-    {
-      current_page: 1,
-      per_page: 10,
-      total_item: 0,
-      total_page: 1
-    }
-  )
-});
+  const select: SelectedRowsState<unknown> | null = pluginStates.select;
+
+  if (!select) {
+    return;
+  }
+
+  select.selectedDataIds.subscribe((selectedRows) => {
+    const tableData = get(data.table);
+
+    const selected = tableData.filter((_, idx) => selectedRows[idx]);
+
+    run(selected);
+  });
+}

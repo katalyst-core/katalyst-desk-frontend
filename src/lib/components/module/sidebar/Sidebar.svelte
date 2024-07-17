@@ -46,7 +46,7 @@
   });
 </script>
 
-<div class="flex w-full h-full bg-gray-100">
+<div class="flex w-full h-full bg-gray-50">
   <div class="flex flex-col justify-between w-72 h-screen px-2 py-4 bg-gray-50 border-r-2 border-gray-200">
 
     <!-- Top -->
@@ -55,7 +55,7 @@
 
       <Separator />
 
-      <ul class="flex flex-col w-full gap-1 font-medium">
+      <ul class="flex flex-col w-full gap-1 font-medium text-gray-900">
         {#each items as item}
           <SidebarItem label={item.label} icon={item.icon} path={item.path} hasChildren={!!item.children} bind:open={item.open} />
           {#if !!item.children}

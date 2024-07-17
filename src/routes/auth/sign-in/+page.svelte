@@ -90,7 +90,7 @@
           <PasswordInput id="password" bind:value={$form.password} placeholder="Password" disabled={isRequestLoading} class={ $errors.password ? 'error' : '' } />
           {#if $errors.password}<p class="text-red-600 ml-[2px]">{ $errors.password }</p>{/if}
         </div>
-        <Button type="submit" bind:loading={isRequestLoading} class="w-full">Sign In</Button>
+        <Button type="submit" size="lg" bind:loading={isRequestLoading} class="w-full">Sign In</Button>
       </form>
       <p>Don't have an account? <a href="/auth/sign-up" class="text-gray-600">Sign Up</a></p>
     </div>
