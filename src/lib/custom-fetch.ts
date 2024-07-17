@@ -5,9 +5,18 @@ interface RequestConfig extends RequestInit {
   noRefresh?: boolean;
 }
 
+let controller: AbortController | null = null;
+
 export async function fetchApi(input: RequestInfo | URL, init?: RequestConfig): Promise<Response> {
+  if (controller) {
+    controller.abort();
+  }
+
+  controller = new AbortController();
+  const { signal } = controller;
+
   const originalPath = `${PUBLIC_BASE_API}${input}`;
-  let response = await fetch(originalPath, init);
+  let response = await fetch(originalPath, { ...init, signal });
 
   // Request fails
   if (response.status === 401 && !init?.noRefresh) {
@@ -26,7 +35,7 @@ export async function fetchApi(input: RequestInfo | URL, init?: RequestConfig): 
       }
 
       // Retry request
-      response = await fetch(originalPath, init);
+      response = await fetch(originalPath, { ...init, signal });
     }
   }
 

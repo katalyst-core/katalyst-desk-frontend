@@ -1,10 +1,10 @@
 import type { StoreObject } from "$types/store";
 
 import { fetchApi } from "$lib/custom-fetch";
-import { activeStore, stores } from "$stores/store";
+import { currentStore, stores } from "$stores/store";
 import toast from "svelte-french-toast";
 
-export const fetchStores = async (activeStoreId?: string) => {
+export const fetchStores = async (currentStoreId?: string) => {
   stores.set(null);
 
   const response = await fetchApi('/store/list');
@@ -19,7 +19,7 @@ export const fetchStores = async (activeStoreId?: string) => {
 
   stores.set(data);
 
-  activeStore.update((store) => {
+  currentStore.update((store) => {
     if (data.length === 0) {
       return null;
     }
@@ -28,8 +28,8 @@ export const fetchStores = async (activeStoreId?: string) => {
       return data[0].id;
     }
 
-    if (activeStoreId) {
-      store = activeStoreId;
+    if (currentStoreId) {
+      store = currentStoreId;
     }
 
     if (!data.find((d: StoreObject) => d.id == store)) {

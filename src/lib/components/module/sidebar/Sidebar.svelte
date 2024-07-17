@@ -1,15 +1,43 @@
 <script lang="ts">
+	import { Clock, House, Library } from 'lucide-svelte';
+
+  import * as Collapsible from '$lib/components/ui/collapsible';
   import { Separator } from '$lib/components/ui/separator';
+	import type { SidebarObject } from '$types/sidebar';
 	import SidebarItem from './navigation/SidebarItem.svelte';
 	import SidebarSubItem from './navigation/SidebarSubItem.svelte';
 	import UserBox from './user/UserBox.svelte';
 	import StoreBox from './store/StoreBox.svelte';
-  import * as Collapsible from '$lib/components/ui/collapsible';
-	import type { SItem, SItems } from './navigation/types';
 
-  export let items: SItems;
+  const items = [
+    {
+      label: 'Dashboard',
+      icon: House,
+      path: '/app/dashboard'
+    },
+    {
+      label: 'Product',
+      icon: Library,
+      path: '/app/product',
+      children: [
+        {
+          label: 'Manage Product',
+          path: '/app/product/manage'
+        },
+        {
+          label: 'Manage Stock',
+          path: '/app/product/stock'
+        }
+      ]
+    },
+    {
+      label: 'Order',
+      icon: Clock,
+      path: '/app/order',
+    }
+  ] as SidebarObject[];
 
-  items.forEach((item: SItem) => {
+  items.forEach((item: SidebarObject) => {
     if (item.children) {
       item.open = false;
     }

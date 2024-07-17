@@ -6,7 +6,7 @@
 	import { getTextInitials } from '$utils/index';
   import { user } from '$stores/user';
 	import UserMenu from './UserMenu.svelte';
-	import type { User } from './types';
+	import type { User } from '$types/user';
 
   let userData: User | null = null;
   let name = '';
@@ -27,7 +27,7 @@
 
 <UserMenu {buttonWidth}>
   <div bind:clientWidth={buttonWidth} class="flex justify-between items-center w-full h-16 px-2 select-none cursor-pointer text-left rounded-xl bg-gray-200 text-gray-800 hover:bg-gray-300 transition-all">
-    <div class="flex gap-2">
+    <div class="flex items-center gap-2">
       <Avatar.Root>
         <Avatar.Image src="" alt="" />
         <Avatar.Fallback class="font-medium">{initials}</Avatar.Fallback>

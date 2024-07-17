@@ -1,16 +1,14 @@
 import type { Component } from "lucide-svelte";
 
-export type SItems = SItem[];
-
-export type SItem = {
+export type SidebarObject = {
   label: string;
   icon: typeof Component;
   path: string;
   open?: boolean;
-  children?: SChildItem[];
+  children?: SidebarChildObject[];
 }
 
-export type SChildItem = {
+export type SidebarChildObject = {
   label: string;
   path: string;
 }

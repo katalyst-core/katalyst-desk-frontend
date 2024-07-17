@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
   import { ArrowLeftRight } from 'lucide-svelte';
 
-	import { stores, activeStore } from '$stores/store';
+	import { stores, currentStore } from '$stores/store';
   import * as Avatar from '$lib/components/ui/avatar';
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import type { StoreObject } from '$types/store';
@@ -10,7 +10,7 @@
 	import { getTextInitials, textToColor } from '$utils/index';
 
   let storeList: StoreObject[] | null = null;
-  let activeStoreData: StoreObject | null = null;
+  let currentStoreData: StoreObject | null = null;
   let storeName = '';
   let buttonWidth: number;
 
@@ -19,24 +19,24 @@
 
   onMount(() => {
     stores.subscribe((stores) => storeList = stores);
-    activeStore.subscribe((storeId) => {
+    currentStore.subscribe((storeId) => {
       if (storeId === null || storeList === null) {
-        activeStoreData = null;
+        currentStoreData = null;
         return;
       }
 
-      activeStoreData = storeList.find((s) => s.id === storeId) || null;
+      currentStoreData = storeList.find((s) => s.id === storeId) || null;
 
-      if (activeStoreData == null) {
+      if (currentStoreData == null) {
         return;
       }
 
-      storeName = activeStoreData.name;
+      storeName = currentStoreData.name;
     });
   });
 </script>
 
-<StoreMenu {buttonWidth} {storeList} {activeStoreData} disabled={!storeList}>
+<StoreMenu {buttonWidth} {storeList} {currentStoreData} disabled={!storeList}>
   <div bind:clientWidth={buttonWidth} class="flex justify-between items-center w-full h-14 px-2 select-none cursor-pointer text-left rounded-xl bg-transparent text-gray-800 hover:bg-gray-200 transition-all">
     {#if !!storeList}
       <div class="flex gap-2">
