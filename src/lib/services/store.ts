@@ -1,22 +1,25 @@
-import type { StoreObject } from "$types/store";
+import toast from "svelte-french-toast";
 
+import type { StoreObject } from "$types/store";
+import type { ApiResponse } from "$types/api";
 import { fetchApi } from "$lib/custom-fetch";
 import { currentStore, stores } from "$stores/store";
-import toast from "svelte-french-toast";
 
 export const fetchStores = async (currentStoreId?: string) => {
   stores.set(null);
 
-  const response = await fetchApi('/store/list');
+  const response: ApiResponse<StoreObject[]> | null = await fetchApi('/store/list');
+
+  if (!response) {
+    return;
+  }
 
   if (!response.ok) {
     toast.error('Unable to retrieve stores');
     return;
   }
 
-  const result = await response.json();
-  const data = result.data as StoreObject[];
-
+  const data = response.data;
   stores.set(data);
 
   currentStore.update((store) => {

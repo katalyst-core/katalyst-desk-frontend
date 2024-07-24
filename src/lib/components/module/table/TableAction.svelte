@@ -1,0 +1,23 @@
+<script lang="ts">
+	import { Ellipsis } from 'lucide-svelte';
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+
+	import { Button } from '$lib/components/ui/button';
+	import type { ComponentType } from 'svelte';
+
+	export let refresh: () => void;
+	export let content: ComponentType;
+	export let prop: any | null;
+</script>
+
+<DropdownMenu.Root>
+	{#if prop}
+		<DropdownMenu.Trigger asChild let:builder>
+			<Button variant="icon" builders={[builder]} class="w-8 h-8 p-0">
+				<Ellipsis class="w-6 h-6" />
+			</Button>
+		</DropdownMenu.Trigger>
+
+		<svelte:component this={content} {refresh} {prop} />
+	{/if}
+</DropdownMenu.Root>

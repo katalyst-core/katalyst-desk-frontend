@@ -10,6 +10,8 @@
 	import { createStoreSchema } from '$lib/schema';
 	import { fetchApi } from '$lib/custom-fetch';
 	import { fetchStores } from '$lib/services/store';
+	import type { ApiResponse } from '$types/api';
+	import type { StoreObject } from '$types/store';
 
   export let open: boolean = false;
   export let closeable: boolean = true;
@@ -25,7 +27,7 @@
       }
 
       try {
-        const response = await fetchApi('/store/create', {
+        const response: ApiResponse<StoreObject> | null = await fetchApi('/store/create', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -35,14 +37,15 @@
           })
         });
 
-        const result = await response.json();
+        if (!response) {
+          return;
+        }
 
         if (!response.ok) {
           isRequestLoading = false;
 
-          let message = result.message;
-
-          const code = result.error.code;
+          let message = response.message;
+          const code = response.error?.code;
           if (code === 'STORE_NAME_ALREADY_EXIST') {
             message = 'Please choose another store name';
           }
@@ -53,7 +56,7 @@
           return;
         }
 
-        const storeId = result.data.id;
+        const storeId = response.data.id;
         fetchStores(storeId);
 
         toast.success('Created new store');

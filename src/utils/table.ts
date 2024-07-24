@@ -1,17 +1,6 @@
+import type { TableData } from "$types/table";
 import type { AnyPlugins, PaginationState, PluginStates, SortByState, SelectedRowsState } from "svelte-headless-table/plugins";
-import { get, writable, type Writable } from "svelte/store";
-
-export type TableData = {
-  table: Writable<never[]>;
-  pagination: Writable<PaginationData>;
-}
-
-export type PaginationData = {
-  current_page: number;
-  per_page: number;
-  total_item: number;
-  total_page: number;
-};
+import { get, writable } from "svelte/store";
 
 export const initTableData = () => ({
   table: writable([]),
@@ -81,7 +70,7 @@ export const getTableOptions = (pluginStates: PluginStates<AnyPlugins> | null): 
   return query;
 };
 
-export const getItemsSelected = (pluginStates: PluginStates<AnyPlugins> | null, data: TableData) => {
+export const getItemsSelected = (pluginStates: PluginStates<AnyPlugins> | null, data: TableData<unknown>) => {
   if (!pluginStates) {
     return [];
   }
@@ -98,13 +87,12 @@ export const getItemsSelected = (pluginStates: PluginStates<AnyPlugins> | null, 
   return tableData.filter((_, idx) => selectedRows[idx]);
 }
 
-export const subscribeItemsSelected = (pluginStates: PluginStates<AnyPlugins> | null, data: TableData, run: (selected: unknown[]) => void) => {
+export const subscribeItemsSelected = <T>(pluginStates: PluginStates<AnyPlugins> | null, data: TableData<T>, run: (selected: T[]) => void) => {
   if (!pluginStates) {
     return;
   }
 
   const select: SelectedRowsState<unknown> | null = pluginStates.select;
-
   if (!select) {
     return;
   }

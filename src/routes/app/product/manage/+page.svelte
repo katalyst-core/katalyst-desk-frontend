@@ -1,97 +1,151 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-	import { derived, writable } from 'svelte/store';
-  import { createRender, type Table as TableType } from 'svelte-headless-table';
-  import { type AnyPlugins, type PluginStates } from 'svelte-headless-table/plugins';
+	import { onMount } from 'svelte';
+	import { type Table as TableType } from 'svelte-headless-table';
+	import { type AnyPlugins, type PluginStates } from 'svelte-headless-table/plugins';
 	import toast from 'svelte-french-toast';
 
-  import { fetchApi } from '$lib/custom-fetch';
-	import { SortHeader, TableSortHeader } from '$lib/components/module/table';
-	import { currentStore } from '$stores/store';
-	import { getTableOptions, getItemsSelected, initTableData, subscribePlugins, type TableData, subscribeItemsSelected } from '$utils/table';
-	import { CheckboxCell, CheckboxHeader, Table as Table } from '$lib/components/module/table';
+	import { fetchApi } from '$lib/custom-fetch';
+	import { ActionCell, SortHeader } from '$lib/components/module/table';
 	import { Button } from '$lib/components/ui/button';
+	import { CheckboxCell, CheckboxHeader, Table as Table } from '$lib/components/module/table';
+	import { currentStore } from '$stores/store';
+	import type { DeleteProductList, ProductListObject } from '$types/product';
+	import type { TableActionOption, TableData } from '$types/table';
+	import {
+		getTableOptions,
+		initTableData,
+		subscribePlugins,
+		subscribeItemsSelected
+	} from '$utils/table';
+	import type { ApiResponse, ApiTableOptions } from '$types/api';
+	import ProductListDropdown from '$lib/components/module/table/dropdown/ProductListDropdown.svelte';
 
-  let data: TableData = initTableData();
-  let tableStates: PluginStates<AnyPlugins> | null;
-  let currentStoreId: string;
-  let isRequestLoading = true;
-  let selectedItems: unknown[] = [];
+	let data: TableData<ProductListObject> = initTableData();
+	let tableStates: PluginStates<AnyPlugins> | null;
+	let isRequestLoading = true;
+	let selectedItemIds: string[] = [];
 
-  const columnBuilder = (table: TableType<never, any>) => table.createColumns([
-    table.column({
-      accessor: 'product_id',
-      header: CheckboxHeader,
-      cell: CheckboxCell,
-      plugins: {
-        sort: {
-          disable: true,
-        }
-      }
-    }),
-    table.column({
-      accessor: 'name',
-      header: SortHeader('Name')
-    }),
-    table.column({
-      accessor: 'sku',
-      header: SortHeader('SKU')
-    })
-  ]);
+	const actions: TableActionOption<ProductListObject>[] = [
+		{
+			label: 'Delete',
+			action: (prop) => {
+				const id = prop.product_id;
 
-  const fetchProducts = async () => {
-    isRequestLoading = true;
+				deleteProducts([id]);
+			}
+		}
+	];
 
-    if (!currentStoreId) {
-      return;
-    }
+	const colBuilder = (table: TableType<never, any>) => {
+		return table.createColumns([
+			table.display({
+				header: CheckboxHeader,
+				cell: CheckboxCell,
+				plugins: {
+					sort: {
+						disable: true
+					}
+				}
+			}),
+			table.column({
+				accessor: 'name',
+				header: SortHeader('Name')
+			}),
+			table.column({
+				accessor: 'sku',
+				header: SortHeader('SKU')
+			}),
+			table.display({
+				header: () => '',
+				cell: ActionCell(ProductListDropdown, fetchProducts)
+			})
+		]);
+	};
 
-    const tableOptions = getTableOptions(tableStates);
-    const response = await fetchApi(`/product/list/${currentStoreId}?${tableOptions}`);
-    const result = await response.json();
+	const fetchProducts = async () => {
+		isRequestLoading = true;
 
-    if (!response.ok) {
-      const message = result.message;
-      toast.error(message);
+		if (!$currentStore) {
+			return;
+		}
 
-      return;
-    }
+		const tableOptions = getTableOptions(tableStates);
+		const response: ApiResponse<ApiTableOptions<ProductListObject[]>> | null = await fetchApi(
+			`/product/list/${$currentStore}?${tableOptions}`
+		);
 
-    isRequestLoading = false;
+		isRequestLoading = false;
 
-    const { table, pagination } = result.data;
+		if (!response) {
+			return;
+		}
 
-    data.table.set(table)
-    data.pagination.set(pagination);
-  };
+		if (!response.ok) {
+			const message = response.message;
+			toast.error(message);
 
-  onMount(() => {
-    currentStore.subscribe(async (storeId) => {
-      if (!storeId) {
-        return;
-      }
+			return;
+		}
 
-      currentStoreId = storeId;
-      await fetchProducts();
-    });
+		const { table, pagination } = response.data;
 
-    subscribePlugins(tableStates, () => fetchProducts());
-    subscribeItemsSelected(tableStates, data, (selected) => selectedItems = selected);
-  });
+		data.table.set(table);
+		data.pagination.set(pagination);
+	};
+
+	const deleteProducts = async (products: string[]) => {
+		isRequestLoading = true;
+
+		const response: ApiResponse<DeleteProductList> | null = await fetchApi(`/product/delete`, {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				product_id: products
+			})
+		});
+
+		isRequestLoading = false;
+
+		if (!response) {
+			return;
+		}
+
+		if (!response.ok) {
+			const message = response.message;
+			toast.error(message);
+
+			return;
+		}
+
+		const data = response.data;
+		const totalSuccess = data.total_success;
+		toast.success(`Successfully deleted ${totalSuccess} product(s)`);
+
+		fetchProducts();
+	};
+
+	onMount(() => {
+		currentStore.subscribe(async () => await fetchProducts());
+		subscribePlugins(tableStates, () => fetchProducts());
+		subscribeItemsSelected(
+			tableStates,
+			data,
+			(selected) => (selectedItemIds = selected.map((product) => product.product_id))
+		);
+	});
 </script>
 
 <div class="flex flex-col w-full h-full gap-2">
-  <div class="flex w-full justify-end gap-2">
-    {#if selectedItems.length > 0}
-      <Button class="bg-red-700">Delete Product</Button>
-    {/if}
-    <Button>Add Product</Button>
-  </div>
+	<div class="flex w-full justify-end gap-2">
+		{#if selectedItemIds.length > 0}
+			<Button on:click={() => deleteProducts(selectedItemIds)} class="bg-red-700"
+				>Delete Product</Button
+			>
+		{/if}
+		<Button>Add Product</Button>
+	</div>
 
-  <Table
-    bind:tableStates
-    {columnBuilder}
-    {data}
-    loading={isRequestLoading}
-  />
+	<Table bind:tableStates {colBuilder} {data} loading={isRequestLoading} />
 </div>

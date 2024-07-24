@@ -1,48 +1,71 @@
 import { PUBLIC_BASE_API } from '$env/static/public';
+import type { ApiResponse } from '$types/api';
 import { parse } from 'cookie';
 
 interface RequestConfig extends RequestInit {
-  noRefresh?: boolean;
+	noRefresh?: boolean;
 }
 
 let controller: AbortController | null = null;
 
-export async function fetchApi(input: RequestInfo | URL, init?: RequestConfig): Promise<Response> {
-  if (controller) {
-    controller.abort();
-  }
+export async function fetchApi<T>(
+	input: RequestInfo | URL,
+	init?: RequestConfig
+): Promise<ApiResponse<T> | null> {
+	if (controller) {
+		controller.abort();
+	}
 
-  controller = new AbortController();
-  const { signal } = controller;
+	controller = new AbortController();
+	const { signal } = controller;
 
-  const originalPath = `${PUBLIC_BASE_API}${input}`;
-  let response = await fetch(originalPath, { ...init, signal });
+	if (init && init.method && ['POST', 'DELETE'].includes(init.method)) {
+		init = {
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			...init
+		}
+	}
 
-  // Request fails
-  if (response.status === 401 && !init?.noRefresh) {
+	try {
+		const originalPath = `${PUBLIC_BASE_API}${input}`;
+		let response = await fetch(originalPath, { ...init, signal });
 
-    // Refresh user's access token
-    const refreshToken = getCookie('Refresh');
-    if (refreshToken) {
-      const refreshPath = `${PUBLIC_BASE_API}/auth/refresh`;
-      const refresh = await fetch(refreshPath, { method: 'POST' });
+		// Request fails
+		if (response.status === 401 && !init?.noRefresh) {
+			// Refresh user's access token
+			const refreshToken = getCookie('Refresh');
+			if (refreshToken) {
+				const refreshPath = `${PUBLIC_BASE_API}/auth/refresh`;
+				const refresh = await fetch(refreshPath, { method: 'POST' });
 
-      if (!refresh.ok) {
-        const logoutPath = `${PUBLIC_BASE_API}/auth/logout`;
-        await fetch(logoutPath, { method: 'POST' });
+				if (!refresh.ok) {
+					// Refresh token
+					const logoutPath = `${PUBLIC_BASE_API}/auth/logout`;
+					response = await fetch(logoutPath, { method: 'POST' });
+				} else {
+					// Retry request
+					response = await fetch(originalPath, { ...init, signal });
+				}
+			}
+		}
 
-        return refresh;
-      }
+		const { ok } = response;
+		const data = await response.json();
 
-      // Retry request
-      response = await fetch(originalPath, { ...init, signal });
-    }
-  }
+		return {
+			ok,
+			...data
+		};
+	} catch (err) {
+		void err;
+	}
 
-  return response;
+	return null;
 }
 
 const getCookie = (name: string) => {
-  const cookies = parse(document.cookie);
-  return cookies[name];
+	const cookies = parse(document.cookie);
+	return cookies[name];
 };

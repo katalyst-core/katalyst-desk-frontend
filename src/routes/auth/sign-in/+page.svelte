@@ -38,14 +38,15 @@
           })
         });
 
-        const result = await response.json();
+        if (!response) {
+          return;
+        }
 
         if (!response.ok) {
           isRequestLoading = false;
 
-          let message = result.message;
-
-          const code = result.error.code;
+          let message = response.message;
+          const code = response.error?.code;
           if (code === 'UNABLE_TO_FIND_ACCOUNT') {
             message = 'Invalid username or password';
           }
