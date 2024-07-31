@@ -63,7 +63,7 @@
 						<Table.Row>
 							{#each headerRow.cells as cell (cell.id)}
 								<Subscribe attrs={cell.attrs()} let:attrs>
-									<Table.Head {...attrs}>
+									<Table.Head {...attrs} class="{cell.id === 'action' ? 'text-right' : ''} {cell.id === 'select' ? 'w-12' : ''} px-4">
 										<Render of={cell.render()} />
 									</Table.Head>
 								</Subscribe>
@@ -81,7 +81,7 @@
 								<Table.Row {...rowAttrs} class="h-12">
 									{#each row.cells as cell (cell.id)}
 										<Subscribe attrs={cell.attrs()} let:attrs>
-											<Table.Cell {...attrs}>
+											<Table.Cell {...attrs} class="{cell.id === 'action' ? 'text-right' : ''} {cell.id === 'select' ? 'w-12' : ''} px-4">
 												<Render of={cell.render()} />
 											</Table.Cell>
 										</Subscribe>

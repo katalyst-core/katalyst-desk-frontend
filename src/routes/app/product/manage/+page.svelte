@@ -39,6 +39,7 @@
 	const colBuilder = (table: TableType<never, any>) => {
 		return table.createColumns([
 			table.display({
+				id: 'select',
 				header: CheckboxHeader,
 				cell: CheckboxCell,
 				plugins: {
@@ -56,8 +57,9 @@
 				header: SortHeader('SKU')
 			}),
 			table.display({
+				id: 'action',
 				header: () => '',
-				cell: ActionCell(ProductListDropdown, fetchProducts)
+				cell: ActionCell(ProductListDropdown, fetchProducts),
 			})
 		]);
 	};
