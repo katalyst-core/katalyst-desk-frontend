@@ -5,6 +5,7 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 
+	import * as Form from '$ui/form';
 	import { Button } from '$ui/button';
 	import { Input } from '$ui/input';
 	import { Label } from '$ui/label';
@@ -17,7 +18,7 @@
 	let isRequestLoading = false;
 	let isFormLoading = true;
 
-	const { form, errors, enhance } = superForm(defaults(zod(signUpSchema)), {
+	const form = superForm(defaults(zod(signUpSchema)), {
 		SPA: true,
 		validators: zodClient(signUpSchema),
 		async onUpdate({ form }) {
@@ -69,8 +70,10 @@
 		}
 	});
 
+	const { form: formData, errors, enhance } = form;
+
 	onMount(() => {
-		if (form) {
+		if (formData) {
 			isFormLoading = false;
 		}
 	});
@@ -84,54 +87,58 @@
 				<p class="text-gray-500">Create a new account</p>
 			</div>
 			<form method="POST" use:enhance class="flex flex-col w-96 gap-3">
-				<div>
-					<Label for="name">Name</Label>
-					<Input
-						id="name"
-						bind:value={$form.name}
-						placeholder="Name"
-						disabled={isRequestLoading}
-						class={$errors.name ? 'error' : ''}
-					/>
-					{#if $errors.name}<p class="text-red-600 ml-[2px]">{$errors.name}</p>{/if}
-				</div>
-				<div>
-					<Label for="username">Username</Label>
-					<Input
-						id="username"
-						bind:value={$form.username}
-						placeholder="Username"
-						disabled={isRequestLoading}
-						class={$errors.username ? 'error' : ''}
-					/>
-					{#if $errors.username}<p class="text-red-600 ml-[2px]">{$errors.username}</p>{/if}
-				</div>
-				<div>
-					<Label for="email">Email address</Label>
-					<Input
-						id="email"
-						type="email"
-						bind:value={$form.email}
-						placeholder="Email address"
-						disabled={isRequestLoading}
-						class={$errors.email ? 'error' : ''}
-					/>
-					{#if $errors.email}<p class="text-red-600 ml-[2px]">{$errors.email}</p>{/if}
-				</div>
-				<div>
-					<Label for="password">Password</Label>
-					<PasswordInput
-						id="password"
-						bind:value={$form.password}
-						placeholder="Password"
-						disabled={isRequestLoading}
-						class={$errors.password ? 'error' : ''}
-					/>
-					{#if $errors.password}<p class="text-red-600 ml-[2px]">{$errors.password}</p>{/if}
-				</div>
-				<Button type="submit" size="lg" bind:loading={isRequestLoading} class="w-full"
-					>Sign Up</Button
+				<Form.Field {form} name="name">
+					<Form.Control>
+						<Form.Label>Name</Form.Label>
+						<Form.Input
+							bind:value={$formData.name}
+							placeholder="Name"
+							disabled={isRequestLoading}
+						/>
+					</Form.Control>
+					<Form.FieldErrors />
+				</Form.Field>
+				<Form.Field {form} name="username">
+					<Form.Control>
+						<Form.Label>Username</Form.Label>
+						<Form.Input
+							bind:value={$formData.username}
+							placeholder="Username"
+							disabled={isRequestLoading}
+						/>
+					</Form.Control>
+					<Form.FieldErrors />
+				</Form.Field>
+				<Form.Field {form} name="email">
+					<Form.Control>
+						<Form.Label>Email address</Form.Label>
+						<Form.Input
+							type="email"
+							bind:value={$formData.email}
+							placeholder="Email address"
+							disabled={isRequestLoading}
+						/>
+					</Form.Control>
+					<Form.FieldErrors />
+				</Form.Field>
+				<Form.Field {form} name="password">
+					<Form.Control>
+						<Form.Label>Password</Form.Label>
+						<Form.PasswordInput
+							bind:value={$formData.password}
+							placeholder="Password"
+							disabled={isRequestLoading}
+						/>
+					</Form.Control>
+					<Form.FieldErrors />
+				</Form.Field>
+				<Form.Button
+					size="lg"
+					bind:loading={isRequestLoading}
+					class="w-full"
 				>
+					Sign Up
+				</Form.Button>
 			</form>
 			<p>Already have an account? <a href="/auth/sign-in" class="text-gray-600">Sign In</a></p>
 		</div>
