@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { Ellipsis } from 'lucide-svelte';
-	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-
-	import { Button } from '$lib/components/ui/button';
 	import type { ComponentType } from 'svelte';
+
+	import { Ellipsis } from 'lucide-svelte';
+	import * as DropdownMenu from '$ui/dropdown-menu';
+	import { Button } from '$ui/button';
 
 	export let refresh: () => void;
 	export let content: ComponentType;

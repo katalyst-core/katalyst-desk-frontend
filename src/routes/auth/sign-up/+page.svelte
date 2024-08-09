@@ -2,16 +2,17 @@
 	import { defaults, setError, superForm } from 'sveltekit-superforms';
 	import { zod, zodClient } from 'sveltekit-superforms/adapters';
 	import toast from 'svelte-french-toast';
-	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
+
+	import { Button } from '$ui/button';
+	import { Input } from '$ui/input';
+	import { Label } from '$ui/label';
+	import { PasswordInput } from '$ui/password-input';
 
 	import { signUpSchema } from '$lib/schema';
-	import { Button } from '$lib/components/ui/button';
-	import { Input } from '$lib/components/ui/input';
-	import { Label } from '$lib/components/ui/label';
 	import { fetchApi } from '$lib/custom-fetch';
 	import LoadingPage from '$lib/components/module/page/LoadingPage.svelte';
-	import PasswordInput from '$lib/components/module/ui/PasswordInput.svelte';
 
 	let isRequestLoading = false;
 	let isFormLoading = true;

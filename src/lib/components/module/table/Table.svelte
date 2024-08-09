@@ -1,17 +1,11 @@
 <script lang="ts">
-	import * as Table from '$lib/components/ui/table';
 	import {
 		Column,
 		createTable,
 		Render,
 		Subscribe,
-		type TableViewModel,
 		type Table as TableType
 	} from 'svelte-headless-table';
-	import { keyed } from 'svelte-keyed';
-
-	import * as Pagination from '$lib/components/ui/pagination';
-	import { ChevronLeft, ChevronRight } from 'lucide-svelte';
 	import {
 		addPagination,
 		addSelectedRows,
@@ -19,8 +13,14 @@
 		type AnyPlugins,
 		type PluginStates
 	} from 'svelte-headless-table/plugins';
-	import type { PaginationData, TableData } from '$types/table';
+	import { keyed } from 'svelte-keyed';
 	import type { Writable } from 'svelte/store';
+
+	import { ChevronLeft, ChevronRight } from 'lucide-svelte';
+	import * as Table from '$ui/table';
+	import * as Pagination from '$ui/pagination';
+
+	import type { PaginationData, TableData } from '$types/table';
 
 	export let data: TableData<unknown>;
 	export let colBuilder: (table: TableType<never, any>) => Column<never, any>[];

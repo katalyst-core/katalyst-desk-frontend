@@ -4,21 +4,23 @@
 	import { type AnyPlugins, type PluginStates } from 'svelte-headless-table/plugins';
 	import toast from 'svelte-french-toast';
 
+	import { CirclePlus } from 'lucide-svelte';
+	import { Button } from '$ui/button';
+	import { ActionCell, SortHeader } from '$module/table';
+	import { CheckboxCell, CheckboxHeader, Table as Table } from '$module/table';
+	import { ProductListDropdown } from '$module/table/dropdown';
+
 	import { fetchApi } from '$lib/custom-fetch';
-	import { ActionCell, SortHeader } from '$lib/components/module/table';
-	import { Button } from '$lib/components/ui/button';
-	import { CheckboxCell, CheckboxHeader, Table as Table } from '$lib/components/module/table';
 	import { currentStore } from '$stores/store';
 	import type { DeleteProductList, ProductListObject } from '$types/product';
 	import type { TableActionOption, TableData } from '$types/table';
+	import type { ApiResponse, ApiTableOptions } from '$types/api';
 	import {
 		getTableOptions,
 		initTableData,
 		subscribePlugins,
 		subscribeItemsSelected
 	} from '$utils/table';
-	import type { ApiResponse, ApiTableOptions } from '$types/api';
-	import ProductListDropdown from '$lib/components/module/table/dropdown/ProductListDropdown.svelte';
 
 	let data: TableData<ProductListObject> = initTableData();
 	let tableStates: PluginStates<AnyPlugins> | null;
@@ -146,7 +148,10 @@
 				>Delete Product</Button
 			>
 		{/if}
-		<Button>Add Product</Button>
+		<Button>
+		<CirclePlus size="20" />
+			Add Product
+		</Button>
 	</div>
 
 	<Table bind:tableStates {colBuilder} {data} loading={isRequestLoading} />

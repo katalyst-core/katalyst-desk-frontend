@@ -6,9 +6,9 @@
 	import { getTextInitials } from '$utils/index';
   import { user } from '$stores/user';
 	import UserMenu from './UserMenu.svelte';
-	import type { User } from '$types/user';
+	import type { UserObject } from '$types/user';
 
-  let userData: User | null = null;
+  let userData: UserObject | null = null;
   let name = '';
   let username = '';
   let initials = '';

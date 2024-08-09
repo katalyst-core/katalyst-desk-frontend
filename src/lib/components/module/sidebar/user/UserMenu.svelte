@@ -1,6 +1,6 @@
 <script lang="ts">
-  import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { LogOut } from 'lucide-svelte';
+  import * as DropdownMenu from '$ui/dropdown-menu';
 
   export let buttonWidth;
 </script>

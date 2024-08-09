@@ -26,14 +26,15 @@
   .sidebar-item {
     @apply flex;
     @apply h-11;
+    @apply w-full;
     @apply select-none;
   }
 
-  .sidebar-item > a {
+  .sidebar-item a {
     @apply flex;
     @apply items-center;
     @apply w-full;
-    @apply h-full;
+    @apply h-11;
     @apply px-3;
     @apply cursor-pointer;
     @apply rounded-xl;

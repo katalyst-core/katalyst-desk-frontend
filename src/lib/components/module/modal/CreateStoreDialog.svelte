@@ -3,10 +3,11 @@
 	import { defaults, setError, superForm } from 'sveltekit-superforms';
 	import { zod, zodClient } from 'sveltekit-superforms/adapters';
 
-  import * as Dialog from '$lib/components/ui/dialog';
-  import { Button } from '$lib/components/ui/button';
-	import { Input } from '$lib/components/ui/input';
-	import { Label } from '$lib/components/ui/label';
+  import * as Dialog from '$ui/dialog';
+  import { Button } from '$ui/button';
+	import { Input } from '$ui/input';
+	import { Label } from '$ui/label';
+
 	import { createStoreSchema } from '$lib/schema';
 	import { fetchApi } from '$lib/custom-fetch';
 	import { fetchStores } from '$lib/services/store';

@@ -1,5 +1,5 @@
 <script>
-  import { Button } from '$lib/components/ui/button';
+  import { Button } from '$ui/button';
 </script>
 
 <h1 class="bg-slate-500">Welcome to SvelteKit</h1>

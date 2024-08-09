@@ -24,6 +24,8 @@ const config = {
 			'$stores/*': 'src/stores/*',
 			'$utils/*': 'src/utils/*',
 			'$types/*': 'src/types/*',
+			'$ui/*': 'src/lib/components/ui/*',
+			'$module/*': 'src/lib/components/module/*'
 		}
 	},
 };

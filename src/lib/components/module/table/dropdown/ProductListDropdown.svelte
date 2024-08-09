@@ -2,11 +2,12 @@
 	import { Trash } from 'lucide-svelte';
 	import toast from 'svelte-french-toast';
 
-	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import * as AlertDialog from '$lib/components/ui/alert-dialog';
+	import * as DropdownMenu from '$ui/dropdown-menu';
+	import * as AlertDialog from '$ui/alert-dialog';
+	import { Button } from '$ui/button';
+
 	import { fetchApi } from '$lib/custom-fetch';
 	import type { ProductListObject } from '$types/product';
-	import { Button } from '$lib/components/ui/button';
 
 	export let prop: ProductListObject;
 	export let refresh: () => void;
@@ -20,9 +21,9 @@
 		const productId = prop.product_id;
 		const response = await fetchApi('/product/delete', {
 			method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+			headers: {
+				'Content-Type': 'application/json'
+			},
 			body: JSON.stringify({
 				product_id: [productId]
 			})
@@ -41,7 +42,7 @@
 			return;
 		}
 
-    isDeleteOpen = false;
+		isDeleteOpen = false;
 		toast.success('Successfully deleted');
 		refresh();
 	};
@@ -64,7 +65,7 @@
 		</AlertDialog.Header>
 		<AlertDialog.Footer>
 			<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
-      <Button loading={isRequestLoading} on:click={deleteProduct} >Delete</Button>
+			<Button loading={isRequestLoading} on:click={deleteProduct}>Delete</Button>
 		</AlertDialog.Footer>
 	</AlertDialog.Content>
 </AlertDialog.Root>

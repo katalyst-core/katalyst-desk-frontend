@@ -1,9 +1,10 @@
 <script lang="ts">
-  import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-  import CreateStoreDialog from '$lib/components/module/modal/CreateStoreDialog.svelte';
+  import * as DropdownMenu from '$ui/dropdown-menu';
+  import { CreateStoreDialog } from '$module/modal';
+	import StoreItem from './StoreItem.svelte';
+
 	import type { StoreObject } from '$types/store';
 	import { currentStore } from '$stores/store';
-	import StoreItem from './StoreItem.svelte';
 
   export let buttonWidth;
   export let disabled = false;
