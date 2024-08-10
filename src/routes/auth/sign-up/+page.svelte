@@ -6,10 +6,6 @@
 	import { goto } from '$app/navigation';
 
 	import * as Form from '$ui/form';
-	import { Button } from '$ui/button';
-	import { Input } from '$ui/input';
-	import { Label } from '$ui/label';
-	import { PasswordInput } from '$ui/password-input';
 
 	import { signUpSchema } from '$lib/schema';
 	import { fetchApi } from '$lib/custom-fetch';
