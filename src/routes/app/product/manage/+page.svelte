@@ -148,8 +148,8 @@
 				>Delete Product</Button
 			>
 		{/if}
-		<Button>
-		<CirclePlus size="20" />
+		<Button href="/app/product/new">
+			<CirclePlus size="20" />
 			Add Product
 		</Button>
 	</div>

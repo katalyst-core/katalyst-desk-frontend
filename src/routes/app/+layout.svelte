@@ -32,7 +32,7 @@
 
 <Sidebar>
   <LoadingPage loading={!hasStores}>
-    <div class="w-full h-full p-4">
+    <div class="w-full h-full p-4 bg-muted overflow-auto">
       <slot />
     </div>
   </LoadingPage>

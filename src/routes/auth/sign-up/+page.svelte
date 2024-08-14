@@ -2,14 +2,13 @@
 	import { defaults, setError, superForm } from 'sveltekit-superforms';
 	import { zod, zodClient } from 'sveltekit-superforms/adapters';
 	import toast from 'svelte-french-toast';
-	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 
 	import * as Form from '$ui/form';
+	import { LoadingPage } from '$module/page';
 
 	import { signUpSchema } from '$lib/schema';
 	import { fetchApi } from '$lib/custom-fetch';
-	import LoadingPage from '$lib/components/module/page/LoadingPage.svelte';
 
 	let isRequestLoading = false;
 	let isFormLoading = true;
@@ -66,13 +65,8 @@
 		}
 	});
 
-	const { form: formData, errors, enhance } = form;
-
-	onMount(() => {
-		if (formData) {
-			isFormLoading = false;
-		}
-	});
+	const { form: formData, enhance } = form;
+	isFormLoading = !form;
 </script>
 
 <LoadingPage bind:loading={isFormLoading}>
@@ -120,21 +114,16 @@
 				<Form.Field {form} name="password">
 					<Form.Control>
 						<Form.Label>Password</Form.Label>
-						<Form.PasswordInput
+						<Form.Input
 							bind:value={$formData.password}
 							placeholder="Password"
+							type="password-toggle"
 							disabled={isRequestLoading}
 						/>
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
-				<Form.Button
-					size="lg"
-					bind:loading={isRequestLoading}
-					class="w-full"
-				>
-					Sign Up
-				</Form.Button>
+				<Form.Button size="lg" bind:loading={isRequestLoading} class="w-full">Sign Up</Form.Button>
 			</form>
 			<p>Already have an account? <a href="/auth/sign-in" class="text-gray-600">Sign In</a></p>
 		</div>
