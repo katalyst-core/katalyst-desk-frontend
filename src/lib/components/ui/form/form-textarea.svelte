@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { HTMLInputAttributes } from "svelte/elements";
+  import type { HTMLTextareaAttributes } from "svelte/elements";
 	import { getFormControl } from "formsnap";
-	import { PasswordInput } from "$lib/components/ui/password-input";
+	import { Textarea } from "$lib/components/ui/textarea";
 	import { cn } from "$lib/utils.js";
 
-	type $$Props = HTMLInputAttributes;
+	type $$Props = HTMLTextareaAttributes;
 
 	let className: $$Props["class"] = undefined;
   export let value: $$Props["value"] = undefined;
@@ -13,7 +13,7 @@
 	const { attrs } = getFormControl();
 </script>
 
-<PasswordInput
+<Textarea
   {...$attrs}
   class={cn("data-[fs-error]:border-red-600", className)}
   bind:value

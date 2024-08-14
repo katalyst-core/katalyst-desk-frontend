@@ -1,4 +1,6 @@
-import Root from "./input.svelte";
+import type { HTMLInputAttributes } from 'svelte/elements';
+import BaseInput from './input-base.svelte';
+import Root from './input.svelte';
 
 export type FormInputEvent<T extends Event = Event> = T & {
 	currentTarget: EventTarget & HTMLInputElement;
@@ -22,8 +24,14 @@ export type InputEvents = {
 	wheel: FormInputEvent<WheelEvent>;
 };
 
+export type ExtendedInputProps = HTMLInputAttributes & {
+	type?: HTMLInputAttributes['type'] | 'password-toggle' | 'price';
+	suffix?: string;
+};
+
 export {
+	BaseInput,
 	Root,
 	//
-	Root as Input,
+	Root as Input
 };

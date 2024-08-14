@@ -1,42 +1,54 @@
 <script lang="ts">
-	import type { HTMLInputAttributes } from "svelte/elements";
-	import type { InputEvents } from "./index.js";
-	import { cn } from "$lib/utils.js";
+	import { Eye, EyeOff } from 'lucide-svelte';
+	import { BaseInput, type ExtendedInputProps } from './index.js';
+	import { cn } from '$lib/utils.js';
 
-	type $$Props = HTMLInputAttributes;
-	type $$Events = InputEvents;
+	type $$Props = ExtendedInputProps;
 
-	let className: $$Props["class"] = undefined;
-	export let value: $$Props["value"] = undefined;
+	let className: $$Props['class'] = undefined;
+	export let type: $$Props['type'] = 'text';
+	export let value: $$Props['value'] = undefined;
+	export let suffix: $$Props['suffix'] = '';
 	export { className as class };
 
-	// Workaround for https://github.com/sveltejs/svelte/issues/9305
-	// Fixed in Svelte 5, but not backported to 4.x.
-	export let readonly: $$Props["readonly"] = undefined;
+	let isHidden = true;
 </script>
 
-<input
-	class={cn(
-		"flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 focus:border-gray-600",
-		className
-	)}
-	bind:value
-	{readonly}
-	on:blur
-	on:change
-	on:click
-	on:focus
-	on:focusin
-	on:focusout
-	on:keydown
-	on:keypress
-	on:keyup
-	on:mouseover
-	on:mouseenter
-	on:mouseleave
-	on:mousemove
-	on:paste
-	on:input
-	on:wheel|passive
-	{...$$restProps}
-/>
+<div class="relative flex items-center">
+	{#if type === 'password-toggle'}
+		<BaseInput
+			class={cn('pr-9', className)}
+			type={isHidden ? 'password' : 'text'}
+			bind:value
+			{...$$restProps}
+		/>
+		<div class="absolute right-0 flex items-center mr-2">
+			<button type="button" on:click|preventDefault={() => (isHidden = !isHidden)}>
+				{#if isHidden}
+					<Eye />
+				{:else}
+					<EyeOff />
+				{/if}
+			</button>
+		</div>
+	{:else}
+		{#if type === 'price'}
+			<span class="absolute left-0 ml-3 text-base">Rp</span>
+		{/if}
+
+		<BaseInput
+			class={cn(
+				`${type === 'price' ? 'pl-9' : ''}`,
+				className
+			)}
+			price={type === 'price'}
+			bind:value
+			{type}
+			{...$$restProps}
+		/>
+
+		{#if suffix}
+			<span class="absolute right-0 text-sm text-gray-400 select-none { type === 'number' ? 'mr-10' : 'mr-3' }">{suffix}</span>
+		{/if}
+	{/if}
+</div>

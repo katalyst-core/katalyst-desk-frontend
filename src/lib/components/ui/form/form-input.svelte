@@ -1,15 +1,14 @@
 <script lang="ts">
-  import type { HTMLInputAttributes } from "svelte/elements";
-  import type { InputEvents } from "$lib/components/ui/input/index.js";
 	import { getFormControl } from "formsnap";
-	import { Input } from "$lib/components/ui/input";
+	import { Input, type ExtendedInputProps } from "$lib/components/ui/input";
 	import { cn } from "$lib/utils.js";
 
-	type $$Props = HTMLInputAttributes;
-  type $$Events = InputEvents;
+	type $$Props = ExtendedInputProps;
 
 	let className: $$Props["class"] = undefined;
+	export let type: $$Props["type"] = undefined;
   export let value: $$Props["value"] = undefined;
+	export let label: string = '';
 	export { className as class };
 
 	const { attrs } = getFormControl();
@@ -19,5 +18,7 @@
   {...$attrs}
   class={cn("data-[fs-error]:border-red-600", className)}
   bind:value
+	{type}
+	{label}
   {...$$restProps}
 />

@@ -14,7 +14,7 @@
 
 <svelte:element
 	this={tag}
-	class={cn("font-semibold leading-none tracking-tight", className)}
+	class={cn("font-semibold leading-none tracking-tight text-lg", className)}
 	{...$$restProps}
 >
 	<slot />

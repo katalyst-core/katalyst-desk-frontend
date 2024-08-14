@@ -8,7 +8,7 @@ import Fieldset from './form-fieldset.svelte';
 import Legend from './form-legend.svelte';
 import ElementField from './form-element-field.svelte';
 import Input from './form-input.svelte';
-import PasswordInput from './form-password-input.svelte';
+import Textarea from './form-textarea.svelte';
 
 const Control = FormPrimitive.Control;
 
@@ -23,7 +23,7 @@ export {
 	ElementField,
 	Button,
 	Input,
-	PasswordInput,
+	Textarea,
 	//
 	Field as FormField,
 	Control as FormControl,
@@ -35,5 +35,5 @@ export {
 	ElementField as FormElementField,
 	Button as FormButton,
 	Input as FormInput,
-	PasswordInput as FormPasswordInput,
+	Textarea as FormTextarea,
 };

@@ -2,9 +2,14 @@
 	import * as FormPrimitive from "formsnap";
 	import { cn } from "$lib/utils.js";
 
-	type $$Props = FormPrimitive.LegendProps;
+	interface ExtendedLegendProps extends FormPrimitive.LegendProps {
+		required?: boolean;
+	}
+
+	type $$Props = ExtendedLegendProps;
 
 	let className: $$Props["class"] = undefined;
+	export let required: $$Props["required"] = false;
 	export { className as class };
 </script>
 
@@ -14,4 +19,7 @@
 	let:legendAttrs
 >
 	<slot {legendAttrs} />
+	{#if required}
+		<span class="text-red-500">*</span>
+	{/if}
 </FormPrimitive.Legend>
