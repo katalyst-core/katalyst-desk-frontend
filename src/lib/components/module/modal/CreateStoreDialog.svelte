@@ -22,6 +22,9 @@
   const { form, errors, enhance, submit } = superForm(defaults(zod(createStoreSchema)), {
     SPA: true,
     validators: zodClient(createStoreSchema),
+    warnings: {
+      duplicateId: false,
+    },
     async onUpdate({ form }) {
       if (!form.valid) {
         return;

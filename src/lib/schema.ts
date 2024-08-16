@@ -31,7 +31,7 @@ export const createProductSchema = z.object({
   discount_percentage: z.coerce.number({ message: 'Invalid' }).min(1, 'Must be bigger than 1'),
   wholesale: z.array(wholesaleSchema),
   brand: z.string(),
-  stock: z.string().or(z.number()),
+  stock: z.number().min(0).default(0),
   dimension_width: z.coerce.number({ message: 'Invalid' }).min(1, 'Must be bigger than 1'),
   dimension_height: z.coerce.number({ message: 'Invalid' }).min(1, 'Must be bigger than 1'),
   dimension_length: z.coerce.number({ message: 'Invalid' }).min(1, 'Must be bigger than 1'),
