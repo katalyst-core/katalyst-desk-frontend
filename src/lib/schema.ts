@@ -16,6 +16,11 @@ export const createStoreSchema = z.object({
   name: z.string().min(4, 'Name must at least be 4 characters').max(100, 'Name must not exceed 100 characters'),
 });
 
+export const wholesaleSchema = z.object({
+  min_quantity: z.coerce.number().min(1),
+  price: z.coerce.number()
+})
+
 export const createProductSchema = z.object({
   name: z.string().min(25, 'Name must be at least 25 character'),
   description: z.string(),
@@ -24,6 +29,9 @@ export const createProductSchema = z.object({
   price: z.coerce.number({ message: 'Invalid' }).min(1, 'Must be bigger than 1'),
   discount_price: z.coerce.number({ message: 'Invalid' }).min(1, 'Must be bigger than 1'),
   discount_percentage: z.coerce.number({ message: 'Invalid' }).min(1, 'Must be bigger than 1'),
+  wholesale: z.array(wholesaleSchema),
+  brand: z.string(),
+  stock: z.string().or(z.number()),
   dimension_width: z.coerce.number({ message: 'Invalid' }).min(1, 'Must be bigger than 1'),
   dimension_height: z.coerce.number({ message: 'Invalid' }).min(1, 'Must be bigger than 1'),
   dimension_length: z.coerce.number({ message: 'Invalid' }).min(1, 'Must be bigger than 1'),

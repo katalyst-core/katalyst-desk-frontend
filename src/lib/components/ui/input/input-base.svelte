@@ -18,20 +18,36 @@
 	let className: $$Props['class'] = undefined;
 	export let value: $$Props['value'] = undefined;
 	export let price: $$Props['price'] = false;
+	export let min: $$Props['min'] = undefined;
+	export let max: $$Props['max'] = undefined;
 	export { className as class };
 
 	// Workaround for https://github.com/sveltejs/svelte/issues/9305
 	// Fixed in Svelte 5, but not backported to 4.x.
 	export let readonly: $$Props['readonly'] = undefined;
 
-	let displayValue = formatCurrency(value);
+	$: displayValue = price ? formatCurrency(value) : value;
 	let inputElement: HTMLInputElement | null = null;
+
+	const handleMinMax = () => {
+		const minValue = typeof min === 'string' ? parseInt(min) : min;
+		const maxValue = typeof max === 'string' ? parseInt(max) : max;
+
+		if (minValue != undefined && parseInt(displayValue) < minValue) {
+			displayValue = min;
+			return;
+		}
+
+		if (maxValue != undefined && parseInt(displayValue) > maxValue) {
+			displayValue = max;
+			return;
+		}
+	}
 
 	const handleNumberInput = (event: any) => {
 		if (price) {
 			const rawValue = event.target.value.replace(/[^\d]/g, '');
 			value = rawValue ? parseInt(rawValue) : 0;
-			displayValue = formatCurrency(value);
 
 			const cursorPosition = event.target.selectionStart;
 			const prevLength = event.target.value.length;
@@ -45,7 +61,9 @@
 				}
 			});
 		} else {
+			handleMinMax();
 			value = displayValue;
+			console.log(displayValue);
 		}
 	};
 </script>

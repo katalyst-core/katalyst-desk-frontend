@@ -14,7 +14,7 @@
 	let isHidden = true;
 </script>
 
-<div class="relative flex items-center">
+<div class="relative flex items-center w-full">
 	{#if type === 'password-toggle'}
 		<BaseInput
 			class={cn('pr-9', className)}

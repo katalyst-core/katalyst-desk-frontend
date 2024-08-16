@@ -8,7 +8,7 @@
 	let className: $$Props["class"] = undefined;
 	export let type: $$Props["type"] = undefined;
   export let value: $$Props["value"] = undefined;
-	export let label: string = '';
+	export let suffix: string = '';
 	export { className as class };
 
 	const { attrs } = getFormControl();
@@ -19,6 +19,6 @@
   class={cn("data-[fs-error]:border-red-600", className)}
   bind:value
 	{type}
-	{label}
+	{suffix}
   {...$$restProps}
 />
