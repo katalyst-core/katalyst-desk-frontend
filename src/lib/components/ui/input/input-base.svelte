@@ -63,7 +63,6 @@
 		} else {
 			handleMinMax();
 			value = displayValue;
-			console.log(displayValue);
 		}
 	};
 </script>
