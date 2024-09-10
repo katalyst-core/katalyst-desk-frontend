@@ -3,6 +3,8 @@
 	import img from '$lib/images/logo_omni.svg';
 	import bg from '$lib/images/bg.png';
 	import { ChartColumn } from 'lucide-svelte';
+	import * as Card from "$ui/card";
+	import * as Tabs from "$ui/tabs";
 </script>
 
 <header class="flex items-center p-6 h-24 justify-between border-b-2">
@@ -66,8 +68,30 @@
 
 <div class="flex flex-col py-10 items-center h-[calc(100vh-24px)]">
 	<h1 class="font-bold text-4xl pb-5">Pricing</h1>
-	<p class="pb-5 text-slate-500">Affordable plans for any needs. Cancel anytime.</p>
+	<p class="text-slate-500">Affordable plans for any needs. Cancel anytime.</p>
 	<div>
-
+		<Tabs.Root value="account" class="w-[400px] flex justify-center items-center p-5">
+			<Tabs.List>
+				<Tabs.Trigger value="account">Annual</Tabs.Trigger>
+				<Tabs.Trigger value="password">Monthly</Tabs.Trigger>
+			</Tabs.List>
+			<Tabs.Content value="account">
+			</Tabs.Content>
+		</Tabs.Root>
+		</div>
+		<div>
+			<Card.Root>
+				<Card.Header>
+					<Card.Title>Card Title</Card.Title>
+					<Card.Description>Card Description</Card.Description>
+				</Card.Header>
+				<Card.Content>
+					<p>Card Content</p>
+				</Card.Content>
+				<Card.Footer>
+					<p>Card Footer</p>
+				</Card.Footer>
+			</Card.Root>
+		</div>
 	</div>
-</div>
+
