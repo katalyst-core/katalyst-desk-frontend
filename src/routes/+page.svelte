@@ -72,26 +72,60 @@
 	<div>
 		<Tabs.Root value="account" class="w-[400px] flex justify-center items-center p-5">
 			<Tabs.List>
-				<Tabs.Trigger value="account">Annual</Tabs.Trigger>
-				<Tabs.Trigger value="password">Monthly</Tabs.Trigger>
+				<Tabs.Trigger value="account">Monthly plans</Tabs.Trigger>
+				<Tabs.Trigger value="password">Annual plans</Tabs.Trigger>
 			</Tabs.List>
 			<Tabs.Content value="account">
 			</Tabs.Content>
 		</Tabs.Root>
 		</div>
-		<div>
-			<Card.Root>
+		<div class = "flex flex-row justify-between gap-6">
+			<Card.Root class ="h-86 w-86">
 				<Card.Header>
-					<Card.Title>Card Title</Card.Title>
-					<Card.Description>Card Description</Card.Description>
+					<p class = "text-base">Basic</p>
+					<Card.Title class = "text-4xl">Rp 70,000 <span class = "text-base">per month</span></Card.Title>
+					<Card.Description class = "p-3">
+						<ul class="list-outside pl-2 list-disc text-lg">
+							<li class ="pb-1">Handle 50 order per month</li>
+							<li class ="pb-1">Feature</li>
+							<li class ="pb-1">Feature</li>
+							<li class ="pb-1">Feature</li>
+						</ul>
+							</Card.Description>
+						<Button>Select</Button>
 				</Card.Header>
-				<Card.Content>
-					<p>Card Content</p>
-				</Card.Content>
-				<Card.Footer>
-					<p>Card Footer</p>
-				</Card.Footer>
 			</Card.Root>
+			<Card.Root class ="h-72 w-72">
+				<Card.Header>
+					<p class = "text-sm">Standard</p>
+					<Card.Title class = "text-3xl">Rp 110,000 <span class = "text-sm">per month</span></Card.Title>
+					<Card.Description class = "p-3">
+						<ul class="list-outside pl-2 list-disc">
+							<li class ="pb-1">Handle 100 order per month</li>
+							<li class ="pb-1">Feature</li>
+							<li class ="pb-1">Feature</li>
+							<li class ="pb-1">Feature</li>
+						</ul>
+							</Card.Description>
+						<Button>Select</Button>
+				</Card.Header>
+			</Card.Root>
+			<Card.Root class ="h-72 w-72">
+				<Card.Header>
+					<p class = "text-sm">Premium</p>
+					<Card.Title class = "text-3xl">Rp 150,000 <span class = "text-sm">per month</span></Card.Title>
+					<Card.Description class = "p-3">
+						<ul class="list-outside pl-2 list-disc">
+							<li class ="pb-1">Handle 150 order per month</li>
+							<li class ="pb-1">Feature</li>
+							<li class ="pb-1">Feature</li>
+							<li class ="pb-1">Feature</li>
+						</ul>
+							</Card.Description>
+						<Button>Select</Button>
+				</Card.Header>
+			</Card.Root>
+
 		</div>
 	</div>
 
