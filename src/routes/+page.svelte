@@ -63,3 +63,11 @@
 		</div>
 	</div>
 </div>
+
+<div class="flex flex-col py-10 items-center h-[calc(100vh-24px)]">
+	<h1 class="font-bold text-4xl pb-5">Pricing</h1>
+	<p class="pb-5 text-slate-500">Affordable plans for any needs. Cancel anytime.</p>
+	<div>
+
+	</div>
+</div>
