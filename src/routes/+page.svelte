@@ -5,14 +5,23 @@
 	import { ChartColumn } from 'lucide-svelte';
 	import * as Card from "$ui/card";
 	import * as Tabs from "$ui/tabs";
+
+	// @ts-ignore
+	function scrollIntoView({ target }) {
+		const el = document.querySelector(target.getAttribute('href'));
+		if (!el) return;
+		el.scrollIntoView({
+		behavior: 'smooth'
+		});
+  	}
 </script>
 
 <header class="flex items-center p-6 h-24 justify-between border-b-2">
 	<a href=" " class="items-start pl-6 justify-start"><img class="h-16" src={img} alt="" /></a>
 	<div class="flex space-x-8 items-center justify-end sm:justify-end">
-		<button>Features</button>
-		<button>Pricing</button>
-		<button>About Us</button>
+		<a href="#landing-features" on:click|preventDefault={scrollIntoView}>Features</a>
+		<a href="#landing-pricing" on:click|preventDefault={scrollIntoView}>Pricing</a>
+		<a href="#landing-aboutus" on:click|preventDefault={scrollIntoView}>About Us</a>
 		<Button>Sign In</Button>
 		<Button>Sign Up</Button>
 	</div>
@@ -26,7 +35,7 @@
 	<Button>Get Started</Button>
 </div>
 
-<div class="flex flex-col justify-center items-center bg-[#dce8f1] h-[calc(100vh-24px)] py-8">
+<div class="flex flex-col justify-center items-center bg-[#dce8f1] h-[calc(100vh-24px)] py-8" id="landing-features">
 	<h1 class="font-bold text-4xl pb-7 underline underline-offset-8">Features</h1>
 	<p class="pb-8 text-slate-500">Get to Know Omnilink Features</p>
 	<div class="flex justify-center px-8 gap-64 max-md:flex-col text-justify max-md:gap-20 [&>div]:gap-20 [&>div>div]:max-w-96">
@@ -66,7 +75,7 @@
 	</div>
 </div>
 
-<div class="flex flex-col py-10 items-center h-[calc(100vh-24px)]">
+<div class="flex flex-col py-10 items-center h-[calc(100vh-24px)]" id="landing-pricing">
 	<h1 class="font-bold text-4xl pb-5">Pricing</h1>
 	<p class="text-slate-500">Affordable plans for any needs. Cancel anytime.</p>
 	<div>
