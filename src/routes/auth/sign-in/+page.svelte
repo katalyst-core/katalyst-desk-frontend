@@ -23,7 +23,7 @@
 			isRequestLoading = true;
 
 			try {
-				const response = await fetchApi('/auth/login', {
+				const response = await fetchApi('/agent/auth/login', {
 					method: 'POST',
 					noRefresh: true,
 					headers: {

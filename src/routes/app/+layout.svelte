@@ -2,8 +2,6 @@
   import { onMount } from "svelte";
 
 	import Sidebar from "$lib/components/module/sidebar/Sidebar.svelte";
-	import { stores } from "$stores/store";
-	import { fetchStores } from "$lib/services/store";
 	import LoadingPage from "$lib/components/module/page/LoadingPage.svelte";
 	import CreateStoreDialog from "$lib/components/module/modal/CreateStoreDialog.svelte";
 
@@ -11,22 +9,22 @@
   let openCreateStoreDialog = false;
 
   onMount(async () => {
-    stores.subscribe((stores) => {
-      if (!stores) {
-        hasStores = false;
-        return;
-      }
+    // stores.subscribe((stores) => {
+    //   if (!stores) {
+    //     hasStores = false;
+    //     return;
+    //   }
 
-      if (stores.length === 0) {
-        hasStores = false;
-        openCreateStoreDialog = true;
-        return;
-      }
+    //   if (stores.length === 0) {
+    //     hasStores = false;
+    //     openCreateStoreDialog = true;
+    //     return;
+    //   }
 
-      hasStores = true;
-    });
+    //   hasStores = true;
+    // });
 
-    fetchStores();
+    // fetchStores();
   });
 </script>
 

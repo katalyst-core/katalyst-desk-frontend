@@ -23,7 +23,7 @@
 
 			isRequestLoading = true;
 
-			const response = await fetchApi('/auth/create', {
+			const response = await fetchApi('/agent/auth/create', {
 				method: 'POST',
 				noRefresh: true,
 				headers: {
@@ -31,7 +31,6 @@
 				},
 				body: JSON.stringify({
 					name: form.data.name,
-					username: form.data.username,
 					email: form.data.email,
 					password: form.data.password
 				})
@@ -59,7 +58,7 @@
 				return;
 			}
 
-			await goto('/', {
+			await goto('/auth/sign-in', {
 				invalidateAll: true
 			});
 		}
@@ -83,17 +82,6 @@
 						<Form.Input
 							bind:value={$formData.name}
 							placeholder="Name"
-							disabled={isRequestLoading}
-						/>
-					</Form.Control>
-					<Form.FieldErrors />
-				</Form.Field>
-				<Form.Field {form} name="username">
-					<Form.Control>
-						<Form.Label>Username</Form.Label>
-						<Form.Input
-							bind:value={$formData.username}
-							placeholder="Username"
 							disabled={isRequestLoading}
 						/>
 					</Form.Control>

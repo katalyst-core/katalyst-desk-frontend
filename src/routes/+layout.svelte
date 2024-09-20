@@ -4,14 +4,14 @@
   import { onMount } from 'svelte';
 
 	import LoadingPage from '$lib/components/module/page/LoadingPage.svelte';;
-	import { fetchUser } from '$lib/services/auth';
+	import { fetchAgent } from '$lib/services/auth';
 
   let isRequestLoading = true;
 
 
 
   onMount(async () => {
-    await fetchUser();
+    await fetchAgent();
     isRequestLoading = false;
   })
 </script>

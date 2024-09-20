@@ -1,19 +1,19 @@
 import { fetchApi } from '$lib/custom-fetch';
-import { user } from '$stores/user';
+import { agent } from '$stores/agent';
 import type { ApiResponse } from '$types/api';
 import type { UserObject } from '$types/user';
 
 import { redirect } from '$utils/index';
 
-export const fetchUser = async () => {
-	const response: ApiResponse<UserObject> | null = await fetchApi('/user/info');
+export const fetchAgent = async () => {
+	const response: ApiResponse<UserObject> | null = await fetchApi('/agent/info');
 
 	if (!response) {
 		return;
 	}
 
 	if (!response.ok) {
-		user.set(null);
+		agent.set(null);
 
 		// Redirect to sign-in if user is not logged in while in the app
 		await redirect([/^\/app\/.*$/], '/auth/sign-in');
@@ -25,5 +25,5 @@ export const fetchUser = async () => {
 	await redirect([/^\/auth\/sign-in$/, /^\/auth\/sign-up/, /^\/$/], '/app/dashboard');
 
 	const data = response.data;
-	user.set(data);
+	agent.set(data);
 };

@@ -1,10 +1,11 @@
 <script>
-	import { Button } from '$ui/button';
-	import img from '$lib/images/logo_omni.svg';
-	import bg from '$lib/images/bg.png';
 	import { ChartColumn } from 'lucide-svelte';
+	import { Button } from '$ui/button';
 	import * as Card from "$ui/card";
 	import * as Tabs from "$ui/tabs";
+
+	import img from '$lib/images/logo_omni.svg';
+	import bg from '$lib/images/bg.png';
 
 	// @ts-ignore
 	function scrollIntoView({ target }) {
@@ -22,8 +23,8 @@
 		<a href="#landing-features" on:click|preventDefault={scrollIntoView}>Features</a>
 		<a href="#landing-pricing" on:click|preventDefault={scrollIntoView}>Pricing</a>
 		<a href="#landing-aboutus" on:click|preventDefault={scrollIntoView}>About Us</a>
-		<Button>Sign In</Button>
-		<Button>Sign Up</Button>
+		<Button href="/auth/sign-in">Sign In</Button>
+		<Button href="/auth/sign-up">Sign Up</Button>
 	</div>
 </header>
 
