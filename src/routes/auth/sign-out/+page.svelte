@@ -5,7 +5,7 @@
 	import { fetchApi } from '$lib/custom-fetch';
 
 	onMount(async () => {
-		await fetchApi('/auth/logout', {
+		await fetchApi('/agent/auth/logout', {
 			method: 'POST',
 			noRefresh: true
 		});

@@ -37,12 +37,12 @@ export async function fetchApi<T>(
 			// Refresh user's access token
 			const refreshToken = getCookie('Refresh');
 			if (refreshToken) {
-				const refreshPath = `${PUBLIC_BASE_API}/auth/refresh`;
+				const refreshPath = `${PUBLIC_BASE_API}/agent/auth/refresh`;
 				const refresh = await fetch(refreshPath, { method: 'POST' });
 
 				if (!refresh.ok) {
 					// Refresh token
-					const logoutPath = `${PUBLIC_BASE_API}/auth/logout`;
+					const logoutPath = `${PUBLIC_BASE_API}/agent/auth/logout`;
 					response = await fetch(logoutPath, { method: 'POST' });
 				} else {
 					// Retry request
