@@ -8,7 +8,7 @@
 	import UserBox from './user/UserBox.svelte';
 	import OrganizationDropdown from './organization/OrganizationDropdown.svelte';
 
-	import type { SidebarObject } from '$types/sidebar';
+	import type { SidebarObject } from '$types/sidebar-type';
 
 	const items = [
 		{

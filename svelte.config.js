@@ -25,7 +25,9 @@ const config = {
 			'$utils/*': 'src/utils/*',
 			'$types/*': 'src/types/*',
 			'$ui/*': 'src/lib/components/ui/*',
-			'$module/*': 'src/lib/components/module/*'
+			'$module/*': 'src/lib/components/module/*',
+			'$api/*': 'src/api/*',
+			'$schema/*': 'src/schema/*',
 		}
 	},
 };

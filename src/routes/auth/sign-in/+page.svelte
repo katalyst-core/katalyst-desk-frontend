@@ -1,13 +1,12 @@
 <script>
 	import { defaults, setError, superForm } from 'sveltekit-superforms';
 	import { zod, zodClient } from 'sveltekit-superforms/adapters';
-	import toast from 'svelte-french-toast';
 
 	import * as Form from '$ui/form';
-  import { LoadingPage } from '$module/page';
+	import { LoadingPage } from '$module/page';
 
-	import { signInSchema } from '$lib/schema';
-	import { fetchApi } from '$lib/custom-fetch';
+	import * as AgentAPI from '$api/agent-api';
+	import { signInSchema } from '$schema/agent-schema';
 
 	let isRequestLoading = false;
 	let isFormLoading = true;
@@ -22,44 +21,19 @@
 
 			isRequestLoading = true;
 
-			try {
-				const response = await fetchApi('/agent/auth/login', {
-					method: 'POST',
-					noRefresh: true,
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({
-						username: form.data.username,
-						password: form.data.password
-					})
-				});
+			const { email, password } = form.data;
+			const response = await AgentAPI.loginAgent(email, password);
 
-				if (!response) {
-					return;
-				}
+			isRequestLoading = false;
 
-				if (!response.ok) {
-					isRequestLoading = false;
-
-					let message = response.message;
-					const code = response.error?.code;
-					if (code === 'UNABLE_TO_FIND_ACCOUNT') {
-						message = 'Invalid username or password';
-					}
-
-					toast.error(message);
-					setError(form, message);
-
-					return;
-				}
-
-				const newUrl = '/app/dashboard';
-				window.location.href = newUrl;
-			} catch (_) {
-				isRequestLoading = false;
-				toast.error('An error occurred');
+			if (response && !response.ok) {
+				const { message } = response;
+				setError(form, message);
+				return;
 			}
+
+			const newUrl = '/app/dashboard';
+			window.location.href = newUrl;
 		}
 	});
 
@@ -75,13 +49,13 @@
 				<p class="text-gray-500">Please sign-in to continue</p>
 			</div>
 			<form method="POST" use:enhance class="flex flex-col w-96 gap-3">
-				<Form.Field {form} name="username">
+				<Form.Field {form} name="email">
 					<Form.Control>
-						<Form.Label>Username / Email</Form.Label>
+						<Form.Label>Email</Form.Label>
 						<Form.Input
-							bind:value={$formData.username}
+							bind:value={$formData.email}
 							disabled={isRequestLoading}
-							placeholder="Username / Email"
+							placeholder="Email"
 						/>
 					</Form.Control>
 					<Form.FieldErrors />

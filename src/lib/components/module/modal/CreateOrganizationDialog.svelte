@@ -1,18 +1,15 @@
 <script lang="ts">
-	import toast from 'svelte-french-toast';
 	import { defaults, setError, superForm } from 'sveltekit-superforms';
 	import { zod, zodClient } from 'sveltekit-superforms/adapters';
+	import { toast } from 'svelte-french-toast';
 
   import * as Dialog from '$ui/dialog';
   import { Button } from '$ui/button';
 	import { Input } from '$ui/input';
 	import { Label } from '$ui/label';
 
-	import { fetchApi } from '$lib/custom-fetch';
-	import type { ApiResponse } from '$types/api';
-	import { createOrganizationSchema } from '$lib/schema/organization-schema';
-	import type { CreateOrganizationResponse } from '$types/organization-type';
-	import { fetchAllOrganization } from '$lib/api/organization-api';
+	import * as OrganizationAPI from '$api/organization-api';
+	import { createOrganizationSchema } from '$schema/organization-schema';
 
   export let open: boolean = false;
   export let closeable: boolean = true;
@@ -30,41 +27,23 @@
         return;
       }
 
-      try {
-        const response: ApiResponse<CreateOrganizationResponse> | null = await fetchApi('/organization/create', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            name: form.data.name
-          })
-        });
+      isRequestLoading = true;
 
-        if (!response) {
-          return;
-        }
+      const { name } = form.data;
+      const response = await OrganizationAPI.createOrganization(name);
 
-        if (!response.ok) {
-          isRequestLoading = false;
+      isRequestLoading = false;
 
-          let message = response.message;
-
-          toast.error(message);
-          setError(form, message);
-
-          return;
-        }
-
-        fetchAllOrganization();
-
-        toast.success('Created new organization');
-
-        open = false;
-      } catch (_) {
-        isRequestLoading = false;
-        toast.error('An error occurred');
+      if (response && !response.ok) {
+        setError(form, response.message);
+        return;
       }
+
+      OrganizationAPI.fetchOrganizationList();
+
+      toast.success('Created new organization');
+
+      open = false;
     }
   });
 </script>

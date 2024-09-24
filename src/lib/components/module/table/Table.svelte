@@ -20,7 +20,7 @@
 	import * as Table from '$ui/table';
 	import * as Pagination from '$ui/pagination';
 
-	import type { PaginationData, TableData } from '$types/table';
+	import type { PaginationData, TableData } from '$types/table-type';
 
 	export let data: TableData<unknown>;
 	export let colBuilder: (table: TableType<never, any>) => Column<never, any>[];

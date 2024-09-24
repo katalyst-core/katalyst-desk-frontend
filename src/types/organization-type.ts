@@ -1,4 +1,4 @@
-export type OrganizationListObject = {
+export type OrganizationListResponse = {
   organization_id: string;
   name: string;
 }

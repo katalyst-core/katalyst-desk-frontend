@@ -1,4 +1,4 @@
-import type { PaginationData } from "./table";
+import type { PaginationData } from "./table-type";
 
 export type ApiResponse<T> = {
   ok: boolean;

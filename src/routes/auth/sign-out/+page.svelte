@@ -2,13 +2,11 @@
 	import { onMount } from 'svelte';
 
 	import LoadingPage from '$lib/components/module/page/LoadingPage.svelte';
-	import { fetchApi } from '$lib/custom-fetch';
+
+	import * as AgentAPI from '$api/agent-api';
 
 	onMount(async () => {
-		await fetchApi('/agent/auth/logout', {
-			method: 'POST',
-			noRefresh: true
-		});
+		await AgentAPI.logoutAgent();
 
 		const newUrl = '/';
 		window.location.href = newUrl;

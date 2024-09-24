@@ -6,7 +6,7 @@
 
 	import { availableOrganizations } from "$stores/organization-store";
   import { CreateOrganizationDialog } from "$module/modal";
-	import { fetchAllOrganization } from "$lib/api/organization-api";
+	import * as OrganizationAPI from "$api/organization-api";
 
   let hasOrganization = false;
   let openCreateOrganizationDialog = false;
@@ -28,7 +28,7 @@
   }
 
   onMount(async () => {
-    fetchAllOrganization();
+    OrganizationAPI.fetchOrganizationList();
     checkOrganizations();
   });
 </script>

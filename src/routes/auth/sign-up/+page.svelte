@@ -1,14 +1,14 @@
 <script>
 	import { defaults, setError, superForm } from 'sveltekit-superforms';
 	import { zod, zodClient } from 'sveltekit-superforms/adapters';
-	import toast from 'svelte-french-toast';
 	import { goto } from '$app/navigation';
+	import { toast } from 'svelte-french-toast';
 
 	import * as Form from '$ui/form';
 	import { LoadingPage } from '$module/page';
 
-	import { signUpSchema } from '$lib/schema';
-	import { fetchApi } from '$lib/custom-fetch';
+	import * as AgentAPI from '$api/agent-api';
+	import { signUpSchema } from '$schema/agent-schema';
 
 	let isRequestLoading = false;
 	let isFormLoading = true;
@@ -23,40 +23,18 @@
 
 			isRequestLoading = true;
 
-			const response = await fetchApi('/agent/auth/create', {
-				method: 'POST',
-				noRefresh: true,
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					name: form.data.name,
-					email: form.data.email,
-					password: form.data.password
-				})
-			});
+			const { name, email, password } = form.data;
+			const response = await AgentAPI.createAgent(name, email, password);
 
-			if (!response) {
-				return;
-			}
+			isRequestLoading = false;
 
-			if (!response.ok) {
-				isRequestLoading = false;
-
-				let message = response.message;
-				const code = response.error?.code;
-				if (code === 'ACCOUNT_USERNAME_ALREADY_EXIST') {
-					message = 'Username already exist';
-				}
-				if (code === 'ACCOUNT_EMAIL_ALREADY_EXIST') {
-					message = 'Email already exist';
-				}
-
-				toast.error(message);
+			if (response && !response.ok) {
+				const { message } = response;
 				setError(form, message);
-
 				return;
 			}
+
+			toast.success('Account created, please login');
 
 			await goto('/auth/sign-in', {
 				invalidateAll: true

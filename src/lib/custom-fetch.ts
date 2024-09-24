@@ -1,5 +1,5 @@
 import { PUBLIC_BASE_API } from '$env/static/public';
-import type { ApiResponse } from '$types/api';
+import type { ApiResponse } from '$types/api-type';
 import { parse } from 'cookie';
 
 interface RequestConfig extends RequestInit {

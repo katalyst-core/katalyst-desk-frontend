@@ -1,4 +1,4 @@
-import type { TableData } from "$types/table";
+import type { TableData } from "$types/table-type";
 import type { AnyPlugins, PaginationState, PluginStates, SortByState, SelectedRowsState } from "svelte-headless-table/plugins";
 import { get, writable } from "svelte/store";
 

@@ -1,4 +1,4 @@
-export type AgentObject = {
+export type AgentInfoResponse = {
   name: string;
   email: string;
 };
