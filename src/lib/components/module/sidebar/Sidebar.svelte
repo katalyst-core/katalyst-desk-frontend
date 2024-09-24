@@ -6,7 +6,7 @@
 	import SidebarItem from './navigation/SidebarItem.svelte';
 	import SidebarSubItem from './navigation/SidebarSubItem.svelte';
 	import UserBox from './user/UserBox.svelte';
-	import StoreBox from './store/StoreBox.svelte';
+	import OrganizationDropdown from './organization/OrganizationDropdown.svelte';
 
 	import type { SidebarObject } from '$types/sidebar';
 
@@ -53,7 +53,7 @@
 	>
 		<!-- Top -->
 		<div class="flex flex-col w-full gap-2">
-			<StoreBox />
+			<OrganizationDropdown />
 
 			<Separator />
 

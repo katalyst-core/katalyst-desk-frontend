@@ -4,24 +4,26 @@
 
   import * as Avatar from '$lib/components/ui/avatar';
 	import { getTextInitials } from '$utils/index';
-  import { user } from '$stores/user';
+  import { agent } from '$stores/agent';
 	import UserMenu from './UserMenu.svelte';
-	import type { UserObject } from '$types/user';
 
-  let userData: UserObject | null = null;
   let name = '';
-  let username = '';
+  let email = '';
   let initials = '';
   let buttonWidth: number;
 
+  const getAgentData = () => {
+    agent.subscribe((agent) => {
+      if (!agent) return;
+
+      name = agent.name;
+      email = agent.email;
+      initials = getTextInitials(agent.name);
+    })
+  };
+
   onMount(() => {
-    user.subscribe((user) => userData = user);
-
-    if (!userData) return;
-
-    name = userData.name;
-    username = userData.username;
-    initials = getTextInitials(userData?.name);
+    getAgentData();
   });
 </script>
 
@@ -34,7 +36,7 @@
       </Avatar.Root>
       <div class="flex flex-col justify-center font-medium">
         <p class="w-40 truncate">{name}</p>
-        <p class="w-40 truncate text-sm opacity-65">{username}</p>
+        <p class="w-40 truncate text-sm opacity-65">{email}</p>
       </div>
     </div>
     <ChevronUp class="w-6 h-6 mx-2" />

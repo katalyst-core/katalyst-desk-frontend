@@ -1,12 +1,12 @@
 import { fetchApi } from '$lib/custom-fetch';
 import { agent } from '$stores/agent';
 import type { ApiResponse } from '$types/api';
-import type { UserObject } from '$types/user';
+import type { AgentObject } from '$types/agent';
 
 import { redirect } from '$utils/index';
 
 export const fetchAgent = async () => {
-	const response: ApiResponse<UserObject> | null = await fetchApi('/agent/info');
+	const response: ApiResponse<AgentObject> | null = await fetchApi('/agent/info');
 
 	if (!response) {
 		return;

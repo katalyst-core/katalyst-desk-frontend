@@ -1,27 +1,27 @@
 <script lang="ts">
   import * as DropdownMenu from '$ui/dropdown-menu';
   import { CreateStoreDialog } from '$module/modal';
-	import StoreItem from './StoreItem.svelte';
+	import StoreItem from './OrganizationItem.svelte';
 
-	import type { StoreObject } from '$types/store';
-	import { currentStore } from '$stores/store';
+	import type { OrganizationListObject } from '$types/organization';
+	import { selectedOrganization } from '$stores/organization';
 
   export let buttonWidth;
   export let disabled = false;
-  export let storeList: StoreObject[] | null = null;
-  export let currentStoreData: StoreObject | null;
+  export let organizationList: OrganizationListObject[] | null = null;
+  export let selectedOrganizationData: OrganizationListObject | null;
 
   let openCreateStoreDialog: boolean = false;
 
   const toggleCreateStoreDialog = () => openCreateStoreDialog = !openCreateStoreDialog;
 
-  const setCurrentStore = (storeId: string) => {
-    if (currentStoreData && currentStoreData.id === storeId) {
+  const setCurrentOrganization = (orgId: string) => {
+    if (selectedOrganizationData?.organization_id === orgId) {
       return;
     }
 
-    currentStore.set(storeId);
-  };
+    selectedOrganization.set(orgId);
+  }
 </script>
 
 
@@ -31,12 +31,15 @@
   </DropdownMenu.Trigger>
 
   <DropdownMenu.Content style="width: {buttonWidth}px">
-    <DropdownMenu.Label>My Stores</DropdownMenu.Label>
+    <DropdownMenu.Label>My Organizations</DropdownMenu.Label>
     <DropdownMenu.Separator />
-    {#if storeList && currentStoreData}
-      {#each storeList as store}
-        <DropdownMenu.Item on:click={() => setCurrentStore(store.id)}>
-          <StoreItem name={store.name} active={store.id === currentStoreData.id} />
+    {#if organizationList}
+      {#each organizationList as org}
+        <DropdownMenu.Item on:click={() => setCurrentOrganization(org.organization_id)}>
+          <StoreItem
+            name={org.name}
+            />
+            <!-- active={store.id === currentStoreData.id} -->
         </DropdownMenu.Item>
       {/each}
     {/if}
