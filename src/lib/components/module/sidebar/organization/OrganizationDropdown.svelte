@@ -4,11 +4,11 @@
 
 	import * as Avatar from '$ui/avatar';
 	import { Skeleton } from '$ui/skeleton';
-	import StoreMenu from './OrganizationMenu.svelte';
+	import OrganizationMenu from './OrganizationMenu.svelte';
 
 	import { getTextInitials, textToColor } from '$utils/index';
-	import type { OrganizationListObject } from '$types/organization';
-	import { availableOrganizations, selectedOrganization } from '$stores/organization';
+	import type { OrganizationListObject } from '$types/organization-type';
+	import { availableOrganizations, selectedOrganization } from '$stores/organization-store';
 
 	let organizationList: OrganizationListObject[] | null;
 	let selectedOrganizationData: OrganizationListObject | null;
@@ -18,7 +18,7 @@
 	$: initials = getTextInitials(organizationName);
 	$: avatarColor = textToColor(organizationName);
 
-	const getAvailableOrganizations = availableOrganizations.subscribe((org) => { organizationList = org; console.log(org) });
+	const getAvailableOrganizations = () => availableOrganizations.subscribe((org) => organizationList = org);
 
 	const getSelectedOrganization = async () => {
 		selectedOrganization.subscribe((orgId) => {
@@ -43,7 +43,7 @@
 	});
 </script>
 
-<StoreMenu {buttonWidth} {organizationList} {selectedOrganizationData} disabled={!organizationList}>
+<OrganizationMenu {buttonWidth} {organizationList} {selectedOrganizationData} disabled={!organizationList}>
 	<div
 		bind:clientWidth={buttonWidth}
 		class="flex justify-between items-center w-full h-14 px-2 select-none cursor-pointer text-left rounded-xl bg-transparent text-gray-800 hover:bg-gray-200 transition-all"
@@ -66,4 +66,4 @@
 			</div>
 		{/if}
 	</div>
-</StoreMenu>
+</OrganizationMenu>

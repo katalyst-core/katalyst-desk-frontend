@@ -1,5 +1,3 @@
-import CreateStoreDialog from './CreateStoreDialog.svelte';
+import CreateOrganizationDialog from './CreateOrganizationDialog.svelte';
 
-export {
-  CreateStoreDialog,
-}
+export { CreateOrganizationDialog };

@@ -3,32 +3,13 @@
 
 	import Sidebar from "$lib/components/module/sidebar/Sidebar.svelte";
 	import LoadingPage from "$lib/components/module/page/LoadingPage.svelte";
-	import CreateStoreDialog from "$lib/components/module/modal/CreateStoreDialog.svelte";
-	import { type ApiResponse } from "$types/api";
-	import type { OrganizationListObject } from "$types/organization";
-	import { fetchApi } from "$lib/custom-fetch";
-	import { toast } from "svelte-french-toast";
-	import { availableOrganizations } from "$stores/organization";
+
+	import { availableOrganizations } from "$stores/organization-store";
+  import { CreateOrganizationDialog } from "$module/modal";
+	import { fetchAllOrganization } from "$lib/api/organization-api";
 
   let hasOrganization = false;
-  let openCreateStoreDialog = false;
-
-  const getAllOrganizations = async () => {
-    const response: ApiResponse<OrganizationListObject[]> | null = await fetchApi('/organization/get-all');
-
-		if (!response) {
-			return;
-		}
-
-		if (!response.ok) {
-			toast.error('Unable to retrieved stores');
-			return;
-		}
-
-		const { data } = response;
-    console.log(data);
-		availableOrganizations.set(data);
-  }
+  let openCreateOrganizationDialog = false;
 
   const checkOrganizations = async () => {
     availableOrganizations.subscribe((org) => {
@@ -39,7 +20,7 @@
 
       if (org.length === 0) {
         hasOrganization = false;
-        // Open create or invite new organization
+        openCreateOrganizationDialog = true;
       }
 
       hasOrganization = true;
@@ -47,7 +28,7 @@
   }
 
   onMount(async () => {
-    getAllOrganizations();
+    fetchAllOrganization();
     checkOrganizations();
   });
 </script>
@@ -60,4 +41,4 @@
   </LoadingPage>
 </Sidebar>
 
-<CreateStoreDialog bind:open={openCreateStoreDialog} closeable={false} />
+<CreateOrganizationDialog bind:open={openCreateOrganizationDialog} closeable={false} />

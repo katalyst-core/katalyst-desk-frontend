@@ -35,7 +35,7 @@
       </Avatar.Fallback>
     </Avatar.Root>
     <div class="flex flex-col justify-center font-medium">
-      <p class="w-40 truncate">{name || 'Create new store'}</p>
+      <p class="w-40 truncate">{name || 'New Organization'}</p>
     </div>
   </div>
   <Check class="w-5 h-5 {!active ? 'invisible' : ''}" />

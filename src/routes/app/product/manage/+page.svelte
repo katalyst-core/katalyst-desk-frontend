@@ -11,7 +11,7 @@
 	import { ProductListDropdown } from '$module/table/dropdown';
 
 	import { fetchApi } from '$lib/custom-fetch';
-	import { currentStore } from '$stores/store';
+	// import { currentStore } from '$stores/store';
 	import type { DeleteProductList, ProductListObject } from '$types/product';
 	import type { TableActionOption, TableData } from '$types/table';
 	import type { ApiResponse, ApiTableOptions } from '$types/api';
@@ -67,34 +67,34 @@
 	};
 
 	const fetchProducts = async () => {
-		isRequestLoading = true;
+		// isRequestLoading = true;
 
-		if (!$currentStore) {
-			return;
-		}
+		// if (!$currentStore) {
+		// 	return;
+		// }
 
-		const tableOptions = getTableOptions(tableStates);
-		const response: ApiResponse<ApiTableOptions<ProductListObject[]>> | null = await fetchApi(
-			`/product/list/${$currentStore}?${tableOptions}`
-		);
+		// const tableOptions = getTableOptions(tableStates);
+		// const response: ApiResponse<ApiTableOptions<ProductListObject[]>> | null = await fetchApi(
+		// 	`/product/list/${$currentStore}?${tableOptions}`
+		// );
 
-		isRequestLoading = false;
+		// isRequestLoading = false;
 
-		if (!response) {
-			return;
-		}
+		// if (!response) {
+		// 	return;
+		// }
 
-		if (!response.ok) {
-			const message = response.message;
-			toast.error(message);
+		// if (!response.ok) {
+		// 	const message = response.message;
+		// 	toast.error(message);
 
-			return;
-		}
+		// 	return;
+		// }
 
-		const { table, pagination } = response.data;
+		// const { table, pagination } = response.data;
 
-		data.table.set(table);
-		data.pagination.set(pagination);
+		// data.table.set(table);
+		// data.pagination.set(pagination);
 	};
 
 	const deleteProducts = async (products: string[]) => {
@@ -131,7 +131,7 @@
 	};
 
 	onMount(() => {
-		currentStore.subscribe(async () => await fetchProducts());
+		// currentStore.subscribe(async () => await fetchProducts());
 		subscribePlugins(tableStates, () => fetchProducts());
 		subscribeItemsSelected(
 			tableStates,
