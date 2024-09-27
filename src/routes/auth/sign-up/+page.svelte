@@ -48,7 +48,7 @@
 
 <LoadingPage bind:loading={isFormLoading}>
 	<div class="flex justify-center items-center w-screen h-screen">
-		<div class="flex flex-col items-center gap-5">
+		<div class="flex flex-col items-center gap-5 px-8 py-14 rounded-lg shadow-lg border border-gray-200">
 			<div class="text-center">
 				<h1 class="font-bold">Get started</h1>
 				<p class="text-gray-500">Create a new account</p>
@@ -89,7 +89,7 @@
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
-				<Form.Button size="lg" bind:loading={isRequestLoading} class="w-full">Sign Up</Form.Button>
+				<Form.Button bind:loading={isRequestLoading} class="w-full">Sign Up</Form.Button>
 			</form>
 			<p>Already have an account? <a href="/auth/sign-in" class="text-gray-600">Sign In</a></p>
 		</div>
