@@ -3,8 +3,10 @@
 	import { Button } from '$ui/button';
 	import * as Card from '$ui/card';
 	import * as Tabs from '$ui/tabs';
+	import * as Accordion from "$lib/components/ui/accordion";
 
 	import img from '$lib/images/logo_omni.svg';
+	import ibx from '$lib/images/inbox.png';
 
 	// @ts-ignore
 	function scrollIntoView({ target }) {
@@ -120,15 +122,14 @@
 		you to deliver personalized, timely, and cohesive experiences that exceed expectations.
 	</p>
 
-	<div class="">
+	<div class="pt-6">
 		<div class="flex w-full h-full border border-gray-400 rounded-lg">
-			<div class="flex flex-col justify-between items-center w-72 h-80 px-5 py-8">
-				<ChartColumn />
+			<div class="flex flex-col justify-between items-center w-72 h-80 px-6 py-9">
+				<img class="h-36" src={ibx} alt="" />
 				<div class="flex flex-col items-center">
-					<h3 class="text-xl font-semibold py-2">Encrypted Wallet</h3>
+					<h3 class="text-xl font-semibold py-2">Unified Inbox</h3>
 					<p class="text-sm text-center text-gray-700">
-						An encrypted wallet is a secure digital tool designed to store & manage cryptocurrencies
-						or other digital assets
+						Consolidate messages from various platforms (WhatsApp, LINE, email, etc.) into one view.
 					</p>
 				</div>
 			</div>
@@ -215,6 +216,31 @@
 		</table>
 	</div>
 </div>
+
+<div class="flex flex-col w-full items-center justify-center">
+		<p class="text-4xl font-semibold pb-4">FAQs</p>
+		<Accordion.Root class="w-full sm:max-w-[70%] pb-8">
+			<Accordion.Item value="item-1">
+				<Accordion.Trigger class="text-xl">What is the difference between basic, standard, and premium plan?</Accordion.Trigger>
+				<Accordion.Content class="text-lg">
+					Yes. It adheres to the WAI-ARIA design pattern.</Accordion.Content
+				>
+			</Accordion.Item>
+			<Accordion.Item value="item-2">
+				<Accordion.Trigger class="text-xl">How to change my plan from one to another?</Accordion.Trigger>
+				<Accordion.Content class="text-lg">
+					Yes. It comes with default styles that matches the other components'
+					aesthetic.
+				</Accordion.Content>
+			</Accordion.Item>
+			<Accordion.Item value="item-3">
+				<Accordion.Trigger class="text-xl">How to cancel my subscription?</Accordion.Trigger>
+				<Accordion.Content class="text-lg">
+					Yes. It's animated by default, but you can disable it if you prefer.
+				</Accordion.Content>
+			</Accordion.Item>
+		</Accordion.Root>
+	</div>
 
 <footer class="flex w-full h-20 bg-gray-100 justify-center items-center shadow-lg">
 	© 2024, PT Global Integritas Teknologi
