@@ -1,6 +1,10 @@
 <script>
 	import { ChartColumn, BadgeCheck } from 'lucide-svelte';
 	import { Button } from '$ui/button';
+	import {Label} from '$ui/label';
+	import {Textarea} from '$ui/textarea';
+	import { Input } from "$ui/input";
+	import * as Select from '$ui/select';
 	import * as Card from '$ui/card';
 	import * as Tabs from '$ui/tabs';
 	import * as Accordion from "$lib/components/ui/accordion";
@@ -240,7 +244,58 @@
 				</Accordion.Content>
 			</Accordion.Item>
 		</Accordion.Root>
-	</div>
+</div>
+
+<div class="flex flex-col py-10 items-center">
+	<p class="font-bold text-6xl pt-5 pb-5">Contact Us</p>
+	<Card.Root>
+		<Card.Header>
+			<Card.Title>Report an issue</Card.Title>
+			<Card.Description>What area are you having problems with?</Card.Description>
+		</Card.Header>
+		<Card.Content class="grid gap-6">
+			<div class="grid grid-cols-2 gap-4">
+				<div class="grid gap-2">
+					<Label for="area">Area</Label>
+					<Select.Root>
+						<Select.Trigger id="area">
+							<Select.Value placeholder="Select" />
+						</Select.Trigger>
+						<Select.Content>
+						</Select.Content>
+					</Select.Root>
+				</div>
+				<div class="grid gap-2">
+					<Select.Root>
+						<Select.Trigger
+							id="security-level"
+							class="line-clamp-1 flex w-[160px] truncate"
+						>
+							<Select.Value placeholder="Select level" />
+						</Select.Trigger>
+						<Select.Content>
+						</Select.Content>
+					</Select.Root>
+				</div>
+			</div>
+			<div class="grid gap-2">
+				<Label for="subject">Subject</Label>
+				<Input id="subject" placeholder="I need help with..." />
+			</div>
+			<div class="grid gap-2">
+				<Label for="description">Description</Label>
+				<Textarea
+					id="description"
+					placeholder="Please include all information relevant to your issue."
+				/>
+			</div>
+		</Card.Content>
+		<Card.Footer class="justify-between space-x-2">
+			<Button variant="ghost">Cancel</Button>
+			<Button>Submit</Button>
+		</Card.Footer>
+	</Card.Root>
+</div>
 
 <footer class="flex w-full h-20 bg-gray-100 justify-center items-center shadow-lg">
 	© 2024, PT Global Integritas Teknologi
