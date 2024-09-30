@@ -15,7 +15,7 @@
 	});
 </script>
 
-<div class="w-screen h-screen font-open overflow-auto">
+<div class="w-screen h-screen font-poppins overflow-auto">
 	<LoadingPage bind:loading={isRequestLoading}>
 		<slot />
 	</LoadingPage>
