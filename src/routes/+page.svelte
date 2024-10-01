@@ -89,7 +89,7 @@
 
 <div class="flex h-svh justify-center">
 	<div class="flex flex-col items-center px-24 py-24">
-		<h1 class="font-bold text-8xl/[90px] text-slate-800 text-center py-4">
+		<h1 class="font-bold text-7xl text-slate-800 text-center py-4">
 			<span class="bg-gradient-to-r bg-clip-text text-transparent from-blue-500 to-blue-600">
 				Reach
 			</span>
@@ -117,7 +117,7 @@
 	>
 		What is Katalyst-desk?
 	</h1>
-	<p class="text-5xl font-bold pb-4 justify-center items-center text-center">
+	<p class="text-4xl font-bold pb-4 justify-center items-center text-center">
 		Reach Customers Everywhere. <br /> Respond to Their Needs Anywhere.
 	</p>
 	<p class="text-xl pb-4 justify-center items-center text-center">
@@ -168,7 +168,7 @@
 </div>
 
 <div class="flex flex-col py-10 items-center" id="landing-pricing">
-	<h1 class="font-bold text-6xl pt-5 pb-5">Katalyst Desk Pricing</h1>
+	<h1 class="font-bold text-5xl pt-5 pb-5">Katalyst Desk Pricing</h1>
 	<p class="text-slate-500">Affordable plans for any needs. Cancel anytime.</p>
 	<div>
 		<Tabs.Root value="account" class="w-[400px] flex justify-center items-center p-5">
@@ -270,7 +270,7 @@
 </div>
 
 <div class="flex flex-col py-10 items-center">
-	<p class="font-bold text-6xl pt-5 pb-5">Contact Us</p>
+	<p class="font-bold text-5xl pt-5 pb-5">Contact Us</p>
 	<Card.Root>
 		<Card.Header>
 			<Card.Title>Report an issue</Card.Title>
