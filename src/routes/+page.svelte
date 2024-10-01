@@ -74,8 +74,7 @@
 </script>
 
 <header
-	class="sticky top-0 z-50 flex items-center p-6 h-24 justify-between text-lg bg-white border border-b-2 shadow"
->
+	class="sticky top-0 z-50 flex items-center p-6 h-24 justify-between text-lg bg-white border border-b-2 shadow">
 	<a href=" " class="items-start pl-6 justify-start"><img class="h-16" src={img} alt="" /></a>
 	<div class="flex space-x-8 items-center justify-end sm:justify-end">
 		<a href="#landing-features" on:click|preventDefault={scrollIntoView}>Features</a>
@@ -122,13 +121,13 @@
 		Reach Customers Everywhere. <br /> Respond to Their Needs Anywhere.
 	</p>
 	<p class="text-xl pb-4 justify-center items-center text-center">
-		Katalyst Desk help Streamline your customer support with our omnichannel solution, <br /> enabling
+		Katalyst Desk help streamline your customer support with our omnichannel solution, <br /> enabling
 		you to deliver personalized, timely, and cohesive experiences that exceed expectations.
 	</p>
 
 	<div class="pt-6">
-		<div class="flex w-full h-full border border-gray-400 rounded-lg">
-			<div class="flex flex-col justify-between items-center w-72 h-80 px-6 py-9">
+		<div class="flex space-x-4 w-full h-full">
+			<div class="flex flex-col justify-between items-center w-72 h-80 px-6 py-9 border border-gray-400 rounded-lg">
 				<img class="h-36" src={ibx} alt="" />
 				<div class="flex flex-col items-center">
 					<h3 class="text-xl font-semibold py-2">Unified Inbox</h3>
@@ -137,8 +136,33 @@
 					</p>
 				</div>
 			</div>
-			<div></div>
-			<div></div>
+			<div class="flex flex-col justify-between items-center w-72 h-80 px-6 py-9 border border-gray-400 rounded-lg">
+				<img class="h-36" src={ibx} alt="" />
+				<div class="flex flex-col items-center">
+					<h3 class="text-xl font-semibold py-2">Dashboard</h3>
+					<p class="text-sm text-center text-gray-700">
+						Offer a holistic view of the customer support process, including graph and status.
+					</p>
+				</div>
+			</div>
+			<div class="flex flex-col justify-between items-center w-72 h-80 px-6 py-9 border border-gray-400 rounded-lg">
+				<img class="h-36" src={ibx} alt="" />
+				<div class="flex flex-col items-center">
+					<h3 class="text-xl font-semibold py-2">Tickets</h3>
+					<p class="text-sm text-center text-gray-700">
+						For better issue-handling, customers' complaints will be resolved in forms of tickets.
+					</p>
+				</div>
+			</div>
+			<div class="flex flex-col justify-between items-center w-72 h-80 px-6 py-9 border border-gray-400 rounded-lg">
+				<img class="h-36" src={ibx} alt="" />
+				<div class="flex flex-col items-center">
+					<h3 class="text-xl font-semibold py-2">Manage Organization</h3>
+					<p class="text-sm text-center text-gray-700">
+						Allow setting preferences such as permissions and assigning teams/members to be in the organization.
+					</p>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -225,22 +249,21 @@
 		<p class="text-4xl font-semibold pb-4">FAQs</p>
 		<Accordion.Root class="w-full sm:max-w-[70%] pb-8">
 			<Accordion.Item value="item-1">
-				<Accordion.Trigger class="text-xl">What is the difference between basic, standard, and premium plan?</Accordion.Trigger>
+				<Accordion.Trigger class="text-xl">Can i use Katalyst Desk feature without for free?</Accordion.Trigger>
 				<Accordion.Content class="text-lg">
-					Yes. It adheres to the WAI-ARIA design pattern.</Accordion.Content
+					Yes, you can. To have the full access to our features, you can also choose the paid plan according to your needs.</Accordion.Content
 				>
 			</Accordion.Item>
 			<Accordion.Item value="item-2">
 				<Accordion.Trigger class="text-xl">How to change my plan from one to another?</Accordion.Trigger>
 				<Accordion.Content class="text-lg">
-					Yes. It comes with default styles that matches the other components'
-					aesthetic.
+					Choose your next plan for your business and the previous plan will automatically canceled and changed.
 				</Accordion.Content>
 			</Accordion.Item>
 			<Accordion.Item value="item-3">
-				<Accordion.Trigger class="text-xl">How to cancel my subscription?</Accordion.Trigger>
+				<Accordion.Trigger class="text-xl">Can i cancel my subscription?</Accordion.Trigger>
 				<Accordion.Content class="text-lg">
-					Yes. It's animated by default, but you can disable it if you prefer.
+					Yes, you can cancel your subscription at any time. There is an option for cancellation on the setting page.
 				</Accordion.Content>
 			</Accordion.Item>
 		</Accordion.Root>
