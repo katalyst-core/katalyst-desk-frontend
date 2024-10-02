@@ -88,7 +88,7 @@
 </header>
 
 <div class="flex h-svh justify-center">
-	<div class="flex flex-col items-center px-24 py-24">
+	<div class="flex flex-col items-center justify-center px-24 py-24">
 		<h1 class="font-bold text-7xl text-slate-800 text-center py-4">
 			<span class="bg-gradient-to-r bg-clip-text text-transparent from-blue-500 to-blue-600">
 				Reach
@@ -128,7 +128,7 @@
 	<div class="pt-6">
 		<div class="flex space-x-4 w-full h-full">
 			<div class="flex flex-col justify-between items-center w-72 h-80 px-6 py-9 border border-gray-400 rounded-lg">
-				<img class="h-36" src={ibx} alt="" />
+				<img class="h-32" src={ibx} alt="" />
 				<div class="flex flex-col items-center">
 					<h3 class="text-xl font-semibold py-2">Unified Inbox</h3>
 					<p class="text-sm text-center text-gray-700">
@@ -137,7 +137,7 @@
 				</div>
 			</div>
 			<div class="flex flex-col justify-between items-center w-72 h-80 px-6 py-9 border border-gray-400 rounded-lg">
-				<img class="h-36" src={ibx} alt="" />
+				<img class="h-32" src={ibx} alt="" />
 				<div class="flex flex-col items-center">
 					<h3 class="text-xl font-semibold py-2">Dashboard</h3>
 					<p class="text-sm text-center text-gray-700">
@@ -146,7 +146,7 @@
 				</div>
 			</div>
 			<div class="flex flex-col justify-between items-center w-72 h-80 px-6 py-9 border border-gray-400 rounded-lg">
-				<img class="h-36" src={ibx} alt="" />
+				<img class="h-32" src={ibx} alt="" />
 				<div class="flex flex-col items-center">
 					<h3 class="text-xl font-semibold py-2">Tickets</h3>
 					<p class="text-sm text-center text-gray-700">
@@ -155,11 +155,11 @@
 				</div>
 			</div>
 			<div class="flex flex-col justify-between items-center w-72 h-80 px-6 py-9 border border-gray-400 rounded-lg">
-				<img class="h-36" src={ibx} alt="" />
+				<img class="h-32" src={ibx} alt="" />
 				<div class="flex flex-col items-center">
 					<h3 class="text-xl font-semibold py-2">Manage Organization</h3>
 					<p class="text-sm text-center text-gray-700">
-						Allow setting preferences such as permissions and assigning teams/members to be in the organization.
+						Allow setting permissions and assigning teams/members to be in the organization.
 					</p>
 				</div>
 			</div>
@@ -219,7 +219,7 @@
 						</p>
 					</th>
 					{#each plans as plan}
-						<th class="text-4xl text-center">{plan.name}</th>
+						<th class="text-3xl text-center">{plan.name}</th>
 					{/each}
 				</tr>
 			</thead>
@@ -249,9 +249,9 @@
 		<p class="text-4xl font-semibold pb-4">FAQs</p>
 		<Accordion.Root class="w-full sm:max-w-[70%] pb-8">
 			<Accordion.Item value="item-1">
-				<Accordion.Trigger class="text-xl">Can i use Katalyst Desk feature without for free?</Accordion.Trigger>
+				<Accordion.Trigger class="text-xl">Can i use Katalyst Desk feature for free?</Accordion.Trigger>
 				<Accordion.Content class="text-lg">
-					Yes, you can. To have the full access to our features, you can also choose the paid plan according to your needs.</Accordion.Content
+					Yes, you can. However, to have the full access to our features, you can choose the paid plan according to your needs.</Accordion.Content
 				>
 			</Accordion.Item>
 			<Accordion.Item value="item-2">
@@ -288,7 +288,7 @@
 						</Select.Content>
 					</Select.Root>
 				</div>
-				<div class="grid gap-2">
+				<div class="grid gap-2 items-end">
 					<Select.Root>
 						<Select.Trigger
 							id="security-level"
