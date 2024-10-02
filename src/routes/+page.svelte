@@ -1,19 +1,25 @@
-<script>
-	import { ChartColumn, BadgeCheck } from 'lucide-svelte';
+<script lang="ts">
+	import { BadgeCheck, CircleCheckBig } from 'lucide-svelte';
 	import { Button } from '$ui/button';
-	import {Label} from '$ui/label';
-	import {Textarea} from '$ui/textarea';
-	import { Input } from "$ui/input";
+	import { Label } from '$ui/label';
+	import { Textarea } from '$ui/textarea';
+	import { Input } from '$ui/input';
 	import * as Select from '$ui/select';
 	import * as Card from '$ui/card';
 	import * as Tabs from '$ui/tabs';
-	import * as Accordion from "$lib/components/ui/accordion";
+	import * as Accordion from '$lib/components/ui/accordion';
 
 	import img from '$lib/images/logo_omni.svg';
-	import ibx from '$lib/images/inbox.png';
 
-	// @ts-ignore
-	function scrollIntoView({ target }) {
+	import InboxGraphic from '$lib/images/graphics/inbox.png';
+	import MultiChannelGraphic from '$lib/images/graphics/multi-channel.png';
+	import TrackProgressGraphic from '$lib/images/graphics/track-progress.png';
+	import WebPreviewGraphic from '$lib/images/graphics/web-preview.png';
+	import StatisticGraphic from '$lib/images/graphics/statistic-graph.png';
+
+	$: isAnnualPayment = true;
+
+	function scrollIntoView({ target }: { target: any }) {
 		const el = document.querySelector(target.getAttribute('href'));
 		if (!el) return;
 		el.scrollIntoView({
@@ -21,54 +27,107 @@
 		});
 	}
 
-	const plans = [
+	const Rupiah = Intl.NumberFormat('en-ID', {
+		style: 'currency',
+		currency: 'IDR'
+	});
+
+	const pricing = [
 		{
-			name: 'Free',
+			label: 'Basic Plan',
+			monthly: 'Rp. 90,000',
+			yearly: 'Rp. 75,000',
 			features: [
-				{ label: 'Number of Users', value: '20 Pages' },
-				{ label: 'Users Per Page', value: '5 Pages' },
-				{ label: 'Includes essential features to get started', value: true },
-				{ label: 'More advanced features for increased productivity', value: true },
-				{ label: 'Designing & Development', value: false },
-				{ label: 'Customizable options to meet your specific needs', value: false },
-				{ label: 'Secure data storage', value: false },
-				{ label: 'Email Support', value: false },
-				{ label: '24/7 customer support', value: false },
-				{ label: 'Analytics and reporting', value: false },
-				{ label: 'Account Management', value: false }
+				'3 Multichannel Support',
+				'100 Tickets / Month',
+				'Report & Analysis',
+				'Team Management'
 			]
 		},
 		{
-			name: 'Standard',
+			label: 'Premium Plan',
+			monthly: 'Rp. 180,000',
+			yearly: 'Rp. 150,000',
 			features: [
-				{ label: 'Number of Users', value: '600 Pages' },
-				{ label: 'Users Per Page', value: '50 Pages' },
-				{ label: 'Includes essential features to get started', value: true },
-				{ label: 'More advanced features for increased productivity', value: true },
-				{ label: 'Designing & Development', value: true },
-				{ label: 'Customizable options to meet your specific needs', value: true },
-				{ label: 'Secure data storage', value: true },
-				{ label: 'Email Support', value: true },
-				{ label: '24/7 customer support', value: true },
-				{ label: 'Analytics and reporting', value: true },
-				{ label: 'Account Management', value: true }
+				'5 Multichannel Support',
+				'1,000 Tickets / Month',
+				'Automation',
+				'Chatbot Integration',
+				'Report & Analysis',
+				'Team Management',
+				'Standard Customer Support'
 			]
 		},
 		{
-			name: 'Premium',
+			label: 'Enterprise Plan',
+			monthly: 'Contact Us',
+			yearly: 'Contact Us',
 			features: [
-				{ label: 'Number of Users', value: 'Unlimited' },
-				{ label: 'Users Per Page', value: 'Unlimited' },
-				{ label: 'Includes essential features to get started', value: true },
-				{ label: 'More advanced features for increased productivity', value: true },
-				{ label: 'Designing & Development', value: true },
-				{ label: 'Customizable options to meet your specific needs', value: true },
-				{ label: 'Secure data storage', value: true },
-				{ label: 'Email Support', value: true },
-				{ label: '24/7 customer support', value: true },
-				{ label: 'Analytics and reporting', value: true },
-				{ label: 'Account Management', value: true }
+				'Unlimited Multichannel',
+				'Unlimited Tickets',
+				'Automation',
+				'Chatbot Integration',
+				'Report & Analysis',
+				'Team Management',
+				'Standard Customer Support'
 			]
+		}
+	];
+
+	const plans = {
+		labels: ['Basic', 'Premium', 'Enterprise'],
+		features: [
+			{
+				label: 'Multichannel Support',
+				values: ['3 channels', '5 channels', 'Unlimited']
+			},
+			{
+				label: 'Ticket Management',
+				values: ['100 tickets per month', '1,000 tickets per month', 'Unlimited tickets']
+			},
+			{
+				label: 'Reporting & Analytics',
+				values: [true, true, true]
+			},
+			{
+				label: 'Team Management',
+				values: [true, true, true]
+			},
+			{
+				label: 'Automation',
+				values: [false, true, true]
+			},
+			{
+				label: 'Chatbot Integrations',
+				values: [false, true, true]
+			},
+			{
+				label: 'Support',
+				values: [false, true, true]
+			}
+		]
+	};
+
+	const features = [
+		{
+			label: 'Unified Inbox',
+			icon: InboxGraphic,
+			desc: 'Consolidate messages from various platforms (WhatsApp, LINE, email, etc.) into one view.'
+		},
+		{
+			label: 'Multichannel Support',
+			icon: MultiChannelGraphic,
+			desc: 'Support for multiple platforms (WhatsApp, LINE, email, web chat, etc.) to provide flexibility for customers.'
+		},
+		{
+			label: 'Ticket Management',
+			icon: TrackProgressGraphic,
+			desc: 'Assign, prioritize, and track the progress of customer issues across different support channels.'
+		},
+		{
+			label: 'Performance Analytics',
+			icon: StatisticGraphic,
+			desc: 'Provide data on response times, ticket resolution, customer satisfaction, and agent performance.'
 		}
 	];
 </script>
@@ -87,154 +146,218 @@
 	</div>
 </header>
 
-<div class="flex h-svh justify-center">
-	<div class="flex flex-col items-center justify-center px-24 py-24">
-		<h1 class="font-bold text-7xl text-slate-800 text-center py-4">
-			<span class="bg-gradient-to-r bg-clip-text text-transparent from-blue-500 to-blue-600">
-				Reach
-			</span>
-			you better. <br /> Get responses
-			<span class="bg-gradient-to-r bg-clip-text text-transparent from-orange-600 to-orange-500">
-				faster</span
-			>.
-		</h1>
-		<p class="font-semibold text-slate-500 text-2xl py-2 text-center">
-			Transform the way you connect with your customer.
-		</p>
-		<div class="flex items-center space-x-8">
-			<Button size="lg" class="text-xl my-6 font-semibold ">Try for free</Button>
-			<a href="#" class="text-xl font-semibold">Get a demo ></a>
+<div class="flex flex-col items-center relative">
+	<div class="flex flex-col items-center px-4 py-12 sm:py-24">
+		<div>
+			<h1
+				class="font-bold leading-[1em] text-slate-800 text-center sm:py-4"
+				style="font-size: clamp(32px,7vw,100px);"
+			>
+				<span class="bg-gradient-to-r bg-clip-text text-transparent from-blue-500 to-blue-600">
+					Reach
+				</span>
+				you better <br /> Get responses
+				<span class="bg-gradient-to-r bg-clip-text text-transparent from-orange-600 to-orange-500">
+					faster
+				</span>
+			</h1>
+			<p
+				class="font-semibold text-slate-500 text-xl sm:text-2xl py-2 text-center"
+				style="font-size: clamp(16px,2.5vw,100px);"
+			>
+				Transform the way you connect with your customer.
+			</p>
+		</div>
+		<div class="flex flex-col sm:flex-row justify-center items-center sm:space-x-8">
+			<Button size="lg" class="text-xl my-6 font-semibold">Try for free</Button>
+			<a href="/demo" class="text-xl font-semibold">Get a demo ></a>
 		</div>
 	</div>
+
+	<div class="px-8 sm:max-w-[75%] z-10">
+		<img
+			src={WebPreviewGraphic}
+			alt=""
+			class="bg-white pb-20 border-2 border-gray-400 border-opacity-30 rounded-2xl"
+		/>
+	</div>
+
+	<svg
+		id="wave"
+		style="transform:rotate(0deg); transition: 0.3s"
+		viewBox="0 0 1440 380"
+		version="1.1"
+		xmlns="http://www.w3.org/2000/svg"
+		class="absolute bottom-8 z-0"
+		><defs
+			><linearGradient id="sw-gradient-0" x1="0" x2="0" y1="1" y2="0"
+				><stop stop-color="rgba(255, 175.574, 0, 1)" offset="0%"></stop><stop
+					stop-color="rgba(255, 175.574, 0, 1)"
+					offset="100%"
+				></stop></linearGradient
+			></defs
+		><path
+			style="transform:translate(0, 0px); opacity:1"
+			fill="url(#sw-gradient-0)"
+			d="M0,76L60,107.7C120,139,240,203,360,221.7C480,241,600,215,720,228C840,241,960,291,1080,291.3C1200,291,1320,241,1440,183.7C1560,127,1680,63,1800,38C1920,13,2040,25,2160,50.7C2280,76,2400,114,2520,145.7C2640,177,2760,203,2880,183.7C3000,165,3120,101,3240,114C3360,127,3480,215,3600,209C3720,203,3840,101,3960,101.3C4080,101,4200,203,4320,253.3C4440,304,4560,304,4680,291.3C4800,279,4920,253,5040,259.7C5160,266,5280,304,5400,291.3C5520,279,5640,215,5760,158.3C5880,101,6000,51,6120,44.3C6240,38,6360,76,6480,82.3C6600,89,6720,63,6840,69.7C6960,76,7080,114,7200,152C7320,190,7440,228,7560,215.3C7680,203,7800,139,7920,126.7C8040,114,8160,152,8280,196.3C8400,241,8520,291,8580,316.7L8640,342L8640,380L8580,380C8520,380,8400,380,8280,380C8160,380,8040,380,7920,380C7800,380,7680,380,7560,380C7440,380,7320,380,7200,380C7080,380,6960,380,6840,380C6720,380,6600,380,6480,380C6360,380,6240,380,6120,380C6000,380,5880,380,5760,380C5640,380,5520,380,5400,380C5280,380,5160,380,5040,380C4920,380,4800,380,4680,380C4560,380,4440,380,4320,380C4200,380,4080,380,3960,380C3840,380,3720,380,3600,380C3480,380,3360,380,3240,380C3120,380,3000,380,2880,380C2760,380,2640,380,2520,380C2400,380,2280,380,2160,380C2040,380,1920,380,1800,380C1680,380,1560,380,1440,380C1320,380,1200,380,1080,380C960,380,840,380,720,380C600,380,480,380,360,380C240,380,120,380,60,380L0,380Z"
+		></path><defs
+			><linearGradient id="sw-gradient-1" x1="0" x2="0" y1="1" y2="0"
+				><stop stop-color="rgba(243, 106, 62, 1)" offset="0%"></stop><stop
+					stop-color="rgba(255, 179, 11, 1)"
+					offset="100%"
+				></stop></linearGradient
+			></defs
+		><path
+			style="transform:translate(0, 50px); opacity:0.9"
+			fill="url(#sw-gradient-1)"
+			d="M0,152L60,164.7C120,177,240,203,360,177.3C480,152,600,76,720,44.3C840,13,960,25,1080,76C1200,127,1320,215,1440,221.7C1560,228,1680,152,1800,152C1920,152,2040,228,2160,228C2280,228,2400,152,2520,120.3C2640,89,2760,101,2880,133C3000,165,3120,215,3240,234.3C3360,253,3480,241,3600,215.3C3720,190,3840,152,3960,139.3C4080,127,4200,139,4320,120.3C4440,101,4560,51,4680,25.3C4800,0,4920,0,5040,38C5160,76,5280,152,5400,190C5520,228,5640,228,5760,202.7C5880,177,6000,127,6120,114C6240,101,6360,127,6480,126.7C6600,127,6720,101,6840,82.3C6960,63,7080,51,7200,95C7320,139,7440,241,7560,278.7C7680,317,7800,291,7920,240.7C8040,190,8160,114,8280,88.7C8400,63,8520,89,8580,101.3L8640,114L8640,380L8580,380C8520,380,8400,380,8280,380C8160,380,8040,380,7920,380C7800,380,7680,380,7560,380C7440,380,7320,380,7200,380C7080,380,6960,380,6840,380C6720,380,6600,380,6480,380C6360,380,6240,380,6120,380C6000,380,5880,380,5760,380C5640,380,5520,380,5400,380C5280,380,5160,380,5040,380C4920,380,4800,380,4680,380C4560,380,4440,380,4320,380C4200,380,4080,380,3960,380C3840,380,3720,380,3600,380C3480,380,3360,380,3240,380C3120,380,3000,380,2880,380C2760,380,2640,380,2520,380C2400,380,2280,380,2160,380C2040,380,1920,380,1800,380C1680,380,1560,380,1440,380C1320,380,1200,380,1080,380C960,380,840,380,720,380C600,380,480,380,360,380C240,380,120,380,60,380L0,380Z"
+		></path></svg
+	>
+
+	<svg
+		id="wave"
+		style="transform:rotate(0deg); transition: 0.3s"
+		viewBox="0 0 1440 280"
+		version="1.1"
+		xmlns="http://www.w3.org/2000/svg"
+		class="absolute bottom-0 z-20"
+		><defs
+			><linearGradient id="sw-gradient-2" x1="0" x2="0" y1="1" y2="0"
+				><stop stop-color="rgba(255, 255, 255, 1)" offset="0%"></stop><stop
+					stop-color="rgba(255, 255, 255, 1)"
+					offset="100%"
+				></stop></linearGradient
+			></defs
+		><path
+			style="transform:translate(0, 0px); opacity:1"
+			fill="url(#sw-gradient-2)"
+			d="M0,56L40,79.3C80,103,160,149,240,154C320,159,400,121,480,126C560,131,640,177,720,177.3C800,177,880,131,960,121.3C1040,112,1120,140,1200,140C1280,140,1360,112,1440,112C1520,112,1600,140,1680,149.3C1760,159,1840,149,1920,154C2000,159,2080,177,2160,177.3C2240,177,2320,159,2400,154C2480,149,2560,159,2640,158.7C2720,159,2800,149,2880,140C2960,131,3040,121,3120,121.3C3200,121,3280,131,3360,140C3440,149,3520,159,3600,149.3C3680,140,3760,112,3840,102.7C3920,93,4000,103,4080,93.3C4160,84,4240,56,4320,60.7C4400,65,4480,103,4560,107.3C4640,112,4720,84,4800,84C4880,84,4960,112,5040,102.7C5120,93,5200,47,5280,32.7C5360,19,5440,37,5520,56C5600,75,5680,93,5720,102.7L5760,112L5760,280L5720,280C5680,280,5600,280,5520,280C5440,280,5360,280,5280,280C5200,280,5120,280,5040,280C4960,280,4880,280,4800,280C4720,280,4640,280,4560,280C4480,280,4400,280,4320,280C4240,280,4160,280,4080,280C4000,280,3920,280,3840,280C3760,280,3680,280,3600,280C3520,280,3440,280,3360,280C3280,280,3200,280,3120,280C3040,280,2960,280,2880,280C2800,280,2720,280,2640,280C2560,280,2480,280,2400,280C2320,280,2240,280,2160,280C2080,280,2000,280,1920,280C1840,280,1760,280,1680,280C1600,280,1520,280,1440,280C1360,280,1280,280,1200,280C1120,280,1040,280,960,280C880,280,800,280,720,280C640,280,560,280,480,280C400,280,320,280,240,280C160,280,80,280,40,280L0,280Z"
+		></path></svg
+	>
 </div>
 
-<div
-	class="flex flex-col justify-center items-center bg-[#dce8f1] h-svh py-8"
-	id="landing-features"
->
+<div class="flex flex-col justify-center items-center px-8 py-8 relative" id="landing-features">
 	<h1
-		class="text-2xl font-medium pb-5 bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 inline-block text-transparent bg-clip-text"
+		class="text-2xl font-medium pb-5 bg-gradient-to-r from-blue-700 to-indigo-400 inline-block text-transparent bg-clip-text"
 	>
 		What is Katalyst-desk?
 	</h1>
-	<p class="text-4xl font-bold pb-4 justify-center items-center text-center">
+	<p class="text-2xl sm:text-5xl font-bold pb-4 justify-center items-center text-center">
 		Reach Customers Everywhere. <br /> Respond to Their Needs Anywhere.
 	</p>
-	<p class="text-xl pb-4 justify-center items-center text-center">
-		Katalyst Desk help streamline your customer support with our omnichannel solution, <br /> enabling
+	<p class="text-base sm:text-xl pb-4 justify-center items-center text-center">
+		Katalyst Desk help Streamline your customer support with our omnichannel solution, <br /> enabling
 		you to deliver personalized, timely, and cohesive experiences that exceed expectations.
 	</p>
 
-	<div class="pt-6">
-		<div class="flex space-x-4 w-full h-full">
-			<div class="flex flex-col justify-between items-center w-72 h-80 px-6 py-9 border border-gray-400 rounded-lg">
-				<img class="h-32" src={ibx} alt="" />
-				<div class="flex flex-col items-center">
-					<h3 class="text-xl font-semibold py-2">Unified Inbox</h3>
-					<p class="text-sm text-center text-gray-700">
-						Consolidate messages from various platforms (WhatsApp, LINE, email, etc.) into one view.
-					</p>
+	<div class="py-12">
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
+			{#each features as feature, i}
+				<div
+					class="flex flex-col justify-between items-center w-72 h-80 px-6 py-9 border-2 border-gray-400 border-opacity-40 rounded-lg shadow-lg {i %
+						2 !==
+					0
+						? 'md:mt-10'
+						: ''}"
+				>
+					<img class="h-36" src={feature.icon} alt="" />
+					<div class="flex flex-col items-center">
+						<h3 class="text-xl font-semibold py-2">{feature.label}</h3>
+						<p class="text-sm text-center text-gray-700">{feature.desc}</p>
+					</div>
 				</div>
-			</div>
-			<div class="flex flex-col justify-between items-center w-72 h-80 px-6 py-9 border border-gray-400 rounded-lg">
-				<img class="h-32" src={ibx} alt="" />
-				<div class="flex flex-col items-center">
-					<h3 class="text-xl font-semibold py-2">Dashboard</h3>
-					<p class="text-sm text-center text-gray-700">
-						Offer a holistic view of the customer support process, including graph and status.
-					</p>
-				</div>
-			</div>
-			<div class="flex flex-col justify-between items-center w-72 h-80 px-6 py-9 border border-gray-400 rounded-lg">
-				<img class="h-32" src={ibx} alt="" />
-				<div class="flex flex-col items-center">
-					<h3 class="text-xl font-semibold py-2">Tickets</h3>
-					<p class="text-sm text-center text-gray-700">
-						For better issue-handling, customers' complaints will be resolved in forms of tickets.
-					</p>
-				</div>
-			</div>
-			<div class="flex flex-col justify-between items-center w-72 h-80 px-6 py-9 border border-gray-400 rounded-lg">
-				<img class="h-32" src={ibx} alt="" />
-				<div class="flex flex-col items-center">
-					<h3 class="text-xl font-semibold py-2">Manage Organization</h3>
-					<p class="text-sm text-center text-gray-700">
-						Allow setting permissions and assigning teams/members to be in the organization.
-					</p>
-				</div>
-			</div>
+			{/each}
 		</div>
 	</div>
 </div>
 
 <div class="flex flex-col py-10 items-center" id="landing-pricing">
-	<h1 class="font-bold text-5xl pt-5 pb-5">Katalyst Desk Pricing</h1>
+	<h1 class="font-bold text-[3.2em] pt-5 pb-5 text-center">Katalyst Desk Pricing</h1>
 	<p class="text-slate-500">Affordable plans for any needs. Cancel anytime.</p>
 	<div>
-		<Tabs.Root value="account" class="w-[400px] flex justify-center items-center p-5">
+		<Tabs.Root
+			value="yearly"
+			onValueChange={(value) => (isAnnualPayment = value === 'yearly')}
+			class="w-[400px] flex justify-center items-center p-5"
+		>
 			<Tabs.List>
-				<Tabs.Trigger value="account">Monthly plans</Tabs.Trigger>
-				<Tabs.Trigger value="password">Annual plans</Tabs.Trigger>
+				<Tabs.Trigger value="monthly">Monthly plans</Tabs.Trigger>
+				<Tabs.Trigger value="yearly">Annual plans</Tabs.Trigger>
 			</Tabs.List>
 			<Tabs.Content value="account"></Tabs.Content>
 		</Tabs.Root>
 	</div>
-	<div class="flex flex-row justify-between gap-6">
-		<Card.Root class="h-60 w-80 flex justify-center items-center">
-			<Card.Header class="justify-center">
-				<p class="text-base">Basic</p>
-				<Card.Title class="text-4xl">Rp 70,000 <span class="text-base">per month</span></Card.Title>
-				<Card.Description class="p-1"></Card.Description>
-				<Button>Select</Button>
-			</Card.Header>
-		</Card.Root>
-		<Card.Root class="h-60 w-80 flex justify-center items-center">
-			<Card.Header class="justify-center">
-				<p class="text-sm">Standard</p>
-				<Card.Title class="text-4xl">Rp 110,000 <span class="text-sm">per month</span></Card.Title>
-				<Card.Description class="p-1"></Card.Description>
-				<Button>Select</Button>
-			</Card.Header>
-		</Card.Root>
-		<Card.Root class="h-60 w-80 flex justify-center items-center">
-			<Card.Header class="justify-center">
-				<p class="text-sm">Premium</p>
-				<Card.Title class="text-4xl">Rp 150,000 <span class="text-sm">per month</span></Card.Title>
-				<Card.Description class="p-3"></Card.Description>
-				<Button>Select</Button>
-			</Card.Header>
-		</Card.Root>
+
+	<div class="flex flex-col md:flex-row w-full px-4 justify-center gap-6">
+		{#each pricing as price}
+			<Card.Root class="w-full md:w-[22rem] flex flex-col">
+				<Card.Header>
+					<p class="text-base">{price.label}</p>
+					<Card.Title class="flex items-center">
+						<p class="text-4xl">
+							{isAnnualPayment ? price.yearly : price.monthly}
+						</p>
+						<div class="flex flex-col justify-center h-full pl-2">
+							{#if price.monthly !== 'Contact Us'}
+								<p class="text-xs">/ month</p>
+								<p class="text-xs">
+									billed
+									{#if isAnnualPayment}
+										annually
+									{:else}
+										monthly
+									{/if}
+								</p>
+							{/if}
+						</div>
+					</Card.Title>
+					<div class="w-full">
+						<Button size="lg" class="w-full text-xl my-4 font-semibold">Contact us</Button>
+					</div>
+				</Card.Header>
+				<Card.Content class="flex flex-col gap-1">
+					{#each price.features as feature}
+						<p class="flex items-center font-medium">
+							<CircleCheckBig class="inline mr-2 w-5 h-5 text-orange-600" />
+							{feature}
+						</p>
+					{/each}
+				</Card.Content>
+			</Card.Root>
+		{/each}
 	</div>
 
-	<div class="w-11/12">
+	<div class="hidden md:flex justify-center w-full px-8 max-w-[100em]">
 		<table
 			class="w-full rounded-xl my-8 table-fixed border border-gray-300 overflow-hidden border-separate shadow-xl"
 		>
 			<thead>
 				<tr class="[&>th]:font-semibold">
-					<th class="w-96 text-left p-8">
+					<th class="w-80 text-left p-8">
 						<p class="py-2 text-xl">Compare plans</p>
 						<p class="text-gray-400 text-sm">
-							Choose your workspace plan according to your organizational plan
+							Choose your plan according to your organizational needs
 						</p>
 					</th>
-					{#each plans as plan}
-						<th class="text-3xl text-center">{plan.name}</th>
+					{#each plans.labels as label}
+						<th class="text-4xl text-center" style="font-size: clamp(6px,2vw,100px);">{label}</th>
 					{/each}
 				</tr>
 			</thead>
 			<tbody>
-				{#each plans[0].features as { label }, index}
+				{#each plans.features as { label, values }}
 					<tr class="border-t">
-						<td class="w-96 p-8 border-t border-gray-300">{label}</td>
-						{#each plans as plan}
+						<td class="p-8 border-t border-gray-300">{label}</td>
+						{#each values as value}
 							<td class="text-center border-t border-gray-300">
-								{#if typeof plan.features[index].value === 'boolean'}
-									{#if plan.features[index].value}
+								{#if typeof value === 'boolean'}
+									{#if value}
 										<BadgeCheck class="text-orange-600 mx-auto" />
+									{:else}
+										<BadgeCheck class="text-gray-500 mx-auto" />
 									{/if}
 								{:else}
-									{plan.features[index].value}
+									{value}
 								{/if}
 							</td>
 						{/each}
@@ -245,28 +368,56 @@
 	</div>
 </div>
 
-<div class="flex flex-col w-full items-center justify-center">
+<div class="flex w-full justify-center">
+	<div class="flex flex-col w-full max-w-[100em] px-8">
 		<p class="text-4xl font-semibold pb-4">FAQs</p>
-		<Accordion.Root class="w-full sm:max-w-[70%] pb-8">
+		<Accordion.Root class="w-full pb-8">
 			<Accordion.Item value="item-1">
-				<Accordion.Trigger class="text-xl">Can i use Katalyst Desk feature for free?</Accordion.Trigger>
-				<Accordion.Content class="text-lg">
-					Yes, you can. However, to have the full access to our features, you can choose the paid plan according to your needs.</Accordion.Content
-				>
+				<Accordion.Trigger class="text-xl text-left">
+					What is an omnichannel customer support?
+				</Accordion.Trigger>
+				<Accordion.Content class="text-lg text-left">
+					An omnichannel customer support platform allows businesses to manage customer interaction
+					from multiple channels (e.g., WhatsApp, Facebook, Email, etc.) in one place.
+				</Accordion.Content>
 			</Accordion.Item>
 			<Accordion.Item value="item-2">
-				<Accordion.Trigger class="text-xl">How to change my plan from one to another?</Accordion.Trigger>
-				<Accordion.Content class="text-lg">
-					Choose your next plan for your business and the previous plan will automatically canceled and changed.
+				<Accordion.Trigger class="text-xl text-left">
+					What channels can I connect to in the platform?
+				</Accordion.Trigger>
+				<Accordion.Content class="text-lg text-left">
+					Currently, we only support WhatsApp and LINE messaging.
 				</Accordion.Content>
 			</Accordion.Item>
 			<Accordion.Item value="item-3">
-				<Accordion.Trigger class="text-xl">Can i cancel my subscription?</Accordion.Trigger>
-				<Accordion.Content class="text-lg">
-					Yes, you can cancel your subscription at any time. There is an option for cancellation on the setting page.
+				<Accordion.Trigger class="text-xl text-left">
+					How does the ticket management system work?
+				</Accordion.Trigger>
+				<Accordion.Content class="text-lg text-left">
+					Our ticket management system organizes customer inquiries into tickets. Teams and
+					individual agents can track, prioritize, and resolve these tickets efficiently.
+				</Accordion.Content>
+			</Accordion.Item>
+			<Accordion.Item value="item-4">
+				<Accordion.Trigger class="text-xl text-left">
+					Can I use this platform if I'm a small business?
+				</Accordion.Trigger>
+				<Accordion.Content class="text-lg text-left">
+					Yes! Our Basic Plan is designed specifically for small businesses. You can start with
+					essential features and scale up as your business grows.
+				</Accordion.Content>
+			</Accordion.Item>
+			<Accordion.Item value="item-5">
+				<Accordion.Trigger class="text-xl text-left">
+					Is there chatbot integration?
+				</Accordion.Trigger>
+				<Accordion.Content class="text-lg text-left">
+					Yes, we offer chatbot integration. Depending on your plan, you can have a basic chatbot or
+					an AI-powered chatbot that automate responses and engage customers 24/7.
 				</Accordion.Content>
 			</Accordion.Item>
 		</Accordion.Root>
+	</div>
 </div>
 
 <div class="flex flex-col py-10 items-center">
@@ -284,20 +435,15 @@
 						<Select.Trigger id="area">
 							<Select.Value placeholder="Select" />
 						</Select.Trigger>
-						<Select.Content>
-						</Select.Content>
+						<Select.Content></Select.Content>
 					</Select.Root>
 				</div>
 				<div class="grid gap-2 items-end">
 					<Select.Root>
-						<Select.Trigger
-							id="security-level"
-							class="line-clamp-1 flex w-[160px] truncate"
-						>
+						<Select.Trigger id="security-level" class="line-clamp-1 flex w-[160px] truncate">
 							<Select.Value placeholder="Select level" />
 						</Select.Trigger>
-						<Select.Content>
-						</Select.Content>
+						<Select.Content></Select.Content>
 					</Select.Root>
 				</div>
 			</div>
@@ -320,6 +466,6 @@
 	</Card.Root>
 </div>
 
-<footer class="flex w-full h-20 bg-gray-100 justify-center items-center shadow-lg">
+<footer class="flex w-full h-20 bg-gray-200 justify-center items-center shadow-lg">
 	© 2024, PT Global Integritas Teknologi
 </footer>
