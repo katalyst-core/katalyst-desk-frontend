@@ -327,8 +327,8 @@
 			class="flex justify-center items-center p-4"
 		>
 			<Tabs.List>
-				<Tabs.Trigger value="monthly" class="text-sm sm:text-lg px-4">Monthly plans</Tabs.Trigger>
-				<Tabs.Trigger value="yearly" class="text-sm sm:text-lg px-4">Annual plans</Tabs.Trigger>
+				<Tabs.Trigger value="monthly" class="text-sm min-[425px]:text-lg px-4">Monthly plans</Tabs.Trigger>
+				<Tabs.Trigger value="yearly" class="text-sm min-[425px]:text-lg px-4">Annual plans</Tabs.Trigger>
 			</Tabs.List>
 			<Tabs.Content value="account"></Tabs.Content>
 		</Tabs.Root>
