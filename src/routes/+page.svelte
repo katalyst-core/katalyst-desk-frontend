@@ -136,12 +136,12 @@
 	class="sticky top-0 z-50 flex items-center p-6 h-24 justify-between text-lg bg-white border border-b-2 shadow">
 	<a href=" " class="items-start pl-6 justify-start"><img class="h-16" src={img} alt="" /></a>
 	<div class="flex space-x-8 items-center justify-end sm:justify-end">
-		<a href="#landing-features" on:click|preventDefault={scrollIntoView}>Features</a>
-		<a href="#landing-pricing" on:click|preventDefault={scrollIntoView}>Pricing</a>
-		<a href="#landing-aboutus" on:click|preventDefault={scrollIntoView}>About Us</a>
+		<a href="#landing-features" on:click|preventDefault={scrollIntoView} class="hidden sm:block">Features</a>
+		<a href="#landing-pricing" on:click|preventDefault={scrollIntoView} class="hidden sm:block">Pricing</a>
+		<a href="#landing-aboutus" on:click|preventDefault={scrollIntoView} class="hidden sm:block">About Us</a>
 		<div class="space-x-2">
-			<Button variant="outline" href="/auth/sign-in" class="text-lg px-7 py-6">Sign In</Button>
-			<Button href="/auth/sign-up" class="text-lg px-7 py-6">Sign Up</Button>
+			<Button variant="outline" href="/auth/sign-in" class="text-sm sm:text-lg sm:px-7 sm:py-6">Sign In</Button>
+			<Button href="/auth/sign-up" class="text-sm sm:text-lg sm:px-7 sm:py-6">Sign Up</Button>
 		</div>
 	</div>
 </header>
