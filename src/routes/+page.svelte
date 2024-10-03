@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { BadgeCheck, CircleCheckBig } from 'lucide-svelte';
+	import { BadgeCheck, CircleCheckBig, Menu } from 'lucide-svelte';
 	import { Button } from '$ui/button';
 	import * as Card from '$ui/card';
 	import * as Tabs from '$ui/tabs';
@@ -13,13 +13,18 @@
 	import StatisticGraphic from '$lib/images/graphics/statistic-graph.png';
 
 	$: isAnnualPayment = true;
+	let isOpen = false;
 
 	const scrollIntoView = ({ target }: { target: any }) => {
 		const el = document.querySelector(target.getAttribute('href'));
 		if (!el) return;
-		el.scrollIntoView({
-			behavior: 'smooth'
-		});
+
+		setTimeout(() => {
+			el.scrollIntoView({
+				block: 'start',
+				behavior: 'smooth'
+			});
+		}, 10);
 	};
 
 	const Rupiah = Intl.NumberFormat('en-ID', {
@@ -125,24 +130,65 @@
 			desc: 'Provide data on response times, ticket resolution, customer satisfaction, and agent performance.'
 		}
 	];
+
+	const toggleMenu = () => (isOpen = !isOpen);
+	const closeMenu = () => (isOpen = false);
 </script>
 
 <header
-	class="sticky top-0 z-50 flex items-center p-6 h-24 justify-between text-lg bg-white border border-b-2 shadow"
+	class="sticky top-0 z-50 flex items-center p-6 h-24 justify-between text-lg bg-white border-b-2 shadow"
 >
 	<a href="/" class="flex items-center gap-2">
-		<img class="h-16" src={KatalystLogo} alt="" />
+		<img class="h-16" src={KatalystLogo} alt="Katalyst Desk Logo" />
 		<h1 class="font-medium text-3xl">Katalyst Desk</h1>
 	</a>
-	<div class="flex space-x-8 items-center justify-end sm:justify-end">
-		<a href="#landing-features" on:click|preventDefault={scrollIntoView} class="hidden sm:block">Features</a>
-		<a href="#landing-pricing" on:click|preventDefault={scrollIntoView} class="hidden sm:block">Pricing</a>
-		<a href="#landing-contact" on:click|preventDefault={scrollIntoView} class="hidden sm:block">Contact Us</a>
+
+	<!-- Burger Menu Button -->
+	<button class="md:hidden flex items-center px-2 text-gray-800" on:click={toggleMenu}>
+		<Menu class="w-10 h-10" />
+	</button>
+
+	<!-- Menu Items -->
+	<nav class="hidden md:flex space-x-8 items-center justify-end">
+		<a href="#landing-features" on:click|preventDefault={scrollIntoView} class="hidden sm:block"
+			>Features</a
+		>
+		<a href="#landing-pricing" on:click|preventDefault={scrollIntoView} class="hidden sm:block"
+			>Pricing</a
+		>
+		<a href="#landing-contact" on:click|preventDefault={scrollIntoView} class="hidden sm:block"
+			>Contact Us</a
+		>
 		<div class="space-x-2">
-			<!-- <Button variant="outline" href="/auth/sign-in" class="text-sm sm:text-lg sm:px-7 sm:py-6">Sign In</Button>
-			<Button href="/auth/sign-up" class="text-sm sm:text-lg sm:px-7 sm:py-6">Sign Up</Button> -->
 			<Button variant="outline" href="#" class="text-lg px-7 py-6">Coming Soon</Button>
 		</div>
+	</nav>
+
+	<!-- Mobile Menu -->
+	<div
+		class={`${
+			isOpen ? 'max-h-[15em]' : 'max-h-0'
+		} block overflow-hidden md:hidden absolute top-24 right-0 w-full bg-white shadow-lg transition-all duration-100 ease-linear`}
+	>
+		<ul class="flex flex-col items-start space-y-4 py-4 w-full px-4 [&>li]:py-2 [&>li]:px-2">
+			<li>
+				<a href="#landing-features" on:click={closeMenu} class="text-lg">Features</a>
+			</li>
+			<li>
+				<a href="#landing-pricing" on:click={closeMenu} class="text-lg">Pricing</a>
+			</li>
+			<li>
+				<a href="#landing-contact" on:click={closeMenu} class="text-lg">Contact Us</a>
+			</li>
+			<li class="w-full">
+				<Button
+					variant="outline"
+					href="#"
+					class="text-lg px-7 py-6 w-full border-2 border-gray-400 border-opacity-30"
+					>Coming Soon</Button
+				>
+			</li>
+		</ul>
 	</div>
 </header>
 
@@ -430,7 +476,9 @@
 			interested in learning more or have any questions, feel free to get in touch. Simply click the
 			button below, and our team will be happy to assist you with any inquiries.
 		</p>
-		<Button class="text-2xl px-8 py-8 my-10" href="mailto:katalystcore@gmail.com">Contact Us Here</Button>
+		<Button class="text-2xl px-8 py-8 my-10" href="mailto:katalystcore@gmail.com"
+			>Contact Us Here</Button
+		>
 	</div>
 </div>
 
