@@ -297,7 +297,7 @@
 	</p>
 
 	<div class="py-12">
-		<div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
+		<div class="flex flex-col sm:grid grid-cols-1 justify-center md:grid-cols-2 gap-x-12 gap-y-4">
 			{#each features as feature, i}
 				<div
 					class="flex flex-col justify-between items-center w-72 h-80 px-6 py-9 border-2 border-gray-400 border-opacity-40 rounded-lg shadow-lg {i %
@@ -324,11 +324,11 @@
 		<Tabs.Root
 			value="yearly"
 			onValueChange={(value) => (isAnnualPayment = value === 'yearly')}
-			class="w-[400px] flex justify-center items-center p-5"
+			class="flex justify-center items-center p-4"
 		>
 			<Tabs.List>
-				<Tabs.Trigger value="monthly">Monthly plans</Tabs.Trigger>
-				<Tabs.Trigger value="yearly">Annual plans</Tabs.Trigger>
+				<Tabs.Trigger value="monthly" class="text-sm sm:text-lg px-4">Monthly plans</Tabs.Trigger>
+				<Tabs.Trigger value="yearly" class="text-sm sm:text-lg px-4">Annual plans</Tabs.Trigger>
 			</Tabs.List>
 			<Tabs.Content value="account"></Tabs.Content>
 		</Tabs.Root>
