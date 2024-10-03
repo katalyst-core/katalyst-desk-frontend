@@ -1,4 +1,4 @@
-import adapter from '@sveltejs/adapter-static';
+import adapter from '@sveltejs/adapter-cloudflare';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 /** @type {import('@sveltejs/kit').Config} */
@@ -16,7 +16,17 @@ const config = {
 			assets: 'build',
 			trailingSlash: 'always',
 			precompress: false,
-			fallback: '404.html'
+			fallback: '404.html',
+			routes: {
+				include: ['/*'],
+				exclude: ['<all>']
+			},
+			platformProxy: {
+				configPath: 'wrangler.toml',
+				environment: undefined,
+				experimentalJsonConfig: false,
+				persist: false
+			}
 		}),
 
 		alias: {
