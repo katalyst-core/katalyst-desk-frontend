@@ -1,16 +1,11 @@
 <script lang="ts">
 	import { BadgeCheck, CircleCheckBig } from 'lucide-svelte';
 	import { Button } from '$ui/button';
-	import { Label } from '$ui/label';
-	import { Textarea } from '$ui/textarea';
-	import { Input } from '$ui/input';
-	import * as Select from '$ui/select';
 	import * as Card from '$ui/card';
 	import * as Tabs from '$ui/tabs';
 	import * as Accordion from '$lib/components/ui/accordion';
 
-	import img from '$lib/images/logo_omni.svg';
-
+	import KatalystLogo from '$lib/images/katalyst-logo.png';
 	import InboxGraphic from '$lib/images/graphics/inbox.png';
 	import MultiChannelGraphic from '$lib/images/graphics/multi-channel.png';
 	import TrackProgressGraphic from '$lib/images/graphics/track-progress.png';
@@ -19,13 +14,13 @@
 
 	$: isAnnualPayment = true;
 
-	function scrollIntoView({ target }: { target: any }) {
+	const scrollIntoView = ({ target }: { target: any }) => {
 		const el = document.querySelector(target.getAttribute('href'));
 		if (!el) return;
 		el.scrollIntoView({
 			behavior: 'smooth'
 		});
-	}
+	};
 
 	const Rupiah = Intl.NumberFormat('en-ID', {
 		style: 'currency',
@@ -133,15 +128,20 @@
 </script>
 
 <header
-	class="sticky top-0 z-50 flex items-center p-6 h-24 justify-between text-lg bg-white border border-b-2 shadow">
-	<a href=" " class="items-start pl-6 justify-start"><img class="h-16" src={img} alt="" /></a>
+	class="sticky top-0 z-50 flex items-center p-6 h-24 justify-between text-lg bg-white border border-b-2 shadow"
+>
+	<a href="/" class="flex items-center gap-2">
+		<img class="h-16" src={KatalystLogo} alt="" />
+		<h1 class="font-medium text-3xl">Katalyst Desk</h1>
+	</a>
 	<div class="flex space-x-8 items-center justify-end sm:justify-end">
 		<a href="#landing-features" on:click|preventDefault={scrollIntoView} class="hidden sm:block">Features</a>
 		<a href="#landing-pricing" on:click|preventDefault={scrollIntoView} class="hidden sm:block">Pricing</a>
-		<a href="#landing-aboutus" on:click|preventDefault={scrollIntoView} class="hidden sm:block">About Us</a>
+		<a href="#landing-contact" on:click|preventDefault={scrollIntoView} class="hidden sm:block">Contact Us</a>
 		<div class="space-x-2">
-			<Button variant="outline" href="/auth/sign-in" class="text-sm sm:text-lg sm:px-7 sm:py-6">Sign In</Button>
-			<Button href="/auth/sign-up" class="text-sm sm:text-lg sm:px-7 sm:py-6">Sign Up</Button>
+			<!-- <Button variant="outline" href="/auth/sign-in" class="text-sm sm:text-lg sm:px-7 sm:py-6">Sign In</Button>
+			<Button href="/auth/sign-up" class="text-sm sm:text-lg sm:px-7 sm:py-6">Sign Up</Button> -->
+			<Button variant="outline" href="#" class="text-lg px-7 py-6">Coming Soon</Button>
 		</div>
 	</div>
 </header>
@@ -236,15 +236,15 @@
 	>
 </div>
 
-<div class="flex flex-col justify-center items-center px-8 py-8 relative" id="landing-features">
+<div id="landing-features" class="flex flex-col justify-center items-center px-8 py-32 relative">
 	<h1
-		class="text-2xl font-medium pb-5 bg-gradient-to-r from-blue-700 to-indigo-400 inline-block text-transparent bg-clip-text"
+		class="text-2xl font-medium pb-5 bg-gradient-to-r from-blue-700 to-indigo-400 inline-block text-transparent bg-clip-text text-center"
 	>
-		What is Katalyst-desk?
+		What is Katalyst-Desk?
 	</h1>
-	<p class="text-2xl sm:text-5xl font-bold pb-4 justify-center items-center text-center">
+	<h2 class="text-2xl sm:text-5xl font-bold pb-4 justify-center items-center text-center">
 		Reach Customers Everywhere. <br /> Respond to Their Needs Anywhere.
-	</p>
+	</h2>
 	<p class="text-base sm:text-xl pb-4 justify-center items-center text-center">
 		Katalyst Desk help Streamline your customer support with our omnichannel solution, <br /> enabling
 		you to deliver personalized, timely, and cohesive experiences that exceed expectations.
@@ -271,9 +271,9 @@
 	</div>
 </div>
 
-<div class="flex flex-col py-10 items-center" id="landing-pricing">
+<div id="landing-pricing" class="flex flex-col py-32 items-center">
 	<h1 class="font-bold text-[3.2em] pt-5 pb-5 text-center">Katalyst Desk Pricing</h1>
-	<p class="text-slate-500">Affordable plans for any needs. Cancel anytime.</p>
+	<p class="text-slate-500 px-2 text-center">Affordable plans for any needs. Cancel anytime.</p>
 	<div>
 		<Tabs.Root
 			value="yearly"
@@ -288,9 +288,9 @@
 		</Tabs.Root>
 	</div>
 
-	<div class="flex flex-col md:flex-row w-full px-4 justify-center gap-6">
+	<div class="flex flex-col lg:flex-row w-full px-4 justify-center gap-6">
 		{#each pricing as price}
-			<Card.Root class="w-full md:w-[22rem] flex flex-col">
+			<Card.Root class="w-full lg:w-[22rem] flex flex-col">
 				<Card.Header>
 					<p class="text-base">{price.label}</p>
 					<Card.Title class="flex items-center">
@@ -420,50 +420,18 @@
 	</div>
 </div>
 
-<div class="flex flex-col py-10 items-center">
-	<p class="font-bold text-5xl pt-5 pb-5">Contact Us</p>
-	<Card.Root>
-		<Card.Header>
-			<Card.Title>Report an issue</Card.Title>
-			<Card.Description>What area are you having problems with?</Card.Description>
-		</Card.Header>
-		<Card.Content class="grid gap-6">
-			<div class="grid grid-cols-2 gap-4">
-				<div class="grid gap-2">
-					<Label for="area">Area</Label>
-					<Select.Root>
-						<Select.Trigger id="area">
-							<Select.Value placeholder="Select" />
-						</Select.Trigger>
-						<Select.Content></Select.Content>
-					</Select.Root>
-				</div>
-				<div class="grid gap-2 items-end">
-					<Select.Root>
-						<Select.Trigger id="security-level" class="line-clamp-1 flex w-[160px] truncate">
-							<Select.Value placeholder="Select level" />
-						</Select.Trigger>
-						<Select.Content></Select.Content>
-					</Select.Root>
-				</div>
-			</div>
-			<div class="grid gap-2">
-				<Label for="subject">Subject</Label>
-				<Input id="subject" placeholder="I need help with..." />
-			</div>
-			<div class="grid gap-2">
-				<Label for="description">Description</Label>
-				<Textarea
-					id="description"
-					placeholder="Please include all information relevant to your issue."
-				/>
-			</div>
-		</Card.Content>
-		<Card.Footer class="justify-between space-x-2">
-			<Button variant="ghost">Cancel</Button>
-			<Button>Submit</Button>
-		</Card.Footer>
-	</Card.Root>
+<div id="landing-contact" class="flex justify-center py-32 px-8">
+	<div class=" flex flex-col items-center max-w-[75em]">
+		<h2 class="text-2xl sm:text-5xl font-bold pb-4 justify-center items-center text-center">
+			Contact Us
+		</h2>
+		<p class="text-base sm:text-xl pb-4 justify-center items-center text-center">
+			We're excited to help you streamline your customer support across multiple channels! If you're
+			interested in learning more or have any questions, feel free to get in touch. Simply click the
+			button below, and our team will be happy to assist you with any inquiries.
+		</p>
+		<Button class="text-2xl px-8 py-8 my-10" href="mailto:katalystcore@gmail.com">Contact Us Here</Button>
+	</div>
 </div>
 
 <footer class="flex w-full h-20 bg-gray-200 justify-center items-center shadow-lg">
