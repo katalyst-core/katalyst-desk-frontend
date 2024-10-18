@@ -10,7 +10,7 @@
 	let isRequestLoading = true;
 
 	onMount(async () => {
-		// await AgentAPI.fetchAgent();
+		await AgentAPI.fetchAgent();
 		isRequestLoading = false;
 	});
 </script>

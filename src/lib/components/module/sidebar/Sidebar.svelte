@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Clock, House, Library } from 'lucide-svelte';
+	import { Clock, House, Tickets } from 'lucide-svelte';
 
 	import * as Collapsible from '$ui/collapsible';
 	import { Separator } from '$ui/separator';
@@ -17,25 +17,30 @@
 			path: '/app/dashboard'
 		},
 		{
-			label: 'Product',
-			icon: Library,
-			path: '/app/product',
-			children: [
-				{
-					label: 'Manage Product',
-					path: '/app/product/manage'
-				},
-				{
-					label: 'Manage Stock',
-					path: '/app/product/stock'
-				}
-			]
+			label: 'Ticket',
+			icon: Tickets,
+			path: '/app/ticket',
 		},
-		{
-			label: 'Order',
-			icon: Clock,
-			path: '/app/order'
-		}
+		// {
+		// 	label: 'Product',
+		// 	icon: Library,
+		// 	path: '/app/product',
+		// 	children: [
+		// 		{
+		// 			label: 'Manage Product',
+		// 			path: '/app/product/manage'
+		// 		},
+		// 		{
+		// 			label: 'Manage Stock',
+		// 			path: '/app/product/stock'
+		// 		}
+		// 	]
+		// },
+		// {
+		// 	label: 'Order',
+		// 	icon: Clock,
+		// 	path: '/app/order'
+		// }
 	] as SidebarObject[];
 
 	items.forEach((item: SidebarObject) => {
@@ -49,7 +54,7 @@
 
 <div class="flex w-full h-full bg-gray-50">
 	<div
-		class="flex flex-col justify-between w-72 h-screen px-2 py-4 bg-gray-50 border-r-2 border-gray-200"
+		class="flex flex-col justify-between w-64 h-screen px-2 py-2 bg-gray-50 border-r-2 border-gray-200"
 	>
 		<!-- Top -->
 		<div class="flex flex-col w-full gap-2">

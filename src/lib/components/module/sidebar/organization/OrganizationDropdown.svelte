@@ -7,11 +7,11 @@
 	import OrganizationMenu from './OrganizationMenu.svelte';
 
 	import { getTextInitials, textToColor } from '$utils/index';
-	import type { OrganizationListObject } from '$types/organization-type';
+	import type { OrganizationObject } from '$types/organization-type';
 	import { availableOrganizations, selectedOrganization } from '$stores/organization-store';
 
-	let organizationList: OrganizationListObject[] | null;
-	let selectedOrganizationData: OrganizationListObject | null;
+	let organizationList: OrganizationObject[] | null;
+	let selectedOrganizationData: OrganizationObject | null;
 	let organizationName = 'Choose one';
 	let buttonWidth: number;
 

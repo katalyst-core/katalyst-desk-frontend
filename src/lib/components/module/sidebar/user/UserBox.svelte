@@ -35,8 +35,8 @@
         <Avatar.Fallback class="font-medium">{initials}</Avatar.Fallback>
       </Avatar.Root>
       <div class="flex flex-col justify-center font-medium">
-        <p class="w-40 truncate">{name}</p>
-        <p class="w-40 truncate text-sm opacity-65">{email}</p>
+        <p class="w-32 truncate">{name}</p>
+        <p class="w-32 truncate text-sm opacity-65">{email}</p>
       </div>
     </div>
     <ChevronUp class="w-6 h-6 mx-2" />

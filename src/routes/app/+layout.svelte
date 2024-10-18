@@ -35,7 +35,7 @@
 
 <Sidebar>
   <LoadingPage loading={!hasOrganization}>
-    <div class="w-full h-full p-4 bg-muted overflow-auto">
+    <div class="w-full h-full bg-muted overflow-auto">
       <slot />
     </div>
   </LoadingPage>

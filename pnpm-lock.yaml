@@ -20,6 +20,9 @@ importers:
       cookie:
         specifier: ^0.6.0
         version: 0.6.0
+      date-fns:
+        specifier: ^4.1.0
+        version: 4.1.0
       formsnap:
         specifier: ^1.0.1
         version: 1.0.1(svelte@4.2.18)(sveltekit-superforms@2.15.2(@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.3(@types/node@22.7.4)))(svelte@4.2.18)(vite@5.3.3(@types/node@22.7.4)))(svelte@4.2.18))
@@ -979,6 +982,9 @@ packages:
 
   data-uri-to-buffer@2.0.2:
     resolution: {integrity: sha512-ND9qDTLc6diwj+Xe5cdAgVTbLVdXbtxTJRXRhli8Mowuaan+0EJOtdqJ0QCHNSSPyoXGx9HX2/VMnKeC34AChA==}
+
+  date-fns@4.1.0:
+    resolution: {integrity: sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==}
 
   dayjs@1.11.11:
     resolution: {integrity: sha512-okzr3f11N6WuqYtZSvm+F776mB41wRZMhKP+hc34YdW+KmtYYK9iqvHSwo2k9FEH3fhGXvOPV6yz2IcSrfRUDg==}
@@ -2923,6 +2929,8 @@ snapshots:
   cssesc@3.0.0: {}
 
   data-uri-to-buffer@2.0.2: {}
+
+  date-fns@4.1.0: {}
 
   dayjs@1.11.11:
     optional: true
