@@ -12,7 +12,7 @@ export type ApiError = {
   code: string;
 }
 
-export type ApiTableOptions<T> = {
-  table: T,
+export type TableOptions<T> = {
+  result: T,
   pagination: PaginationData
 }

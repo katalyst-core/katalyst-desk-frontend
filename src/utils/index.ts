@@ -49,3 +49,7 @@ export const textToColor = (text: string) => {
 
 	return colors[(count % colors.length)];
 };
+
+export const scrollToBottom = (element: HTMLElement) => {
+	element.scroll({ top: element.scrollHeight, behavior: 'instant' });
+};

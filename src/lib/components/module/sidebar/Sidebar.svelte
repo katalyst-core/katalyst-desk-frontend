@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Clock, House, Tickets } from 'lucide-svelte';
+	import { Clock, House, Layers3, Tickets } from 'lucide-svelte';
 
 	import * as Collapsible from '$ui/collapsible';
 	import { Separator } from '$ui/separator';
@@ -18,7 +18,7 @@
 		},
 		{
 			label: 'Ticket',
-			icon: Tickets,
+			icon: Layers3,
 			path: '/app/ticket',
 		},
 		// {

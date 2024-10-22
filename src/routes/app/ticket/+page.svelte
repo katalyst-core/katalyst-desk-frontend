@@ -13,6 +13,7 @@
 	let tickets: TicketListItem[] | null = null;
 	let messages: TicketMessage[] | null = null;
 	let activeTicket: TicketListItem | null;
+	let currentMessagesPage = 1;
 
 	$: activeTicket = null;
 	$: activeTicket ? getMessages() : null;
@@ -30,15 +31,34 @@
 		}
 
 		activeTicket.unread_count = 0;
+		currentMessagesPage = 1;
 
 		const ticketId = activeTicket.ticket_id;
-		const _messages = await TicketAPI.getMessagesByTicketId(ticketId);
+		const _messages = await TicketAPI.getMessagesByTicketId(ticketId, 1);
 		if (_messages?.ok) {
-			messages = _messages.data;
+			messages = _messages.data.result.reverse();
 
 			await TicketAPI.readMessagesByTicketId(ticketId);
 		}
 	}
+
+	const getMoreMessages = async () => {
+		if (!activeTicket) {
+			return;
+		}
+
+		const ticketId = activeTicket.ticket_id;
+		const _messages = await TicketAPI.getMessagesByTicketId(ticketId, ++currentMessagesPage);
+		if (messages && _messages?.ok) {
+			const { total_page: totalPage } = _messages.data.pagination;
+			if (currentMessagesPage > totalPage) {
+				return;
+			}
+
+			messages = [..._messages.data.result.reverse(), ...messages];
+			currentMessagesPage = Math.min(currentMessagesPage, _messages.data.pagination.total_page);
+		}
+	};
 
 	onMount(async () => {
 		selectedOrganization.subscribe(async (orgId) => {
@@ -62,5 +82,7 @@
 		</div>
 		<ChatList {tickets} bind:activeTicket />
 	</div>
-	<ChatWindow rawMessages={messages} />
+	{#if messages}
+		<ChatWindow messages={messages} fetchMessages={getMoreMessages} />
+	{/if}
 </div>
