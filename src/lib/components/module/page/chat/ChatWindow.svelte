@@ -10,7 +10,7 @@
 
 	let messageElement: HTMLElement;
 	export let fetchMessages: Function;
-	export let messages: TicketMessage[];
+	export let messages: TicketMessage[] = [];
 
 	const showMessageDate = (idx: number) => {
 		if (messages == null) {

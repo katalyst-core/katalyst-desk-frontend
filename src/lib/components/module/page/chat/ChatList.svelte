@@ -3,11 +3,13 @@
 	import { differenceInDays, format } from 'date-fns';
 
 	import * as Avatar from '$ui/avatar';
+	import { Skeleton } from '$ui/skeleton';
 	import { getTextInitials } from '$utils/index';
 	import type { TicketListItem } from '$types/ticket-type';
+	import InfiniteScroll from '$module/util/InfiniteScroll.svelte';
 
-	import { Skeleton } from '$ui/skeleton';
-
+	let ticketElement: HTMLElement;
+	export let fetchTickets: Function;
 	export let activeTicket: TicketListItem | null;
 	export let tickets: TicketListItem[] | null;
 
@@ -41,6 +43,7 @@
 
 <ul
 	class="w-80 h-full bg-white border-r border-gray-400 border-opacity-35 p-2 space-y-1 overflow-scroll"
+	bind:this={ticketElement}
 >
 	{#if tickets == null}
 		{#each [3, 4, 2] as _}
@@ -102,5 +105,9 @@
 				</button>
 			</li>
 		{/each}
+
+		{#if ticketElement}
+			<InfiniteScroll bind:element={ticketElement} fetch={fetchTickets} direction="down" />
+		{/if}
 	{/if}
 </ul>

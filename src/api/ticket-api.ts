@@ -9,7 +9,7 @@ export const getMessagesByTicketId = async (ticketId: string, page: number, limi
 		const response: ApiResponse<TableOptions<TicketMessage[]>> | null = await fetchApi(
 			`/ticket/${ticketId}/messages?` +
 				new URLSearchParams({
-          page: String(page),
+					page: String(page),
 					limit: String(limit)
 				})
 		);

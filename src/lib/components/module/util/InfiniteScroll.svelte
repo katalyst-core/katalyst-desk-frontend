@@ -6,7 +6,7 @@
 	export let element: HTMLElement;
   export let fetch: Function;
   export let direction: 'up' | 'down' = 'down';
-  export let threshold = 0;
+  export let threshold = 1;
   export let refetchThreshold = 50;
 
   let hasFetched = false;
@@ -51,7 +51,7 @@
       hasFetched = false;
     }
 
-    if ((scrollTop + clientHeight) < (scrollHeight - threshold)) {
+    if ((scrollTop + clientHeight) <= (scrollHeight - threshold)) {
       return;
     }
 

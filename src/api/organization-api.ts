@@ -2,7 +2,7 @@ import { toast } from 'svelte-french-toast';
 import { fetchApi } from '$lib/custom-fetch';
 
 import { availableOrganizations, selectedOrganization } from '$stores/organization-store';
-import type { ApiResponse } from '$types/api-type';
+import type { ApiResponse, TableOptions } from '$types/api-type';
 import type { CreateOrganizationResponse, OrganizationListItem } from '$types/organization-type';
 import type { TicketListItem } from '$types/ticket-type';
 
@@ -73,11 +73,14 @@ export const createOrganization = async (name: string) => {
 	}
 };
 
-// TODO: rename to getTicketsByOrgId
-export const getTickets = async (orgId: string) => {
+export const getTicketsByOrgId = async (orgId: string, page: number, limit: number = 15) => {
 	try {
-		const response: ApiResponse<TicketListItem[]> | null = await fetchApi(
-			`/organization/${orgId}/tickets`
+		const response: ApiResponse<TableOptions<TicketListItem[]>> | null = await fetchApi(
+			`/organization/${orgId}/tickets?` +
+				new URLSearchParams({
+					page: String(page),
+					limit: String(limit)
+				})
 		);
 
 		if (!response) {
@@ -96,4 +99,4 @@ export const getTickets = async (orgId: string) => {
 		toast.error('An error occurred');
 		return null;
 	}
-}
+};

@@ -9,21 +9,45 @@
 
 	import ChatList from '$module/page/chat/ChatList.svelte';
 	import ChatWindow from '$module/page/chat/ChatWindow.svelte';
+	import LoadingPage from '$module/page/LoadingPage.svelte';
 
 	let tickets: TicketListItem[] | null = null;
 	let messages: TicketMessage[] | null = null;
 	let activeTicket: TicketListItem | null;
+	let activeOrgId: string | null;
 	let currentMessagesPage = 1;
+	let currentTicketsPage = 1;
+	let isMessagesLoading = false;
 
 	$: activeTicket = null;
 	$: activeTicket ? getMessages() : null;
 
-	const setTickets = async (orgId: string) => {
-		const _tickets = await OrganizationAPI.getTickets(orgId);
+	const getTickets = async (orgId: string) => {
+		const _tickets = await OrganizationAPI.getTicketsByOrgId(orgId, 1);
 		if (_tickets?.ok) {
-			tickets = _tickets.data;
+			tickets = _tickets.data.result;
 		}
-	}
+	};
+
+	const getMoreTickets = async (org: string) => {
+		if (!activeOrgId) {
+			return;
+		}
+
+		const _tickets = await OrganizationAPI.getTicketsByOrgId(activeOrgId, ++currentTicketsPage);
+		if (tickets && _tickets?.ok) {
+			const {
+				result: newTickets,
+				pagination: { total_page: totalPage }
+			} = _tickets.data;
+			if (currentTicketsPage > totalPage) {
+				return;
+			}
+
+			tickets = [...tickets, ...newTickets];
+			currentTicketsPage = Math.min(currentTicketsPage, totalPage);
+		}
+	};
 
 	const getMessages = async () => {
 		if (!activeTicket) {
@@ -32,15 +56,18 @@
 
 		activeTicket.unread_count = 0;
 		currentMessagesPage = 1;
+		isMessagesLoading = true;
 
 		const ticketId = activeTicket.ticket_id;
 		const _messages = await TicketAPI.getMessagesByTicketId(ticketId, 1);
 		if (_messages?.ok) {
 			messages = _messages.data.result.reverse();
 
+			isMessagesLoading = false;
+
 			await TicketAPI.readMessagesByTicketId(ticketId);
 		}
-	}
+	};
 
 	const getMoreMessages = async () => {
 		if (!activeTicket) {
@@ -50,18 +77,22 @@
 		const ticketId = activeTicket.ticket_id;
 		const _messages = await TicketAPI.getMessagesByTicketId(ticketId, ++currentMessagesPage);
 		if (messages && _messages?.ok) {
-			const { total_page: totalPage } = _messages.data.pagination;
+			const {
+				result: newMessages,
+				pagination: { total_page: totalPage }
+			} = _messages.data;
 			if (currentMessagesPage > totalPage) {
 				return;
 			}
 
-			messages = [..._messages.data.result.reverse(), ...messages];
-			currentMessagesPage = Math.min(currentMessagesPage, _messages.data.pagination.total_page);
+			messages = [...newMessages.reverse(), ...messages];
+			currentMessagesPage = Math.min(currentMessagesPage, totalPage);
 		}
 	};
 
 	onMount(async () => {
 		selectedOrganization.subscribe(async (orgId) => {
+			activeOrgId = null;
 			activeTicket = null;
 			tickets = null;
 			messages = null;
@@ -70,7 +101,9 @@
 				return;
 			}
 
-			await setTickets(orgId);
+			activeOrgId = orgId;
+
+			await getTickets(orgId);
 		});
 	});
 </script>
@@ -80,9 +113,11 @@
 		<div class="h-20 flex items-center px-4 border-b border-gray-400 border-opacity-35">
 			<h1 class="text-3xl font-semibold">Tickets</h1>
 		</div>
-		<ChatList {tickets} bind:activeTicket />
+		<ChatList bind:activeTicket {tickets} fetchTickets={getMoreTickets} />
 	</div>
-	{#if messages}
-		<ChatWindow messages={messages} fetchMessages={getMoreMessages} />
-	{/if}
+	<LoadingPage loading={isMessagesLoading}>
+		{#if messages}
+			<ChatWindow {messages} fetchMessages={getMoreMessages} />
+		{/if}
+	</LoadingPage>
 </div>

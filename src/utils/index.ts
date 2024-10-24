@@ -51,5 +51,5 @@ export const textToColor = (text: string) => {
 };
 
 export const scrollToBottom = (element: HTMLElement) => {
-	element.scroll({ top: element.scrollHeight, behavior: 'instant' });
+	element.scroll({ top: element.scrollHeight, behavior: 'auto' });
 };
