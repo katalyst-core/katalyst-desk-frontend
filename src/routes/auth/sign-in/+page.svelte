@@ -5,8 +5,9 @@
 	import * as Form from '$ui/form';
 	import { LoadingPage } from '$module/page';
 
-	import * as AgentAPI from '$api/agent-api';
+	import * as AuthAPI from '$api/auth-api';
 	import { signInSchema } from '$schema/agent-schema';
+	import { persistedAccessToken } from '$stores/authentication-store';
 
 	let isRequestLoading = false;
 	let isFormLoading = true;
@@ -22,15 +23,22 @@
 			isRequestLoading = true;
 
 			const { email, password } = form.data;
-			const response = await AgentAPI.loginAgent(email, password);
+			const response = await AuthAPI.login(email, password);
 
 			isRequestLoading = false;
 
-			if (response && !response.ok) {
+			if (!response) {
+				return;
+			}
+
+			if (!response.ok) {
 				const { message } = response;
 				setError(form, message);
 				return;
 			}
+
+			const { auth_token: authToken } = response.data;
+			$persistedAccessToken = authToken;
 
 			const newUrl = '/app/dashboard';
 			window.location.href = newUrl;

@@ -7,7 +7,7 @@
 	import * as Form from '$ui/form';
 	import { LoadingPage } from '$module/page';
 
-	import * as AgentAPI from '$api/agent-api';
+	import * as AuthAPI from '$api/auth-api';
 	import { signUpSchema } from '$schema/agent-schema';
 
 	let isRequestLoading = false;
@@ -24,7 +24,7 @@
 			isRequestLoading = true;
 
 			const { name, email, password } = form.data;
-			const response = await AgentAPI.createAgent(name, email, password);
+			const response = await AuthAPI.createAgent(name, email, password);
 
 			isRequestLoading = false;
 

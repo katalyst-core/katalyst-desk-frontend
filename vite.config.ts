@@ -4,13 +4,7 @@ import { defineConfig } from 'vite';
 export default defineConfig({
 	plugins: [sveltekit()],
 	server: {
-		proxy: {
-			'/api': {
-				target: 'http://localhost:3000',
-				// target: 'http://qt-api.authenity.net',
-				changeOrigin: true,
-				rewrite: (path) => path.replace('/api', '/')
-			}
-		}
+		host: '0.0.0.0',
+		port: 5173
 	}
 });

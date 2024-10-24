@@ -26,12 +26,18 @@ importers:
       formsnap:
         specifier: ^1.0.1
         version: 1.0.1(svelte@4.2.18)(sveltekit-superforms@2.15.2(@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.3(@types/node@22.7.4)))(svelte@4.2.18)(vite@5.3.3(@types/node@22.7.4)))(svelte@4.2.18))
+      jose:
+        specifier: ^5.9.6
+        version: 5.9.6
       lucide-svelte:
         specifier: ^0.436.0
         version: 0.436.0(svelte@4.2.18)
       svelte-french-toast:
         specifier: ^1.2.0
         version: 1.2.0(svelte@4.2.18)
+      svelte-persisted-store:
+        specifier: ^0.11.0
+        version: 0.11.0(svelte@4.2.18)
       svelte-radix:
         specifier: ^1.1.0
         version: 1.1.0(svelte@4.2.18)
@@ -1332,6 +1338,9 @@ packages:
   joi@17.13.3:
     resolution: {integrity: sha512-otDA4ldcIx+ZXsKHWmp0YizCweVRZG96J10b0FevjfuncLO1oX59THoAmHkNubYJ+9gWsYsp5k8v4ib6oDv1fA==}
 
+  jose@5.9.6:
+    resolution: {integrity: sha512-AMlnetc9+CV9asI19zHmrgS/WYsWUwCn2R7RzlbJWD7F9eWYUTGyBmU9o6PxngtLGOiDGPRu+Uc4fhKzbpteZQ==}
+
   js-yaml@4.1.0:
     resolution: {integrity: sha512-wpxZs9NoxZaJESJGIZTyDEaYpl0FKSA+FB9aJiyemKhMwkxQg63h4T1KJgUGHpTqPDNRcmmYLugrRjJlBtWvRA==}
     hasBin: true
@@ -1865,6 +1874,12 @@ packages:
     resolution: {integrity: sha512-7TeEn+QbJC2OJrHiuM0T8vMBkms3DNpTE+Ir+NtnVBnBMA78aL4f1ft9t0Hn/pBbD/TnIXi4YfjFRAgtN+DZ5g==}
     peerDependencies:
       svelte: ^4.0.0
+
+  svelte-persisted-store@0.11.0:
+    resolution: {integrity: sha512-9RgJ5DrawGyyfK22A80cfu8Jose3CV8YjEZKz9Tn94rQ0tWyEmYr+XI+wrVF6wjRbW99JMDSVcFRiM3XzVJj/w==}
+    engines: {node: '>=0.14'}
+    peerDependencies:
+      svelte: ^3.48.0 || ^4.0.0 || ^5.0.0-next.0
 
   svelte-preprocess@5.1.4:
     resolution: {integrity: sha512-IvnbQ6D6Ao3Gg6ftiM5tdbR6aAETwjhHV+UKGf5bHGYR69RQvF1ho0JKPcbUON4vy4R7zom13jPjgdOWCQ5hDA==}
@@ -3329,6 +3344,8 @@ snapshots:
       '@sideway/pinpoint': 2.0.0
     optional: true
 
+  jose@5.9.6: {}
+
   js-yaml@4.1.0:
     dependencies:
       argparse: 2.0.1
@@ -3828,6 +3845,10 @@ snapshots:
       svelte: 4.2.18
 
   svelte-keyed@2.0.0(svelte@4.2.18):
+    dependencies:
+      svelte: 4.2.18
+
+  svelte-persisted-store@0.11.0(svelte@4.2.18):
     dependencies:
       svelte: 4.2.18
 
