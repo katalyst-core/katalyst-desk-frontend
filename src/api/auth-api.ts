@@ -3,6 +3,7 @@ import toast from "svelte-french-toast";
 import { fetchApi } from "$lib/custom-fetch";
 import type { ApiResponse } from "$types/api-type";
 import type { AuthToken } from "$types/auth-type";
+import { persistedAccessToken } from "$stores/authentication-store";
 
 export const createAgent = async (name: string, email: string, password: string) => {
 	const response = await fetchApi('/auth/create', {
@@ -71,6 +72,8 @@ export const logout = async () => {
     const { message } = response;
     toast.error(message);
   }
+
+	persistedAccessToken.set('');
 
   return response;
 };
