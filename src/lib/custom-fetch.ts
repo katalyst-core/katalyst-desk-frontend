@@ -41,11 +41,11 @@ export async function fetchApi<T>(
 	// Apply the correct Content-Type for every "POST" request
 	if (config && config.method && ['POST', 'PUT', 'DELETE'].includes(config.method)) {
 		config = {
+			...config,
 			headers: {
 				'Content-Type': 'application/json',
 				...config.headers
-			},
-			...config
+			}
 		};
 	}
 
@@ -54,7 +54,6 @@ export async function fetchApi<T>(
 
 		const isTokenValid = await verifyToken(accessToken, PUBLIC_ACCESS_PUBLIC_KEY);
 		if (!isTokenValid && !config?.withoutToken) {
-
 			// Refresh tokens
 			const refresh = await AuthAPI.refresh();
 			if (refresh && refresh.ok) {
@@ -70,10 +69,11 @@ export async function fetchApi<T>(
 
 		// Apply access token to every request
 		config = {
+			...config,
 			headers: {
-				Authorization: `Bearer ${accessToken}`
-			},
-			...config
+				Authorization: `Bearer ${accessToken}`,
+				...config?.headers
+			}
 		};
 
 		// Continue fetch
