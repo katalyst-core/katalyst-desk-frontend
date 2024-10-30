@@ -92,7 +92,7 @@
 								<p
 									class="w-36 text-sm text-gray-500 whitespace-nowrap text-ellipsis overflow-hidden"
 								>
-									{ticket.last_message?.text?.body || ''}
+									{ticket.last_message?.body || ''}
 								</p>
 							</div>
 							{#if ticket.unread_count > 0}

@@ -8,9 +8,33 @@
 	import { scrollToBottom } from '$utils/index';
 	import InfiniteScroll from '$module/util/InfiniteScroll.svelte';
 
-	let messageElement: HTMLElement;
-	export let fetchMessages: Function;
-	export let messages: TicketMessage[] = [];
+	interface Props {
+		rawMessages: TicketMessage[],
+		fetchMessages: Function
+	};
+
+	let { rawMessages = [], fetchMessages } = $props() as Props;
+
+	let autoScrollThreshold = 200;
+	let messageElement: HTMLElement | undefined = $state();
+
+	let messages = $derived(rawMessages.toReversed());
+
+	$effect(() => {
+		if (!rawMessages) return;
+
+		scrollOnNewMessage();
+	});
+
+	const scrollOnNewMessage = () => {
+		if (!messageElement) return;
+
+		const { scrollTop, scrollHeight, clientHeight } = messageElement;
+
+		if ((scrollTop + clientHeight) <= (scrollHeight - autoScrollThreshold)) return;
+
+		scrollToBottom(messageElement);
+	};
 
 	const showMessageDate = (idx: number) => {
 		if (messages == null) {
@@ -36,7 +60,7 @@
 		return null;
 	};
 
-	const getTimeFormat = (timestamp: string) => {
+	const getTimeFormat = (timestamp: Date) => {
 		const time = new Date(timestamp);
 		return format(time, 'HH:mm');
 	};
@@ -67,7 +91,7 @@
 			{#if !message.is_customer}
 				<li class="w-full flex justify-end pl-10">
 					<div class="flex items-end w-fit bg-gray-950 px-3 py-2 rounded-2xl rounded-br space-x-2">
-						<p class="text-white text-base">{message.content?.text?.body}</p>
+						<p class="text-white text-base">{message.content?.body}</p>
 						<div class="flex items-center space-x-1">
 							<p class="text-[10px] text-gray-300">{getTimeFormat(message.timestamp)}</p>
 							<CheckCheck class="w-4 h-4 text-gray-400 {message.is_read ? 'text-blue-500' : ''}" />
@@ -77,7 +101,7 @@
 			{:else}
 				<li class="w-full flex justify-start pr-10">
 					<div class="flex items-end w-fit bg-gray-200 px-3 py-2 rounded-2xl rounded-bl space-x-2">
-						<p class="text-black text-base">{message.content?.text?.body}</p>
+						<p class="text-black text-base">{message.content?.body}</p>
 						<div class="flex items-center space-x-1">
 							<p class="text-[10px] text-gray-800">{getTimeFormat(message.timestamp)}</p>
 						</div>

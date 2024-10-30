@@ -1,12 +1,6 @@
 
 export type MessageContent = {
-  id: string;
-  from: string;
-  text: {
-    body: string;
-  }
-  type: string;
-  timestamp: string;
+  body: string;
 }
 
 export type TicketMessage = {
@@ -14,5 +8,17 @@ export type TicketMessage = {
   content: MessageContent;
   is_customer: boolean;
   is_read: boolean;
-  timestamp: string;
+  timestamp: Date;
 };
+
+export type MessageObject = {
+  message_id: string;
+  content: MessageContent;
+  is_customer: boolean;
+  is_read: boolean;
+  timestamp: Date;
+};
+
+export type WsTicketMessage = {
+  ticket_id: string;
+} & MessageObject;

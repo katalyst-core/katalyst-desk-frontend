@@ -1,26 +1,28 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 
 	import * as OrganizationAPI from '$api/organization-api';
 	import * as TicketAPI from '$api/ticket-api';
 	import { selectedOrganization } from '$stores/organization-store';
 	import type { TicketListItem } from '$types/ticket-type';
-	import type { TicketMessage } from '$types/message-type';
+	import type { MessageObject, TicketMessage, WsTicketMessage } from '$types/message-type';
 
 	import ChatList from '$module/page/chat/ChatList.svelte';
 	import ChatWindow from '$module/page/chat/ChatWindow.svelte';
 	import LoadingPage from '$module/page/LoadingPage.svelte';
+	import { socket } from '$stores/socket-store';
 
-	let tickets: TicketListItem[] | null = null;
-	let messages: TicketMessage[] | null = null;
-	let activeTicket: TicketListItem | null;
-	let activeOrgId: string | null;
-	let currentMessagesPage = 1;
-	let currentTicketsPage = 1;
-	let isMessagesLoading = false;
+	let tickets: TicketListItem[] | null = $state(null);
+	let messages: TicketMessage[] | null = $state(null);
+	let activeTicket: TicketListItem | null = $state(null);
+	let activeOrgId: string | null = $state(null);
+	let currentMessagesPage = $state(1);
+	let currentTicketsPage = $state(1);
+	let isMessagesLoading = $state(false);
 
-	$: activeTicket = null;
-	$: activeTicket ? getMessages() : null;
+	$effect(() => {
+		getMessages();
+	});
 
 	const getTickets = async (orgId: string) => {
 		const _tickets = await OrganizationAPI.getTicketsByOrgId(orgId, 1);
@@ -29,7 +31,7 @@
 		}
 	};
 
-	const getMoreTickets = async (org: string) => {
+	const getMoreTickets = async () => {
 		if (!activeOrgId) {
 			return;
 		}
@@ -44,7 +46,7 @@
 				return;
 			}
 
-			tickets = [...tickets, ...newTickets];
+			tickets.push(...newTickets);
 			currentTicketsPage = Math.min(currentTicketsPage, totalPage);
 		}
 	};
@@ -61,11 +63,11 @@
 		const ticketId = activeTicket.ticket_id;
 		const _messages = await TicketAPI.getMessagesByTicketId(ticketId, 1);
 		if (_messages?.ok) {
-			messages = _messages.data.result.reverse();
+			messages = _messages.data.result;
 
 			isMessagesLoading = false;
 
-			await TicketAPI.readMessagesByTicketId(ticketId);
+			TicketAPI.wsReadMessagesByTicketId(ticketId);
 		}
 	};
 
@@ -85,12 +87,12 @@
 				return;
 			}
 
-			messages = [...newMessages.reverse(), ...messages];
+			messages.push(...newMessages);
 			currentMessagesPage = Math.min(currentMessagesPage, totalPage);
 		}
 	};
 
-	onMount(async () => {
+	const onOrganizationChange = () => {
 		selectedOrganization.subscribe(async (orgId) => {
 			activeOrgId = null;
 			activeTicket = null;
@@ -105,6 +107,53 @@
 
 			await getTickets(orgId);
 		});
+	};
+
+	const onSocketTicketMessage = (data: WsTicketMessage) => {
+		if (!(data satisfies WsTicketMessage)) {
+			return null;
+		}
+
+		if (!tickets) {
+			return null;
+		}
+
+		const ticket = tickets.find((t) => t.ticket_id === data.ticket_id);
+
+		if (!ticket) {
+			return null;
+		}
+
+		const { ticket_id, content, timestamp, is_customer, is_read } = data;
+
+		ticket.last_message = content;
+		ticket.is_customer = is_customer;
+		ticket.is_read = is_read;
+		ticket.last_message_timestamp = timestamp;
+
+		// Update active chat window
+		if (!activeTicket || activeTicket.ticket_id != data.ticket_id) {
+			ticket.unread_count = Number(ticket.unread_count) + 1;
+			return;
+		}
+
+		if (!messages) {
+			return;
+		}
+
+		const newMessage = data;
+		messages = [newMessage, ...messages];
+		TicketAPI.wsReadMessagesByTicketId(ticket_id);
+	};
+
+	onMount(async () => {
+		onOrganizationChange();
+
+		$socket?.on('ticket-message', onSocketTicketMessage);
+	});
+
+	onDestroy(async () => {
+		$socket?.off('ticket-message', onSocketTicketMessage);
 	});
 </script>
 
@@ -117,7 +166,7 @@
 	</div>
 	<LoadingPage loading={isMessagesLoading}>
 		{#if messages}
-			<ChatWindow {messages} fetchMessages={getMoreMessages} />
+			<ChatWindow rawMessages={messages} fetchMessages={getMoreMessages} />
 		{/if}
 	</LoadingPage>
 </div>

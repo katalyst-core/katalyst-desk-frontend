@@ -5,7 +5,7 @@ export type TicketListItem = {
   display_name: string;
   last_message: MessageContent;
   is_customer: boolean;
-  is_read: false;
+  is_read: boolean;
   unread_count: number;
-  last_message_timestamp: string;
+  last_message_timestamp: Date;
 }

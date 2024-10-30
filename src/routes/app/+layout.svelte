@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
 
 	import Sidebar from "$lib/components/module/sidebar/Sidebar.svelte";
 	import LoadingPage from "$lib/components/module/page/LoadingPage.svelte";
@@ -7,11 +7,12 @@
 	import { availableOrganizations } from "$stores/organization-store";
   import { CreateOrganizationDialog } from "$module/modal";
 	import * as OrganizationAPI from "$api/organization-api";
+  import { connectSocket, disconnectSocket } from '$lib/socket-handler';
 
   let hasOrganization = false;
   let openCreateOrganizationDialog = false;
 
-  const checkOrganizations = async () => {
+  const checkOrganizations = () => {
     availableOrganizations.subscribe((org) => {
       if (!org) {
         hasOrganization = false;
@@ -30,7 +31,13 @@
   onMount(async () => {
     OrganizationAPI.fetchOrganizationList();
     checkOrganizations();
+
+    connectSocket();
   });
+
+  onDestroy(() => {
+    disconnectSocket();
+  })
 </script>
 
 <Sidebar>
