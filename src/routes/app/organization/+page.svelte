@@ -36,6 +36,9 @@
 </script>
 
 this manages the organizatizns
-<Button on:click={initFB}>
-  Login with Facebook
-</Button>
+<Button on:click={initFB}>Login with Facebook</Button>
+
+<a
+	href="https://www.instagram.com/oauth/authorize?enable_fb_login=0&force_authentication=1&client_id=1081015663664011&redirect_uri=https://katalyst.authenity.net/instagram/auth&response_type=code&scope=instagram_business_basic%2Cinstagram_business_manage_messages%2Cinstagram_business_manage_comments%2Cinstagram_business_content_publish"
+	>Instagram Login</a
+>
