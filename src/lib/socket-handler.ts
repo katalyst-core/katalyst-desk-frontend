@@ -25,14 +25,12 @@ export async function connectSocket() {
 	});
 
 	socket.on('connect_error', async () => {
-		setTimeout(async () => {
-			reconnectSocket(socket);
-		}, 5000);
+		setTimeout(async () => await reconnectSocket(socket), 5000);
 	});
 
 	socket.on('disconnect', () => {
 		reconnectSocket(socket);
-	})
+	});
 
 	socketStore.set(socket);
 }
@@ -52,6 +50,7 @@ export async function reconnectSocket(socket: Socket) {
 
 	if (!response || !response.ok) {
 		console.error('Unable to obtain gateway token');
+		setTimeout(async () => await reconnectSocket(socket), 5000);
 		return;
 	}
 

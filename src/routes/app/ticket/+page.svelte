@@ -4,8 +4,8 @@
 	import * as OrganizationAPI from '$api/organization-api';
 	import * as TicketAPI from '$api/ticket-api';
 	import { selectedOrganization } from '$stores/organization-store';
-	import type { TicketListItem } from '$types/ticket-type';
-	import type { MessageObject, TicketMessage, WsTicketMessage } from '$types/message-type';
+	import type { TicketListItem, WsNewTicket } from '$types/ticket-type';
+	import type { TicketMessage, WsTicketMessage } from '$types/message-type';
 
 	import ChatList from '$module/page/chat/ChatList.svelte';
 	import ChatWindow from '$module/page/chat/ChatWindow.svelte';
@@ -110,10 +110,6 @@
 	};
 
 	const onSocketTicketMessage = (data: WsTicketMessage) => {
-		if (!(data satisfies WsTicketMessage)) {
-			return null;
-		}
-
 		if (!tickets) {
 			return null;
 		}
@@ -146,14 +142,24 @@
 		TicketAPI.wsReadMessagesByTicketId(ticket_id);
 	};
 
+	const onSocketNewTicket = (data: WsNewTicket) => {
+		if (!tickets) {
+			return null;
+		}
+
+		tickets.unshift(data);
+	}
+
 	onMount(async () => {
 		onOrganizationChange();
 
 		$socket?.on('ticket-message', onSocketTicketMessage);
+		$socket?.on('new-ticket', onSocketNewTicket);
 	});
 
 	onDestroy(async () => {
 		$socket?.off('ticket-message', onSocketTicketMessage);
+		$socket?.off('new-ticket', onSocketNewTicket);
 	});
 </script>
 

@@ -17,7 +17,7 @@ const buttonVariants = tv({
 			icon: "bg-transparent hover:opacity-75"
 		},
 		size: {
-			default: "h-9 px-5 py-5 text-sm",
+			default: "h-9 px-5 py-5 text-md",
 			sm: "h-8 rounded-md px-3 text-xs",
 			lg: "h-10 rounded-md px-7 py-7",
 			icon: "h-9 w-9",
@@ -36,6 +36,7 @@ type Props = ButtonPrimitive.Props & {
 	variant?: Variant;
 	size?: Size;
 	loading?: boolean;
+	click?: () => unknown | Promise<unknown>;
 };
 
 type Events = ButtonPrimitive.Events;

@@ -82,7 +82,7 @@
 							>
 								{ticket.display_name}
 							</h3>
-							<p class="text-xs text-gray-400">{getTimeFormat(ticket.last_message_timestamp)}</p>
+							<p class="text-xs text-gray-400">{getTimeFormat(String(ticket.last_message_timestamp))}</p>
 						</div>
 						<div class="flex w-full items-center">
 							<div class="flex space-x-1 flex-1">

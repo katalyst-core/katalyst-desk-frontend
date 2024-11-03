@@ -13,7 +13,7 @@
 		fetchMessages: Function
 	};
 
-	let { rawMessages = [], fetchMessages } = $props() as Props;
+	let { rawMessages = [], fetchMessages }: Props = $props();
 
 	let autoScrollThreshold = 200;
 	let messageElement: HTMLElement | undefined = $state();

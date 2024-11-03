@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { House, Layers3, Cog } from 'lucide-svelte';
+	import { House, Layers3, Cog, Plug } from 'lucide-svelte';
 
 	import * as Collapsible from '$ui/collapsible';
 	import { Separator } from '$ui/separator';
@@ -41,8 +41,8 @@
 	const bottomItems = [
 		{
 			label: 'Manage Channels',
-			icon: Cog,
-			path: '/app/organization'
+			icon: Plug,
+			path: '/app/channel'
 		},
 		{
 			label: 'Manage Org',

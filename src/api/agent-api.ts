@@ -15,13 +15,13 @@ export const fetchAgent = async () => {
 	if (!response.ok) {
 		agent.set(null);
 
-		// Redirect to sign-in if user is not logged in while in the app
+		// Redirect to sign-in if agent is not logged in while in the app
 		await redirect([/^\/app\/.*$/], '/auth/sign-in');
 
 		return;
 	}
 
-	// Redirect to dashboard if user is logged in
+	// Redirect to dashboard if agent is logged in
 	await redirect([/^\/auth\/sign-in$/, /^\/auth\/sign-up/, /^\/$/], '/app/dashboard');
 
 	const data = response.data;

@@ -8,6 +8,7 @@ import { persistedAccessToken } from '$stores/authentication-store';
 
 interface RequestConfig extends RequestInit {
 	withoutToken?: boolean;
+	params?: Record<string, string>;
 }
 
 // let controller: AbortController | null = null;
@@ -29,6 +30,7 @@ export async function fetchApi<T>(
 	target: RequestInfo | URL,
 	config?: RequestConfig
 ): Promise<ApiResponse<T> | null> {
+	let targetPath = target;
 	// Cancels refetching
 	// if (controller) {
 	// 	controller.abort();
@@ -47,6 +49,10 @@ export async function fetchApi<T>(
 				...config.headers
 			}
 		};
+	}
+
+	if (config && config.params) {
+		targetPath = `${targetPath}?${new URLSearchParams(config.params)}`;
 	}
 
 	try {
@@ -77,7 +83,7 @@ export async function fetchApi<T>(
 		};
 
 		// Continue fetch
-		const targetPath = `${PUBLIC_BASE_API}${target}`;
+		targetPath = `${PUBLIC_BASE_API}${targetPath}`;
 		const response = await fetch(targetPath, { ...config, credentials: 'include' });
 
 		const { ok } = response;

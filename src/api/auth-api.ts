@@ -1,9 +1,9 @@
-import toast from "svelte-french-toast";
+import toast from 'svelte-french-toast';
 
-import { fetchApi } from "$lib/custom-fetch";
-import type { ApiResponse } from "$types/api-type";
-import type { AuthToken } from "$types/auth-type";
-import { persistedAccessToken } from "$stores/authentication-store";
+import { fetchApi } from '$lib/custom-fetch';
+import type { ApiResponse } from '$types/api-type';
+import type { AuthToken } from '$types/auth-type';
+import { persistedAccessToken } from '$stores/authentication-store';
 
 export const createAgent = async (name: string, email: string, password: string) => {
 	const response = await fetchApi('/auth/create', {
@@ -59,42 +59,43 @@ export const login = async (email: string, password: string) => {
 };
 
 export const logout = async () => {
-  const response = await fetchApi('/auth/logout', {
-    method: 'POST',
-    withoutToken: true
-  });
+	const response = await fetchApi('/auth/logout', {
+		method: 'POST',
+		withoutToken: true
+	});
 
-  if (!response) {
-    return null;
-  }
+	if (!response) {
+		return null;
+	}
 
-  if (!response.ok) {
-    const { message } = response;
-    toast.error(message);
-  }
+	if (!response.ok) {
+		const { message } = response;
+		toast.error(message);
+	}
 
 	persistedAccessToken.set('');
 
-  return response;
+	return response;
 };
 
 export const refresh = async () => {
-  const response: ApiResponse<AuthToken> | null = await fetchApi('/auth/refresh', {
-    method: 'POST',
-    withoutToken: true
-  });
+	const response: ApiResponse<AuthToken> | null = await fetchApi('/auth/refresh', {
+		method: 'POST',
+		withoutToken: true
+	});
 
-  if (!response) {
-    return null;
-  }
+	if (!response) {
+		return null;
+	}
 
-  if (!response.ok) {
-    const { message } = response;
-    toast.error(message);
-  }
+	if (!response.ok) {
+		return;
+		// const { message } = response;
+		// toast.error(message);
+	}
 
-  return response;
-}
+	return response;
+};
 
 export const getGatewayToken = async () => {
 	const response: ApiResponse<AuthToken> | null = await fetchApi('/auth/gateway', {
@@ -112,4 +113,4 @@ export const getGatewayToken = async () => {
 	}
 
 	return response;
-}
+};

@@ -1,6 +1,6 @@
 import type { PaginationData } from "./table-type";
 
-export type ApiResponse<T> = {
+export type ApiResponse<T = undefined> = {
   ok: boolean;
   status: number;
   message: string;

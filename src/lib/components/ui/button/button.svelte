@@ -12,7 +12,18 @@
 	export let size: $$Props["size"] = "default";
 	export let builders: $$Props["builders"] = [];
 	export let loading: boolean = false;
+	export let click: (() => unknown | Promise<unknown>) | undefined = undefined;
 	export { className as class };
+
+	const onClick = async () => {
+		if (!click) {
+			return;
+		}
+
+		loading = true;
+		await click();
+		loading  = false;
+	};
 </script>
 
 <ButtonPrimitive.Root
@@ -20,7 +31,7 @@
 	class={cn(buttonVariants({ variant, size, className }))}
 	type="button"
 	{...$$restProps}
-	on:click
+	on:click={onClick}
 	on:keydown
 	bind:disabled={loading}
 >
