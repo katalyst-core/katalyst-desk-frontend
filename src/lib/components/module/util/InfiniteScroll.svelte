@@ -3,71 +3,75 @@
 	import { LoaderCircle } from 'lucide-svelte';
 	import { onDestroy, onMount, tick } from 'svelte';
 
-	export let element: HTMLElement;
-  export let fetch: Function;
-  export let direction: 'up' | 'down' = 'down';
-  export let threshold = 1;
-  export let refetchThreshold = 50;
+	interface Props {
+		element: HTMLElement;
+		fetch: Function;
+		direction?: 'up' | 'down';
+		threshold?: number;
+		refetchThreshold?: number;
+	}
 
-  let hasFetched = false;
-  let isLoading = false;
+	let { element = $bindable(), fetch, direction = 'up', threshold = 1, refetchThreshold = 50 }: Props = $props();
 
-  const fetchOnTop = async () => {
-    const scrollTop = element.scrollTop;
+	let hasFetched = $state(false);
+	let isLoading = $state(false);
 
-    if (hasFetched && scrollTop > refetchThreshold) {
-      hasFetched = false;
-    }
+	const fetchOnTop = async () => {
+		const scrollTop = element.scrollTop;
 
-    if (scrollTop > threshold) {
-      return;
-    }
+		if (hasFetched && scrollTop > refetchThreshold) {
+			hasFetched = false;
+		}
 
-    if (isLoading || hasFetched) {
-      return;
-    }
+		if (scrollTop > threshold) {
+			return;
+		}
 
-    const scrollHeightBefore = element.scrollHeight;
+		if (isLoading || hasFetched) {
+			return;
+		}
 
-    isLoading = true;
+		const scrollHeightBefore = element.scrollHeight;
 
-    await fetch();
+		isLoading = true;
 
-    hasFetched = true
-    isLoading = false;
+		await fetch();
 
-    await tick();
+		hasFetched = true;
+		isLoading = false;
 
-    const scrollHeightAfter = element.scrollHeight;
-    const heightDifference = scrollHeightAfter - scrollHeightBefore;
+		await tick();
 
-    element.scrollTop += heightDifference;
-  };
+		const scrollHeightAfter = element.scrollHeight;
+		const heightDifference = scrollHeightAfter - scrollHeightBefore;
 
-  const fetchOnBottom = async () => {
-    const { scrollTop, scrollHeight, clientHeight } = element;
+		element.scrollTop += heightDifference;
+	};
 
-    if (hasFetched && ((scrollTop + clientHeight) < (scrollHeight - refetchThreshold))) {
-      hasFetched = false;
-    }
+	const fetchOnBottom = async () => {
+		const { scrollTop, scrollHeight, clientHeight } = element;
 
-    if ((scrollTop + clientHeight) <= (scrollHeight - threshold)) {
-      return;
-    }
+		if (hasFetched && scrollTop + clientHeight < scrollHeight - refetchThreshold) {
+			hasFetched = false;
+		}
 
-    if (isLoading || hasFetched) {
-      return;
-    }
+		if (scrollTop + clientHeight <= scrollHeight - threshold) {
+			return;
+		}
 
-    isLoading = true;
+		if (isLoading || hasFetched) {
+			return;
+		}
 
-    await tick();
-    scrollToBottom(element);
-    await fetch();
+		isLoading = true;
 
-    hasFetched = true;
-    isLoading = false;
-  }
+		await tick();
+		scrollToBottom(element);
+		await fetch();
+
+		hasFetched = true;
+		isLoading = false;
+	};
 
 	onMount(() => {
 		if (!element) {
@@ -76,22 +80,22 @@
 
 		element.addEventListener('scroll', async () => {
 			if (direction == 'up') {
-        await fetchOnTop();
-      } else {
-        await fetchOnBottom();
-      }
+				await fetchOnTop();
+			} else {
+				await fetchOnBottom();
+			}
 		});
 	});
 
 	onDestroy(() => {
-    if (element) {
-      element.removeEventListener('scroll', () => {});
-    }
+		if (element) {
+			element.removeEventListener('scroll', () => {});
+		}
 	});
 </script>
 
 {#if isLoading}
-  <div class="flex w-full justify-center items-center py-4">
-    <LoaderCircle class="animate-spin w-8 h-8" />
-  </div>
+	<div class="flex w-full justify-center items-center py-4">
+		<LoaderCircle class="animate-spin w-8 h-8" />
+	</div>
 {/if}

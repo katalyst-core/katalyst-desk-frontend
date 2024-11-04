@@ -92,6 +92,15 @@
 		}
 	};
 
+	const sendMessage = async (text: string) => {
+		if (!activeTicket) {
+			return;
+		}
+
+		const { ticket_id: ticketId } = activeTicket;
+		await TicketAPI.sendMessage(ticketId, text);
+	};
+
 	const onOrganizationChange = () => {
 		selectedOrganization.subscribe(async (orgId) => {
 			activeOrgId = null;
@@ -172,7 +181,7 @@
 	</div>
 	<LoadingPage loading={isMessagesLoading}>
 		{#if messages}
-			<ChatWindow rawMessages={messages} fetchMessages={getMoreMessages} />
+			<ChatWindow rawMessages={messages} fetchMessages={getMoreMessages} {sendMessage} />
 		{/if}
 	</LoadingPage>
 </div>

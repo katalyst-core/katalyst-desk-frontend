@@ -6,8 +6,6 @@ import type { ApiResponse, TableOptions } from '$types/api-type';
 import type { TicketMessage } from '$types/message-type';
 import { socket as _socket } from '$stores/socket-store';
 
-const socket = get(_socket);
-
 export const getMessagesByTicketId = async (ticketId: string, page: number, limit: number = 15) => {
 	try {
 		const response: ApiResponse<TableOptions<TicketMessage[]>> | null = await fetchApi(
@@ -26,6 +24,7 @@ export const getMessagesByTicketId = async (ticketId: string, page: number, limi
 			const message = response.message;
 
 			toast.error(message);
+			return null;
 		}
 
 		return response;
@@ -36,7 +35,30 @@ export const getMessagesByTicketId = async (ticketId: string, page: number, limi
 	}
 };
 
+export const sendMessage = async (ticketId: string, text: string) => {
+	try {
+		const response: ApiResponse | null = await fetchApi(`/ticket/${ticketId}/send-message`, {
+			method: 'POST',
+			body: JSON.stringify({
+				text
+			})
+		});
+
+		if (!response || !response.ok) {
+			const message = response?.message || 'Error';
+			toast.error(message);
+			return null;
+		}
+	} catch (err) {
+		void err;
+		toast.error('An error occurred');
+		return null;
+	}
+}
+
 export const wsReadMessagesByTicketId = async (ticketId: string) => {
+	const socket = get(_socket);
+
 	try {
 		socket?.emit('ticket:read-message', { ticket_id: ticketId });
 	} catch (err) {

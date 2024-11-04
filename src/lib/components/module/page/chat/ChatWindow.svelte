@@ -9,14 +9,17 @@
 	import InfiniteScroll from '$module/util/InfiniteScroll.svelte';
 
 	interface Props {
-		rawMessages: TicketMessage[],
-		fetchMessages: Function
-	};
+		rawMessages: TicketMessage[];
+		fetchMessages: () => void;
+		sendMessage: (text: string) => void;
+	}
 
-	let { rawMessages = [], fetchMessages }: Props = $props();
+	let { rawMessages = [], fetchMessages, sendMessage }: Props = $props();
 
 	let autoScrollThreshold = 200;
 	let messageElement: HTMLElement | undefined = $state();
+	let isMessageSending: boolean = $state(false);
+	let messageText: string = $state('');
 
 	let messages = $derived(rawMessages.toReversed());
 
@@ -31,7 +34,7 @@
 
 		const { scrollTop, scrollHeight, clientHeight } = messageElement;
 
-		if ((scrollTop + clientHeight) <= (scrollHeight - autoScrollThreshold)) return;
+		if (scrollTop + clientHeight <= scrollHeight - autoScrollThreshold) return;
 
 		scrollToBottom(messageElement);
 	};
@@ -63,6 +66,15 @@
 	const getTimeFormat = (timestamp: Date) => {
 		const time = new Date(timestamp);
 		return format(time, 'HH:mm');
+	};
+
+	const sendMessageFunction = async () => {
+		isMessageSending = true;
+
+		await sendMessage(messageText);
+		messageText = '';
+
+		isMessageSending = false;
 	};
 
 	onMount(() => {
@@ -112,14 +124,24 @@
 	</ul>
 
 	<!-- Chat input -->
-	<div
-		class="h-16 w-full flex items-center px-4 bg-white space-x-2 border-t border-gray-400 border-opacity-35"
-	>
-		<Input class="bg-gray-100 rounded-full" placeholder="Say something" />
-		<button
-			class="p-3 flex justify-center items-center bg-blue-500 rounded-full hover:brightness-90 transition-all"
+	<div class="w-full">
+		<form
+			onsubmit={sendMessageFunction}
+			class="h-16 w-full flex items-center px-4 bg-white space-x-2 border-t border-gray-400 border-opacity-35"
 		>
-			<SendHorizontal class="w-4 h-4 text-white" />
-		</button>
+			<Input
+				bind:value={messageText}
+				class="bg-gray-100 rounded-full"
+				placeholder="Say something"
+				disabled={isMessageSending}
+			/>
+			<button
+				class="p-3 flex justify-center items-center bg-blue-500 rounded-full transition-all {isMessageSending
+					? 'brightness-75'
+					: 'hover:brightness-90'}"
+			>
+				<SendHorizontal class="w-4 h-4 text-white" />
+			</button>
+		</form>
 	</div>
 </div>
