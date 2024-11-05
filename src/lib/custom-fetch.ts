@@ -5,6 +5,7 @@ import * as jose from 'jose';
 import * as AuthAPI from '$api/auth-api';
 import type { ApiResponse } from '$types/api-type';
 import { persistedAccessToken } from '$stores/authentication-store';
+import { differenceInSeconds } from 'date-fns';
 
 interface RequestConfig extends RequestInit {
 	withoutToken?: boolean;
@@ -16,9 +17,18 @@ interface RequestConfig extends RequestInit {
 const verifyToken = async (token: string, publicKeyPEM: string) => {
 	try {
 		const publicKey = await jose.importSPKI(publicKeyPEM, 'RS256');
-		await jose.jwtVerify(token, publicKey);
+		const tokenData = await jose.jwtVerify(token, publicKey);
 
-		return true;
+		const { payload: { exp: expUnix } } = tokenData;
+		if (!expUnix) {
+			return false;
+		}
+
+		const exp = new Date(expUnix * 1000);
+		const now = new Date(Date.now());
+		const limit = 30; // Seconds
+
+		return differenceInSeconds(exp, now) > limit;
 	} catch (err) {
 		void err;
 	}
