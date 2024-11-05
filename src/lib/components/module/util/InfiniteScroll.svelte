@@ -4,7 +4,7 @@
 	import { onDestroy, onMount, tick } from 'svelte';
 
 	interface Props {
-		element: HTMLElement;
+		element: HTMLDivElement;
 		fetch: Function;
 		direction?: 'up' | 'down';
 		threshold?: number;

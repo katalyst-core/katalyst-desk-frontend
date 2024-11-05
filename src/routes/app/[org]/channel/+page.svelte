@@ -1,26 +1,26 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import { cn } from '$lib/utils';
 	import { onMount } from 'svelte';
 	import { Plus } from 'lucide-svelte';
 	import { Tabs } from 'bits-ui';
 
-	import { PUBLIC_INSTAGRAM_AUTH_URL } from '$env/static/public';
+	import * as Dialog from '$ui/dialog';
+	import * as SideMenu from '$module/navigation/side-menu';
+	import Skeleton from '$ui/skeleton/skeleton.svelte';
+	import { LoadingPage } from '$module/page';
+	import { Separator } from '$ui/separator';
 	import InstagramIcon from '$lib/images/icons/instagram.svg';
 	import WhatsAppIcon from '$lib/images/icons/whatsapp.svg';
 	import InstagramOutlineIcon from '$lib/images/icons/instagram-outline.svg';
 	import WhatsAppOutlineIcon from '$lib/images/icons/whatsapp-outline.svg';
 
-	import * as Dialog from '$ui/dialog';
-	import * as SideMenu from '$module/navigation/side-menu';
-	import { Separator } from '$ui/separator';
-	import Skeleton from '$ui/skeleton/skeleton.svelte';
+	import { PUBLIC_INSTAGRAM_AUTH_URL } from '$env/static/public';
 	import { Button } from '$ui/button';
-	import type { ChannelAccount } from '$types/channel-type';
 	import { ChannelAPI } from '$api/index';
-	import { selectedOrganization } from '$stores/organization-store';
-	import { LoadingPage } from '$module/page';
+	import type { ChannelAccount } from '$types/channel-type';
 
-	let selectedOrganizationId = $selectedOrganization;
+	let orgId = $page.params.org;
 	let accounts: ChannelAccount[] | null = $state(null);
 	let disconnectDialogOpen: boolean = $state(false);
 
@@ -31,10 +31,11 @@
 
 	const ChannelConnections = [
 		{
-			label: 'Instagram',
+			label: 'Login with Instagram',
 			icon: InstagramOutlineIcon,
-			color: 'bg-gradient-to-r from-[#f09433] via-[#e6683c] via-[#dc2743] via-[#cc2366] to-[#bc1888]',
-			href: `${PUBLIC_INSTAGRAM_AUTH_URL}&state=${selectedOrganizationId}`
+			color:
+				'bg-gradient-to-r from-[#f09433] via-[#e6683c] via-[#dc2743] via-[#cc2366] to-[#bc1888]',
+			href: `${PUBLIC_INSTAGRAM_AUTH_URL}&state=${orgId}`
 		},
 		{
 			label: 'WhatsApp',
@@ -56,12 +57,12 @@
 	};
 
 	const getChannelAccounts = async () => {
-		if (!selectedOrganizationId) {
+		if (!orgId) {
 			return;
 		}
 
 		accounts = null;
-		const response = await ChannelAPI.getChannelAccounts(selectedOrganizationId);
+		const response = await ChannelAPI.getChannelAccounts(orgId);
 
 		if (!response?.ok) {
 			return;
@@ -78,7 +79,7 @@
 <div class="flex w-full h-full justify-center px-4 py-8">
 	<div class="flex w-full max-w-[960px] h-full py-4 bg-white border rounded-md shadow-md">
 		<Tabs.Root value="outbound" class="flex w-full h-full px-4">
-			<SideMenu.List class="w-60 overflow-scroll">
+			<SideMenu.List class="w-60">
 				{#if accounts == null}
 					{#each { length: 4 } as _}
 						<Skeleton class="h-9 w-full rounded-md" />
@@ -113,10 +114,13 @@
 							{#each ChannelConnections as connection}
 								<a
 									href={connection.href || '#'}
-									class={cn(`flex items-center px-4 py-2 space-x-6 text-base font-semibold text-white rounded-full ${connection.disabled ? 'brightness-90 cursor-not-allowed' : 'hover:brightness-90'} transition-all`, connection.color)}
+									class={cn(
+										`flex items-center px-4 py-2 space-x-6 text-base font-semibold text-white rounded-full ${connection.disabled ? 'brightness-90 cursor-not-allowed' : 'hover:brightness-90'} transition-all`,
+										connection.color
+									)}
 								>
 									<img src={connection.icon} alt="" class="w-8 h-8" />
-									<span>Connect with {connection.label}</span>
+									<span>{connection.label}</span>
 								</a>
 							{/each}
 						</div>

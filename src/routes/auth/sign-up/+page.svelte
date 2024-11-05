@@ -6,6 +6,7 @@
 
 	import * as Form from '$ui/form';
 	import { LoadingPage } from '$module/page';
+	import { BrandLogo } from '$module/general';
 
 	import * as AuthAPI from '$api/auth-api';
 	import { signUpSchema } from '$schema/agent-schema';
@@ -47,8 +48,11 @@
 </script>
 
 <LoadingPage bind:loading={isFormLoading}>
-	<div class="flex justify-center items-center w-screen h-screen">
-		<div class="flex flex-col items-center gap-5 px-8 py-14 rounded-lg shadow-lg border border-gray-200">
+	<div class="flex flex-col justify-center items-center w-screen h-screen space-y-8">
+		<BrandLogo />
+		<div
+			class="flex flex-col items-center gap-5 px-8 py-14 rounded-lg shadow-lg border border-gray-200"
+		>
 			<div class="text-center">
 				<h1 class="font-bold">Get started</h1>
 				<p class="text-gray-500">Create a new account</p>

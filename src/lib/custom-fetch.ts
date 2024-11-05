@@ -29,7 +29,7 @@ const verifyToken = async (token: string, publicKeyPEM: string) => {
 export async function fetchApi<T>(
 	target: RequestInfo | URL,
 	config?: RequestConfig
-): Promise<ApiResponse<T> | null> {
+): Promise<ApiResponse<T>> {
 	let targetPath = target;
 	// Cancels refetching
 	// if (controller) {
@@ -95,7 +95,6 @@ export async function fetchApi<T>(
 		};
 	} catch (err) {
 		void err;
+		throw new Error('Failed to fetch data');
 	}
-
-	return null;
 }

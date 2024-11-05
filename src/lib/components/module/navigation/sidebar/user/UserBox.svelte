@@ -5,7 +5,7 @@
   import * as Avatar from '$lib/components/ui/avatar';
 	import { getTextInitials } from '$utils/index';
   import { agent } from '$stores/agent';
-	import UserMenu from './UserMenu.svelte';
+	import { UserMenu } from '.';
 
   let name = '';
   let email = '';

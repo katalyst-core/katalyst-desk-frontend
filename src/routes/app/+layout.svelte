@@ -1,51 +1,57 @@
 <script lang="ts">
-  import { onDestroy, onMount } from "svelte";
+	import { onDestroy, onMount, type Snippet } from 'svelte';
 
-	import Sidebar from "$lib/components/module/sidebar/Sidebar.svelte";
-	import LoadingPage from "$lib/components/module/page/LoadingPage.svelte";
+	import Sidebar from '$module/navigation/sidebar/Sidebar.svelte';
+	import LoadingPage from '$lib/components/module/page/LoadingPage.svelte';
 
-	import { availableOrganizations } from "$stores/organization-store";
-  import { CreateOrganizationDialog } from "$module/modal";
-	import * as OrganizationAPI from "$api/organization-api";
-  import { connectSocket, disconnectSocket } from '$lib/socket-handler';
+	import { availableOrganizations } from '$stores/organization-store';
+	import { CreateOrganizationDialog } from '$module/modal';
+	import * as OrganizationAPI from '$api/organization-api';
+	import { connectSocket, disconnectSocket } from '$lib/socket-handler';
 
-  let hasOrganization = false;
-  let openCreateOrganizationDialog = false;
+	interface Props {
+		children: Snippet;
+	}
 
-  const checkOrganizations = () => {
-    availableOrganizations.subscribe((org) => {
-      if (!org) {
-        hasOrganization = false;
-        return;
-      }
+	let { children }: Props = $props();
 
-      if (org.length === 0) {
-        hasOrganization = false;
-        openCreateOrganizationDialog = true;
-      }
+	let hasOrganization = $state(true);
+	let openCreateOrganizationDialog = $state(false);
 
-      hasOrganization = true;
-    });
-  }
+	// const checkOrganizations = () => {
+	//   availableOrganizations.subscribe((org) => {
+	//     if (!org) {
+	//       hasOrganization = false;
+	//       return;
+	//     }
 
-  onMount(async () => {
-    OrganizationAPI.fetchOrganizationList();
-    checkOrganizations();
+	//     if (org.length === 0) {
+	//       hasOrganization = false;
+	//       openCreateOrganizationDialog = true;
+	//     }
 
-    connectSocket();
-  });
+	//     hasOrganization = true;
+	//   });
+	// }
 
-  onDestroy(() => {
-    disconnectSocket();
-  })
+	onMount(async () => {
+	  OrganizationAPI.fetchOrganizationList();
+	  // checkOrganizations();
+
+	  connectSocket();
+	});
+
+	onDestroy(() => {
+	  disconnectSocket();
+	})
 </script>
 
 <Sidebar>
-  <LoadingPage loading={!hasOrganization}>
-    <div class="w-full h-full bg-muted overflow-auto">
-      <slot />
-    </div>
-  </LoadingPage>
+	<LoadingPage loading={!hasOrganization}>
+		<div class="w-full h-full bg-muted overflow-auto">
+			{@render children()}
+		</div>
+	</LoadingPage>
 </Sidebar>
 
 <CreateOrganizationDialog bind:open={openCreateOrganizationDialog} closeable={false} />

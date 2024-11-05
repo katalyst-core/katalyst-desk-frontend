@@ -1,34 +1,33 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
+
 	import * as DropdownMenu from '$ui/dropdown-menu';
 	import { CreateOrganizationDialog } from '$module/modal';
+	import { OrganizationItem } from '.';
 
-	import type { OrganizationListObject } from '$types/organization-type';
-	import { selectedOrganization } from '$stores/organization-store';
+	import type { OrganizationListItem } from '$types/organization-type';
 
-	import OrganizationItem from './OrganizationItem.svelte';
 
-	export let buttonWidth;
-	export let disabled = false;
-	export let organizationList: OrganizationListObject[] | null = null;
-	export let selectedOrganizationData: OrganizationListObject | null;
+	interface Props {
+		buttonWidth: number;
+		disabled: boolean;
+		organizationList: OrganizationListItem[] | null;
+		selectedOrganization: OrganizationListItem | null;
+		children: Snippet;
+	}
 
-	let openCreateOrganizationDialog: boolean = false;
+	let { buttonWidth, disabled = false, organizationList = null, selectedOrganization, children }: Props = $props();
+
+	let openCreateOrganizationDialog: boolean = $state(false);
 
 	const toggleCreateStoreDialog = () =>
 		(openCreateOrganizationDialog = !openCreateOrganizationDialog);
 
-	const setCurrentOrganization = (orgId: string) => {
-		if (selectedOrganizationData?.organization_id === orgId) {
-			return;
-		}
-
-		selectedOrganization.set(orgId);
-	};
 </script>
 
 <DropdownMenu.Root>
 	<DropdownMenu.Trigger class="w-full" {disabled}>
-		<slot />
+		{@render children()}
 	</DropdownMenu.Trigger>
 
 	<DropdownMenu.Content style="width: {buttonWidth}px">
@@ -36,10 +35,11 @@
 		<DropdownMenu.Separator />
 		{#if organizationList}
 			{#each organizationList as org}
-				<DropdownMenu.Item on:click={() => setCurrentOrganization(org.organization_id)}>
+			{@const { organization_id: orgId } = org}
+				<DropdownMenu.Item href="/app/{orgId}" rel="external">
 					<OrganizationItem
 						name={org.name}
-						active={org.organization_id === selectedOrganizationData?.organization_id}
+						active={org.organization_id === selectedOrganization?.organization_id}
 					/>
 				</DropdownMenu.Item>
 			{/each}

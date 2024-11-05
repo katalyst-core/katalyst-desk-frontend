@@ -33,7 +33,7 @@ export const createAgent = async (name: string, email: string, password: string)
 };
 
 export const login = async (email: string, password: string) => {
-	const response: ApiResponse<AuthToken> | null = await fetchApi('/auth/login', {
+	const response: ApiResponse<AuthToken> = await fetchApi('/auth/login', {
 		method: 'POST',
 		withoutToken: true,
 		headers: {
@@ -44,10 +44,6 @@ export const login = async (email: string, password: string) => {
 			password
 		})
 	});
-
-	if (!response) {
-		return null;
-	}
 
 	if (!response.ok) {
 		const { message } = response;

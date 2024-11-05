@@ -6,11 +6,15 @@
 
 	import { getTextInitials, textToColor } from '$utils/index';
 
-  export let name: string | null;
-  export let active: boolean = false;
+  interface Props {
+    name: string | null;
+    active?: boolean;
+  }
 
-  let color = '';
-  let initials = '';
+  let { name, active = false }: Props = $props();
+
+  let color = $state('');
+  let initials = $state('');
 
   onMount(() => {
     if (!name) {

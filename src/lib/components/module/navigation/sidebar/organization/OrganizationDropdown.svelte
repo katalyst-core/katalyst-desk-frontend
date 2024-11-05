@@ -1,49 +1,63 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { ArrowLeftRight } from 'lucide-svelte';
+	import { page } from '$app/stores';
 
 	import * as Avatar from '$ui/avatar';
 	import { Skeleton } from '$ui/skeleton';
-	import OrganizationMenu from './OrganizationMenu.svelte';
+	import { OrganizationMenu } from '.';
 
 	import { getTextInitials, textToColor } from '$utils/index';
 	import type { OrganizationObject } from '$types/organization-type';
-	import { availableOrganizations, selectedOrganization } from '$stores/organization-store';
+	import { availableOrganizations } from '$stores/organization-store';
 
-	let organizationList: OrganizationObject[] | null;
-	let selectedOrganizationData: OrganizationObject | null;
-	let organizationName = 'Choose one';
-	let buttonWidth: number;
+	let organizationList: OrganizationObject[] | null = $state(null);
+	let selectedOrganization: OrganizationObject | null = $state(null);
+	let organizationName = $state('Pick one');
+	let buttonWidth: number = $state(0);
 
-	$: initials = getTextInitials(organizationName);
-	$: avatarColor = textToColor(organizationName);
+	let initials = $derived(getTextInitials(organizationName));
+	let avatarColor = $derived(textToColor(organizationName));
 
-	const getAvailableOrganizations = () => availableOrganizations.subscribe((org) => organizationList = org);
+	const getAvailableOrganizations = () =>
+		availableOrganizations.subscribe((org) => (organizationList = org));
 
 	const getSelectedOrganization = async () => {
-		selectedOrganization.subscribe((orgId) => {
-			if (orgId === null || organizationList === null) {
-				selectedOrganizationData = null;
-				return;
-			}
+		const { org: orgId } = $page.params;
 
-			selectedOrganizationData = organizationList.find((org) => org.organization_id === orgId) || null;
+		if (!orgId || !organizationList) {
+			selectedOrganization = null;
+			return;
+		}
 
-			if (selectedOrganizationData === null) {
-				return;
-			}
+		selectedOrganization = organizationList.find((org) => org.organization_id === orgId) || null;
 
-			organizationName = selectedOrganizationData.name;
-		});
-	}
+		if (!selectedOrganization) {
+			const newUrl = '/app';
+			window.location.href = newUrl;
+
+			return;
+		}
+
+		organizationName = selectedOrganization.name;
+	};
+
+	$effect(() => {
+		getSelectedOrganization();
+	});
 
 	onMount(() => {
 		getAvailableOrganizations();
-		getSelectedOrganization();
+		// getSelectedOrganization();
 	});
 </script>
 
-<OrganizationMenu {buttonWidth} {organizationList} {selectedOrganizationData} disabled={!organizationList}>
+<OrganizationMenu
+	{buttonWidth}
+	{organizationList}
+	{selectedOrganization}
+	disabled={!organizationList}
+>
 	<div
 		bind:clientWidth={buttonWidth}
 		class="flex justify-between items-center w-full h-14 px-2 select-none cursor-pointer text-left rounded-xl bg-transparent text-gray-800 hover:bg-gray-200 transition-all"

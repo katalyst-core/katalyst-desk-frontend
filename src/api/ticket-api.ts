@@ -6,19 +6,15 @@ import type { ApiResponse, TableOptions } from '$types/api-type';
 import type { TicketMessage } from '$types/message-type';
 import { socket as _socket } from '$stores/socket-store';
 
-export const getMessagesByTicketId = async (ticketId: string, page: number, limit: number = 15) => {
+export const getMessagesByTicketId = async (ticketId: string, page: number, limit: number = 25) => {
 	try {
-		const response: ApiResponse<TableOptions<TicketMessage[]>> | null = await fetchApi(
+		const response: ApiResponse<TableOptions<TicketMessage[]>> = await fetchApi(
 			`/ticket/${ticketId}/messages?` +
 				new URLSearchParams({
 					page: String(page),
 					limit: String(limit)
 				})
 		);
-
-		if (!response) {
-			return null;
-		}
 
 		if (!response.ok) {
 			const message = response.message;

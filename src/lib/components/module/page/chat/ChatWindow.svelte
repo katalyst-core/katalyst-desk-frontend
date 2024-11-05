@@ -4,12 +4,14 @@
 
 	import { Input } from '$ui/input';
 	import { SendHorizontal, CheckCheck } from 'lucide-svelte';
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import { scrollToBottom } from '$utils/index';
 	import InfiniteScroll from '$module/util/InfiniteScroll.svelte';
+	import { ScrollArea } from '$ui/scroll-area';
+	import Skeleton from '$ui/skeleton/skeleton.svelte';
 
 	interface Props {
-		rawMessages: TicketMessage[];
+		rawMessages: TicketMessage[] | null;
 		fetchMessages: () => void;
 		sendMessage: (text: string) => void;
 	}
@@ -17,14 +19,26 @@
 	let { rawMessages = [], fetchMessages, sendMessage }: Props = $props();
 
 	let autoScrollThreshold = 200;
-	let messageElement: HTMLElement | undefined = $state();
+	let messageElement: HTMLDivElement | undefined = $state();
 	let isMessageSending: boolean = $state(false);
 	let messageText: string = $state('');
+	let hasNewMessages: boolean = $state(true);
 
-	let messages = $derived(rawMessages.toReversed());
+	let messages = $derived(rawMessages?.toReversed());
 
 	$effect(() => {
-		if (!rawMessages) return;
+		if (!rawMessages) {
+			hasNewMessages = true;
+			return;
+		}
+
+		if (!messageElement) return;
+
+		if (hasNewMessages) {
+			scrollToBottom(messageElement);
+			hasNewMessages = false;
+			return;
+		}
 
 		scrollOnNewMessage();
 	});
@@ -77,6 +91,8 @@
 		isMessageSending = false;
 	};
 
+	const getRandomNumber = (n: number) => Math.floor(Math.random() * n) + 1;
+
 	onMount(() => {
 		if (messageElement) {
 			scrollToBottom(messageElement);
@@ -86,42 +102,76 @@
 
 <div class="w-full h-full flex flex-col justify-between">
 	<!-- Chat messages -->
-	<ul bind:this={messageElement} class="w-full h-full px-2 py-2 space-y-2 overflow-y-scroll">
-		{#if messageElement}
-			<InfiniteScroll bind:element={messageElement} fetch={fetchMessages} direction="up" />
-		{/if}
-
-		{#each messages as message, index}
-			{#if showMessageDate(index)}
-				<li class="w-full flex justify-center">
-					<div class="flex py-2">
-						<p class="text-xs">{showMessageDate(index)}</p>
-					</div>
-				</li>
+	<ScrollArea bind:element={messageElement} orientation="vertical">
+		<ul class="w-full h-full px-2 py-2 space-y-2">
+			{#if messageElement}
+				<InfiniteScroll bind:element={messageElement} fetch={fetchMessages} direction="up" />
 			{/if}
 
-			{#if !message.is_customer}
-				<li class="w-full flex justify-end pl-10">
-					<div class="flex items-end w-fit bg-gray-950 px-3 py-2 rounded-2xl rounded-br space-x-2">
-						<p class="text-white text-base">{message.content?.body}</p>
-						<div class="flex items-center space-x-1">
-							<p class="text-[10px] text-gray-300">{getTimeFormat(message.timestamp)}</p>
-							<CheckCheck class="w-4 h-4 text-gray-400 {message.is_read ? 'text-blue-500' : ''}" />
-						</div>
-					</div>
-				</li>
+			{#if !messages}
+				{#each { length: 15 } as _}
+					{@const isCustomer = getRandomNumber(10) < 5}
+					{@const length = getRandomNumber(6) + 4}
+
+					{#snippet skeleton(size: number)}
+						<Skeleton style="width: {size * 50}px; height: 40px" />
+					{/snippet}
+
+					{#if isCustomer}
+						<li class="w-full flex justify-end pl-10">
+							{@render skeleton(length)}
+						</li>
+					{:else}
+						<li class="w-full flex justify-start pr-10">
+							{@render skeleton(length)}
+						</li>
+					{/if}
+				{/each}
 			{:else}
-				<li class="w-full flex justify-start pr-10">
-					<div class="flex items-end w-fit bg-gray-200 px-3 py-2 rounded-2xl rounded-bl space-x-2">
-						<p class="text-black text-base">{message.content?.body}</p>
-						<div class="flex items-center space-x-1">
-							<p class="text-[10px] text-gray-800">{getTimeFormat(message.timestamp)}</p>
-						</div>
-					</div>
-				</li>
+				{#each messages as message, index}
+					{@const {
+						is_customer: isCustomer,
+						is_read: isRead,
+						timestamp,
+						content: { body: text }
+					} = message}
+
+					{#if showMessageDate(index)}
+						<li class="w-full flex justify-center">
+							<div class="flex py-2">
+								<p class="text-xs">{showMessageDate(index)}</p>
+							</div>
+						</li>
+					{/if}
+
+					{#if !isCustomer}
+						<li class="w-full flex justify-end pl-10">
+							<div
+								class="flex items-end w-fit bg-gray-950 px-3 py-2 rounded-2xl rounded-br space-x-2"
+							>
+								<p class="text-white text-base">{text}</p>
+								<div class="flex items-center space-x-1">
+									<p class="text-[10px] text-gray-300">{getTimeFormat(timestamp)}</p>
+									<CheckCheck class="w-4 h-4 text-gray-400 {isRead ? 'text-blue-500' : ''}" />
+								</div>
+							</div>
+						</li>
+					{:else}
+						<li class="w-full flex justify-start pr-10">
+							<div
+								class="flex items-end w-fit bg-gray-200 px-3 py-2 rounded-2xl rounded-bl space-x-2"
+							>
+								<p class="text-black text-base">{text}</p>
+								<div class="flex items-center space-x-1">
+									<p class="text-[10px] text-gray-800">{getTimeFormat(timestamp)}</p>
+								</div>
+							</div>
+						</li>
+					{/if}
+				{/each}
 			{/if}
-		{/each}
-	</ul>
+		</ul>
+	</ScrollArea>
 
 	<!-- Chat input -->
 	<div class="w-full">
@@ -133,10 +183,10 @@
 				bind:value={messageText}
 				class="bg-gray-100 rounded-full"
 				placeholder="Say something"
-				disabled={isMessageSending}
+				disabled={isMessageSending || !messages}
 			/>
 			<button
-				class="p-3 flex justify-center items-center bg-blue-500 rounded-full transition-all {isMessageSending
+				class="p-3 flex justify-center items-center bg-blue-500 rounded-full transition-all {isMessageSending || !messages
 					? 'brightness-75'
 					: 'hover:brightness-90'}"
 			>

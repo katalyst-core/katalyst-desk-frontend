@@ -4,6 +4,7 @@
 
 	import * as Form from '$ui/form';
 	import { LoadingPage } from '$module/page';
+	import { BrandLogo } from '$module/general';
 
 	import * as AuthAPI from '$api/auth-api';
 	import { signInSchema } from '$schema/agent-schema';
@@ -25,22 +26,17 @@
 			const { email, password } = form.data;
 			const response = await AuthAPI.login(email, password);
 
-			isRequestLoading = false;
-
-			if (!response) {
-				return;
-			}
-
 			if (!response.ok) {
 				const { message } = response;
 				setError(form, message);
+				isRequestLoading = false;
 				return;
 			}
 
 			const { auth_token: authToken } = response.data;
 			$persistedAccessToken = authToken;
 
-			const newUrl = '/app/dashboard';
+			const newUrl = '/app';
 			window.location.href = newUrl;
 		}
 	});
@@ -50,8 +46,11 @@
 </script>
 
 <LoadingPage bind:loading={isFormLoading}>
-	<div class="flex justify-center items-center w-screen h-screen">
-		<div class="flex flex-col items-center gap-5 px-8 py-14 rounded-lg shadow-lg border border-gray-200">
+	<div class="flex flex-col justify-center items-center w-screen h-screen space-y-8">
+		<BrandLogo />
+		<div
+			class="flex flex-col items-center gap-5 px-8 py-14 rounded-lg shadow-lg border border-gray-200"
+		>
 			<div class="text-center">
 				<h1 class="font-bold">Welcome</h1>
 				<p class="text-gray-500">Please sign-in to continue</p>

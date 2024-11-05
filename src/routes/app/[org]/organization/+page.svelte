@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { Button } from '$ui/button';
 	import { onMount } from 'svelte';
-	import { selectedOrganization } from '$stores/organization-store';
 
 	const initFB = () => {
 		FB.login(
@@ -43,7 +42,7 @@ this manages the organizatizns
 	Instagram Login
 </Button>
 
-<a
+<!-- <a
 	href="https://www.instagram.com/oauth/authorize?enable_fb_login=0&force_authentication=1&client_id=1081015663664011&redirect_uri=https://katalyst-frontend.jtbernas.com/app/channel/instagram/auth&response_type=code&scope=instagram_business_basic%2Cinstagram_business_manage_messages%2Cinstagram_business_manage_comments%2Cinstagram_business_content_publish&state={$selectedOrganization}"
 	>Instagram Login</a
->
+> -->

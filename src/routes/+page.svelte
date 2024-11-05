@@ -5,7 +5,7 @@
 	import * as Tabs from '$ui/tabs';
 	import * as Accordion from '$lib/components/ui/accordion';
 
-	import KatalystLogo from '$lib/images/katalyst-logo.png';
+	import { BrandLogo } from '$module/general';
 	import InboxGraphic from '$lib/images/graphics/inbox.png';
 	import MultiChannelGraphic from '$lib/images/graphics/multi-channel.png';
 	import TrackProgressGraphic from '$lib/images/graphics/track-progress.png';
@@ -138,10 +138,7 @@
 <header
 	class="sticky top-0 z-50 flex items-center p-6 h-24 justify-between text-lg bg-white border-b-2 shadow"
 >
-	<a href="/" class="flex items-center gap-2">
-		<img class="h-16" src={KatalystLogo} alt="Katalyst Desk Logo" />
-		<h1 class="font-medium text-3xl">Katalyst Desk</h1>
-	</a>
+	<BrandLogo />
 
 	<!-- Burger Menu Button -->
 	<button class="md:hidden flex items-center px-2 text-gray-800" on:click={toggleMenu}>
@@ -160,7 +157,9 @@
 			>Contact Us</a
 		>
 		<div class="space-x-2">
-			<Button variant="outline" href="#" class="text-lg px-7 py-6">Coming Soon</Button>
+			<!-- <Button variant="outline" href="#" class="text-lg px-7 py-6">Coming Soon</Button> -->
+			<Button href="/auth/sign-in" variant="outline" class="text-lg px-7 py-6">Sign in</Button>
+			<Button href="/auth/sign-up" class="text-lg px-7 py-6">Get started</Button>
 		</div>
 	</nav>
 
@@ -180,13 +179,15 @@
 			<li>
 				<a href="#landing-contact" on:click={closeMenu} class="text-lg">Contact Us</a>
 			</li>
-			<li class="w-full">
-				<Button
+			<li class="grid grid-cols-2 w-full space-x-2">
+				<!-- <Button
 					variant="outline"
 					href="#"
 					class="text-lg px-7 py-6 w-full border-2 border-gray-400 border-opacity-30"
 					>Coming Soon</Button
-				>
+				> -->
+				<Button href="/auth/sign-in" variant="outline" class="text-lg px-7 py-6">Sign in</Button>
+				<Button href="/auth/sign-up" class="text-lg px-7 py-6">Get started</Button>
 			</li>
 		</ul>
 	</div>

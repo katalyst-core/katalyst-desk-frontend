@@ -64,7 +64,7 @@
     </form>
 
     <Dialog.Footer>
-      <Button on:click={submit} bind:loading={isRequestLoading}>Create</Button>
+      <Button onclick={submit} bind:loading={isRequestLoading}>Create</Button>
     </Dialog.Footer>
   </Dialog.Content>
 </Dialog.Root>

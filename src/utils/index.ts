@@ -20,6 +20,16 @@ export const redirect = async (origins: RegExp[], target: string) => {
   }
 }
 
+export const orgTarget = (target: string) => {
+	const { org: orgId } = get(page).params;
+
+	if (!orgId) {
+		return;
+	}
+
+	return `/app/${orgId}${target}`;
+}
+
 export const getTextInitials = (name: string) => {
 	if (!name) {
 		return '';

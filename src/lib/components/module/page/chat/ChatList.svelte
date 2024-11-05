@@ -1,21 +1,25 @@
 <script lang="ts">
 	import { CheckCheck } from 'lucide-svelte';
 	import { differenceInDays, format } from 'date-fns';
+	import { page } from '$app/stores';
 
 	import * as Avatar from '$ui/avatar';
 	import { Skeleton } from '$ui/skeleton';
-	import { getTextInitials } from '$utils/index';
+	import { getTextInitials, orgTarget } from '$utils/index';
 	import type { TicketListItem } from '$types/ticket-type';
 	import InfiniteScroll from '$module/util/InfiniteScroll.svelte';
+	import { ScrollArea } from '$ui/scroll-area';
 
-	let ticketElement: HTMLElement;
-	export let fetchTickets: Function;
-	export let activeTicket: TicketListItem | null;
-	export let tickets: TicketListItem[] | null;
+	interface Props {
+		fetchTickets: Function;
+		tickets: TicketListItem[] | null;
+	}
 
-	const setActiveTicket = (ticket: TicketListItem) => {
-		activeTicket = ticket;
-	};
+	let { fetchTickets, tickets }: Props = $props();
+
+	let ticketElement: HTMLDivElement | undefined = $state();
+
+	let activeTicketId: string = $derived($page.params.ticket);
 
 	const formatCount = (count: number) => {
 		if (count > 99) {
@@ -41,73 +45,75 @@
 	};
 </script>
 
-<ul
-	class="w-80 h-full bg-white border-r border-gray-400 border-opacity-35 p-2 space-y-1 overflow-scroll"
-	bind:this={ticketElement}
->
-	{#if tickets == null}
-		{#each [3, 4, 2] as _}
-			<li class="w-full">
-				<div class="w-full h-[4.5rem] items-center px-3 flex text-start space-x-2 rounded-lg">
-					<Skeleton class="h-12 w-12 rounded-full" />
-					<div class="space-y-2">
-						<Skeleton class="h-4 w-[100px]" />
-						<Skeleton class="h-4 w-[150px]" />
-					</div>
-				</div>
-			</li>
-		{/each}
-	{:else}
-		{#each tickets as ticket}
-			<li class="w-full">
-				<button
-					on:click={() => setActiveTicket(ticket)}
-					class="w-full h-[4.5rem] items-center px-3 flex text-start space-x-2 rounded-lg cursor-pointer transition-colors {activeTicket &&
-					activeTicket.ticket_id == ticket.ticket_id
-						? 'bg-gray-300'
-						: 'hover:bg-gray-200'}"
-				>
-					<Avatar.Root class="w-12 h-12">
-						<Avatar.Image src="" alt="" />
-						<Avatar.Fallback
-							class="font-medium text-xl {activeTicket && activeTicket.ticket_id == ticket.ticket_id
-								? 'bg-gray-200'
-								: 'bg-gray-300'}">{getTextInitials(ticket.display_name)}</Avatar.Fallback
-						>
-					</Avatar.Root>
-					<div class="w-full">
-						<div class="flex items-center justify-between">
-							<h3
-								class="w-36 text-base font-medium whitespace-nowrap text-ellipsis overflow-hidden"
-							>
-								{ticket.display_name}
-							</h3>
-							<p class="text-xs text-gray-400">{getTimeFormat(String(ticket.last_message_timestamp))}</p>
+<ScrollArea bind:element={ticketElement} orientation="vertical">
+	<ul class="w-80 h-full bg-white border-r border-gray-400 border-opacity-35 p-2 space-y-1">
+		{#if tickets == null}
+			{#each [3, 4, 2] as _}
+				<li class="w-full">
+					<div class="w-full h-[4.5rem] items-center px-3 flex text-start space-x-2 rounded-lg">
+						<Skeleton class="h-12 w-12 rounded-full" />
+						<div class="space-y-2">
+							<Skeleton class="h-4 w-[100px]" />
+							<Skeleton class="h-4 w-[150px]" />
 						</div>
-						<div class="flex w-full items-center">
-							<div class="flex space-x-1 flex-1">
-								{#if !ticket.is_customer}
-									<CheckCheck class="w-5 h-5 {ticket.is_read ? 'text-blue-600' : ''}" />
-								{/if}
-								<p
-									class="w-36 text-sm text-gray-500 whitespace-nowrap text-ellipsis overflow-hidden"
+					</div>
+				</li>
+			{/each}
+		{:else}
+			{#each tickets as ticket}
+				{@const { ticket_id: ticketId } = ticket}
+				<li class="w-full">
+					<a
+						href={orgTarget(`/ticket/${ticketId}`)}
+						class="w-full h-[4.5rem] items-center px-3 flex text-start space-x-2 rounded-lg cursor-pointer transition-colors {activeTicketId &&
+						activeTicketId == ticket.ticket_id
+							? 'bg-gray-300'
+							: 'hover:bg-gray-200'}"
+					>
+						<Avatar.Root class="w-12 h-12">
+							<Avatar.Image src="" alt="" />
+							<Avatar.Fallback
+								class="font-medium text-xl {activeTicketId && activeTicketId == ticket.ticket_id
+									? 'bg-gray-200'
+									: 'bg-gray-300'}">{getTextInitials(ticket.display_name)}</Avatar.Fallback
+							>
+						</Avatar.Root>
+						<div class="w-full">
+							<div class="flex items-center justify-between">
+								<h3
+									class="w-36 text-base font-medium whitespace-nowrap text-ellipsis overflow-hidden"
 								>
-									{ticket.last_message?.body || ''}
+									{ticket.display_name}
+								</h3>
+								<p class="text-xs text-gray-400">
+									{getTimeFormat(String(ticket.last_message_timestamp))}
 								</p>
 							</div>
-							{#if ticket.unread_count > 0}
-								<div class="flex h-5 px-2 justify-center items-center rounded-full bg-blue-500">
-									<p class="text-xs text-white font-medium">{formatCount(ticket.unread_count)}</p>
+							<div class="flex w-full items-center">
+								<div class="flex space-x-1 flex-1">
+									{#if !ticket.is_customer}
+										<CheckCheck class="w-5 h-5 {ticket.is_read ? 'text-blue-600' : ''}" />
+									{/if}
+									<p
+										class="w-36 text-sm text-gray-500 whitespace-nowrap text-ellipsis overflow-hidden"
+									>
+										{ticket.last_message?.body || ''}
+									</p>
 								</div>
-							{/if}
+								{#if ticket.unread_count > 0}
+									<div class="flex h-5 px-2 justify-center items-center rounded-full bg-blue-500">
+										<p class="text-xs text-white font-medium">{formatCount(ticket.unread_count)}</p>
+									</div>
+								{/if}
+							</div>
 						</div>
-					</div>
-				</button>
-			</li>
-		{/each}
+					</a>
+				</li>
+			{/each}
 
-		{#if ticketElement}
-			<InfiniteScroll bind:element={ticketElement} fetch={fetchTickets} direction="down" />
+			{#if ticketElement}
+				<InfiniteScroll bind:element={ticketElement} fetch={fetchTickets} direction="down" />
+			{/if}
 		{/if}
-	{/if}
-</ul>
+	</ul>
+</ScrollArea>

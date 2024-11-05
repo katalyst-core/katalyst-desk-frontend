@@ -2,6 +2,7 @@
   import { ChevronDown } from "lucide-svelte";
 	import type { Component } from "lucide-svelte";
   import { page } from '$app/stores';
+	import { orgTarget } from "$utils/index";
 
   export let label: string;
   export let icon: typeof Component;
@@ -15,7 +16,7 @@
 </script>
 
 <li class="sidebar-item">
-  <a href={!hasChildren ? path : null} on:click={() => open = !open} class="justify-between {browserPath == path ? 'sidebar-item-selected' : ''}">
+  <a href={!hasChildren ? orgTarget(path) : null} on:click={() => open = !open} class="justify-between {browserPath == path ? 'sidebar-item-selected' : ''}">
     <div class="flex gap-4">
       <svelte:component this={icon} class="w-6 h-6" />
       <span>{label}</span>
