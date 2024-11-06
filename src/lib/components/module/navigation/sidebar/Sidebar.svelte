@@ -54,9 +54,13 @@
 	] as SidebarObject[];
 
 	items.forEach((item: SidebarObject) => {
-		if (item.children) {
-			item.open = false;
-		}
+		item.open = !!item.children;
+
+		return item;
+	});
+
+	bottomItems.forEach((item: SidebarObject) => {
+		item.open = !!item.children;
 
 		return item;
 	});

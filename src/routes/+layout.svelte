@@ -16,9 +16,9 @@
 </script>
 
 <div class="w-screen h-screen font-poppins overflow-auto">
-	<!-- <LoadingPage bind:loading={isRequestLoading}> -->
+	<LoadingPage bind:loading={isRequestLoading}>
 		<slot />
-	<!-- </LoadingPage> -->
+	</LoadingPage>
 </div>
 
 <Toaster />

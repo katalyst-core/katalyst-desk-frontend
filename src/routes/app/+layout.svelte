@@ -3,11 +3,11 @@
 
 	import Sidebar from '$module/navigation/sidebar/Sidebar.svelte';
 	import LoadingPage from '$lib/components/module/page/LoadingPage.svelte';
-
-	import { availableOrganizations } from '$stores/organization-store';
 	import { CreateOrganizationDialog } from '$module/modal';
+
 	import * as OrganizationAPI from '$api/organization-api';
 	import { connectSocket, disconnectSocket } from '$lib/socket-handler';
+	import { availableOrganizations } from '$stores/organization-store';
 
 	interface Props {
 		children: Snippet;
@@ -15,30 +15,23 @@
 
 	let { children }: Props = $props();
 
-	let hasOrganization = $state(true);
 	let openCreateOrganizationDialog = $state(false);
 
-	// const checkOrganizations = () => {
-	//   availableOrganizations.subscribe((org) => {
-	//     if (!org) {
-	//       hasOrganization = false;
-	//       return;
-	//     }
+	const setOrganizationList = async () => {
+		const response = await OrganizationAPI.fetchOrganizationList();
 
-	//     if (org.length === 0) {
-	//       hasOrganization = false;
-	//       openCreateOrganizationDialog = true;
-	//     }
+		if (!response) {
+			return;
+		}
 
-	//     hasOrganization = true;
-	//   });
-	// }
+		const { data: organizations } = response;
+		availableOrganizations.set(organizations);
+	};
 
 	onMount(async () => {
-	  OrganizationAPI.fetchOrganizationList();
-	  // checkOrganizations();
-
-	  connectSocket();
+	  await setOrganizationList();
+	  await connectSocket();
+		console.log('socket connected');
 	});
 
 	onDestroy(() => {
@@ -47,11 +40,9 @@
 </script>
 
 <Sidebar>
-	<LoadingPage loading={!hasOrganization}>
 		<div class="w-full h-full bg-muted overflow-auto">
 			{@render children()}
 		</div>
-	</LoadingPage>
 </Sidebar>
 
 <CreateOrganizationDialog bind:open={openCreateOrganizationDialog} closeable={false} />

@@ -30,10 +30,10 @@
 	{builders}
 	class={cn(buttonVariants({ variant, size, className }))}
 	type="button"
+	bind:disabled={loading}
 	{...$$restProps}
 	on:click={onClick}
 	on:keydown
-	bind:disabled={loading}
 >
 	{#if loading}
 		<LoaderCircle class="mr-2 py-[2px] animate-spin" />

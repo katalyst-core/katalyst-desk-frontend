@@ -1,22 +1,25 @@
 <script lang="ts">
-	import type { TicketMessage } from '$types/message-type';
+	import { onMount } from 'svelte';
 	import { format } from 'date-fns';
+	import { SendHorizontal, CheckCheck, X } from 'lucide-svelte';
 
+	import { InfiniteScroll } from '$module/util';
+	import { Skeleton } from '$ui/skeleton';
+	import { Button } from '$ui/button';
 	import { Input } from '$ui/input';
-	import { SendHorizontal, CheckCheck } from 'lucide-svelte';
-	import { onMount, tick } from 'svelte';
-	import { scrollToBottom } from '$utils/index';
-	import InfiniteScroll from '$module/util/InfiniteScroll.svelte';
 	import { ScrollArea } from '$ui/scroll-area';
-	import Skeleton from '$ui/skeleton/skeleton.svelte';
+
+	import { scrollToBottom } from '$utils/index';
+	import type { TicketMessage } from '$types/message-type';
 
 	interface Props {
 		rawMessages: TicketMessage[] | null;
 		fetchMessages: () => void;
 		sendMessage: (text: string) => void;
+		disabled?: boolean;
 	}
 
-	let { rawMessages = [], fetchMessages, sendMessage }: Props = $props();
+	let { rawMessages = null, fetchMessages, sendMessage, disabled }: Props = $props();
 
 	let autoScrollThreshold = 200;
 	let messageElement: HTMLDivElement | undefined = $state();
@@ -25,6 +28,7 @@
 	let hasNewMessages: boolean = $state(true);
 
 	let messages = $derived(rawMessages?.toReversed());
+	let disableMessageArea = $derived(isMessageSending || !messages || disabled);
 
 	$effect(() => {
 		if (!rawMessages) {
@@ -32,13 +36,16 @@
 			return;
 		}
 
-		if (!messageElement) return;
+		if (!messageElement || !hasNewMessages) return;
 
-		if (hasNewMessages) {
-			scrollToBottom(messageElement);
-			hasNewMessages = false;
-			return;
-		}
+		scrollToBottom(messageElement);
+		hasNewMessages = false;
+	});
+
+	$effect(() => {
+		if (!rawMessages) return;
+
+		rawMessages.length;
 
 		scrollOnNewMessage();
 	});
@@ -92,19 +99,14 @@
 	};
 
 	const getRandomNumber = (n: number) => Math.floor(Math.random() * n) + 1;
-
-	onMount(() => {
-		if (messageElement) {
-			scrollToBottom(messageElement);
-		}
-	});
 </script>
 
 <div class="w-full h-full flex flex-col justify-between">
 	<!-- Chat messages -->
+	<div class="flex-grow"></div>
 	<ScrollArea bind:element={messageElement} orientation="vertical">
-		<ul class="w-full h-full px-2 py-2 space-y-2">
-			{#if messageElement}
+		<ul class="w-full flex-grow justify-end px-2 py-2 space-y-2">
+			{#if messageElement && messages}
 				<InfiniteScroll bind:element={messageElement} fetch={fetchMessages} direction="up" />
 			{/if}
 
@@ -183,10 +185,10 @@
 				bind:value={messageText}
 				class="bg-gray-100 rounded-full"
 				placeholder="Say something"
-				disabled={isMessageSending || !messages}
+				disabled={disableMessageArea}
 			/>
 			<button
-				class="p-3 flex justify-center items-center bg-blue-500 rounded-full transition-all {isMessageSending || !messages
+				class="p-3 flex justify-center items-center bg-blue-500 rounded-full transition-all {disableMessageArea
 					? 'brightness-75'
 					: 'hover:brightness-90'}"
 			>

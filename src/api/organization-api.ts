@@ -1,7 +1,6 @@
 import { toast } from 'svelte-french-toast';
 import { fetchApi } from '$lib/custom-fetch';
 
-import { availableOrganizations } from '$stores/organization-store';
 import type { ApiResponse, TableOptions } from '$types/api-type';
 import type { CreateOrganizationResponse, OrganizationListItem } from '$types/organization-type';
 import type { TicketListItem } from '$types/ticket-type';
@@ -11,17 +10,12 @@ export const fetchOrganizationList = async () => {
 	const response: ApiResponse<OrganizationListItem[]> | null =
 		await fetchApi('/agent/organizations');
 
-	if (!response) {
-		return;
-	}
-
 	if (!response.ok) {
 		toast.error('Unable to get organizations');
 		return;
 	}
 
-	const { data: organizations } = response;
-	availableOrganizations.set(organizations);
+	return response;
 };
 
 export const createOrganization = async (name: string) => {

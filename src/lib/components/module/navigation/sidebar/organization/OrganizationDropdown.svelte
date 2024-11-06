@@ -60,7 +60,7 @@
 >
 	<div
 		bind:clientWidth={buttonWidth}
-		class="flex justify-between items-center w-full h-14 px-2 select-none cursor-pointer text-left rounded-xl bg-transparent text-gray-800 hover:bg-gray-200 transition-all"
+		class="flex justify-between items-center w-full h-16 px-2 select-none cursor-pointer text-left rounded-xl bg-transparent text-gray-800 hover:bg-gray-200 transition-all"
 	>
 		{#if !!organizationList}
 			<div class="flex gap-2">

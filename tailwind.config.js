@@ -58,6 +58,9 @@ const config = {
 				sans: [...fontFamily.sans],
 				// open: ['"Poppins"', 'sans-serif'],
 				poppins: ['"Poppins"', 'sans-serif'],
+			},
+			height: {
+				'18': '4.5rem'
 			}
 		}
 	},

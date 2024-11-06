@@ -11,7 +11,13 @@
 		refetchThreshold?: number;
 	}
 
-	let { element = $bindable(), fetch, direction = 'up', threshold = 1, refetchThreshold = 50 }: Props = $props();
+	let {
+		element = $bindable(),
+		fetch,
+		direction = 'up',
+		threshold = 1,
+		refetchThreshold = 50
+	}: Props = $props();
 
 	let hasFetched = $state(false);
 	let isLoading = $state(false);
@@ -23,13 +29,7 @@
 			hasFetched = false;
 		}
 
-		if (scrollTop > threshold) {
-			return;
-		}
-
-		if (isLoading || hasFetched) {
-			return;
-		}
+		if (scrollTop > threshold || isLoading || hasFetched) return;
 
 		const scrollHeightBefore = element.scrollHeight;
 
@@ -41,6 +41,8 @@
 		isLoading = false;
 
 		await tick();
+
+		if (!element) return;
 
 		const scrollHeightAfter = element.scrollHeight;
 		const heightDifference = scrollHeightAfter - scrollHeightBefore;
@@ -55,13 +57,7 @@
 			hasFetched = false;
 		}
 
-		if (scrollTop + clientHeight <= scrollHeight - threshold) {
-			return;
-		}
-
-		if (isLoading || hasFetched) {
-			return;
-		}
+		if (scrollTop + clientHeight <= scrollHeight - threshold || isLoading || hasFetched) return;
 
 		isLoading = true;
 
@@ -73,24 +69,28 @@
 		isLoading = false;
 	};
 
+	const onScroll = async () => {
+		if (direction == 'up') {
+			await fetchOnTop();
+		} else {
+			await fetchOnBottom();
+		}
+	};
+
 	onMount(() => {
 		if (!element) {
 			return;
 		}
 
-		element.addEventListener('scroll', async () => {
-			if (direction == 'up') {
-				await fetchOnTop();
-			} else {
-				await fetchOnBottom();
-			}
-		});
+		element.addEventListener('scroll', onScroll);
 	});
 
 	onDestroy(() => {
-		if (element) {
-			element.removeEventListener('scroll', () => {});
+		if (!element) {
+			return;
 		}
+
+		element.removeEventListener('scroll', onScroll);
 	});
 </script>
 

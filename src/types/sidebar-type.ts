@@ -4,7 +4,7 @@ export type SidebarObject = {
   label: string;
   icon: typeof Component;
   path: string;
-  open?: boolean;
+  open: boolean;
   children?: SidebarChildObject[];
 }
 

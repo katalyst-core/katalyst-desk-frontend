@@ -46,7 +46,7 @@
 </script>
 
 <ScrollArea bind:element={ticketElement} orientation="vertical">
-	<ul class="w-80 h-full bg-white border-r border-gray-400 border-opacity-35 p-2 space-y-1">
+	<ul class="w-80 h-full bg-white p-2 space-y-1">
 		{#if tickets == null}
 			{#each [3, 4, 2] as _}
 				<li class="w-full">

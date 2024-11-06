@@ -9,32 +9,32 @@
 	import type { WsTicketMessage } from '$types/message-type';
 	import { socket } from '$stores/socket-store';
 
-  interface Props {
-    children: Snippet;
-  }
+	interface Props {
+		children: Snippet;
+	}
 
-  let { children }: Props = $props();
+	let { children }: Props = $props();
 
 	let orgId: string | null = $page.params.org;
 	let tickets: TicketListItem[] | null = $state(null);
 	let currentTicketsPage = $state(1);
 
-  let activeTicketId: string = $derived($page.params.ticket);
+	let activeTicketId: string = $derived($page.params.ticket);
 
-  $effect(() => {
-    setReadMessage();
-  });
+	$effect(() => {
+		setReadMessage();
+	});
 
-  const setReadMessage = () => {
-    if (!activeTicketId || !tickets) {
-      return;
-    }
+	const setReadMessage = () => {
+		if (!activeTicketId || !tickets) {
+			return;
+		}
 
-    const ticket = tickets.find((t) => t.ticket_id === activeTicketId);
-    if (!ticket) return;
+		const ticket = tickets.find((t) => t.ticket_id === activeTicketId);
+		if (!ticket) return;
 
-    ticket.unread_count = 0;
-  };
+		ticket.unread_count = 0;
+	};
 
 	const getTickets = async () => {
 		const _tickets = await OrganizationAPI.getTicketsByOrgId(orgId, 1);
@@ -68,7 +68,7 @@
 			return null;
 		}
 
-    const { ticket_id: ticketId } = data;
+		const { ticket_id: ticketId } = data;
 		const ticket = tickets.find((t) => t.ticket_id === ticketId);
 
 		if (!ticket) {
@@ -95,23 +95,25 @@
 		}
 
 		tickets.unshift(data);
-	}
+	};
 
 	onMount(async () => {
-    await getTickets();
-
-		$socket?.on('ticket-message', wsUpdateTicketData);
-		$socket?.on('new-ticket', wsAddNewTicket);
+		await getTickets();
 	});
 
-	onDestroy(async () => {
-		$socket?.off('ticket-message', wsUpdateTicketData);
-		$socket?.off('new-ticket', wsAddNewTicket);
+	$effect.pre(() => {
+		$socket?.on('ticket-message', wsUpdateTicketData);
+		$socket?.on('new-ticket', wsAddNewTicket);
+
+		return () => {
+			$socket?.off('ticket-message', wsUpdateTicketData);
+			$socket?.off('new-ticket', wsAddNewTicket);
+		};
 	});
 </script>
 
 <div class="w-full h-full flex">
-	<div class="h-full bg-white flex flex-col">
+	<div class="h-full bg-white flex flex-col border-r border-gray-400 border-opacity-35">
 		<div class="h-20 flex items-center px-4 border-b border-gray-400 border-opacity-35">
 			<h1 class="text-3xl font-semibold">Tickets</h1>
 		</div>
