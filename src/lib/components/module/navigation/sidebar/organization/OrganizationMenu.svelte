@@ -36,7 +36,7 @@
 		{#if organizationList}
 			{#each organizationList as org}
 			{@const { organization_id: orgId } = org}
-				<DropdownMenu.Item href="/app/{orgId}" rel="external">
+				<DropdownMenu.Item href="/app/{orgId}/dashboard">
 					<OrganizationItem
 						name={org.name}
 						active={org.organization_id === selectedOrganization?.organization_id}

@@ -15,7 +15,7 @@
 
 	let { children }: Props = $props();
 
-	let orgId: string | null = $page.params.org;
+	let activeOrgId: string | null = $page.params.org;
 	let tickets: TicketListItem[] | null = $state(null);
 	let currentTicketsPage = $state(1);
 
@@ -37,18 +37,18 @@
 	};
 
 	const getTickets = async () => {
-		const _tickets = await OrganizationAPI.getTicketsByOrgId(orgId, 1);
+		const _tickets = await OrganizationAPI.getTicketsByOrgId(activeOrgId, 1);
 		if (_tickets?.ok) {
 			tickets = _tickets.data.result;
 		}
 	};
 
 	const getMoreTickets = async () => {
-		if (!orgId) {
+		if (!activeOrgId) {
 			return;
 		}
 
-		const _tickets = await OrganizationAPI.getTicketsByOrgId(orgId, ++currentTicketsPage);
+		const _tickets = await OrganizationAPI.getTicketsByOrgId(activeOrgId, ++currentTicketsPage);
 		if (tickets && _tickets?.ok) {
 			const {
 				result: newTickets,
@@ -92,6 +92,13 @@
 	const wsAddNewTicket = (data: WsNewTicket) => {
 		if (!tickets) {
 			return null;
+		}
+
+		const { ticket_id } = data;
+		const ticketIdx = tickets.findIndex((t) => t.ticket_id === ticket_id);
+
+		if (ticketIdx) {
+			tickets.splice(ticketIdx, 1);
 		}
 
 		tickets.unshift(data);

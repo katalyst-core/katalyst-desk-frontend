@@ -10,7 +10,7 @@
 
 	import type { SidebarObject } from '$types/sidebar-type';
 
-	let activeOrgId = $page.params.org;
+	let activeOrgId = $derived($page.params.org);
 
 	const items = [
 		{

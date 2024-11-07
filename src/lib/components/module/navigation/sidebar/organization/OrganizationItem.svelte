@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+  import { Check, Plus } from 'lucide-svelte';
 
-	import { Check, Plus } from 'lucide-svelte';
   import * as Avatar from '$ui/avatar';
 
 	import { getTextInitials, textToColor } from '$utils/index';

@@ -12,8 +12,8 @@
 	import WebPreviewGraphic from '$lib/images/graphics/web-preview.png';
 	import StatisticGraphic from '$lib/images/graphics/statistic-graph.png';
 
-	$: isAnnualPayment = true;
-	let isOpen = false;
+	let isAnnualPayment = $state(true);
+	let isOpen = $state(false);
 
 	const scrollIntoView = ({ target }: { target: any }) => {
 		const el = document.querySelector(target.getAttribute('href'));

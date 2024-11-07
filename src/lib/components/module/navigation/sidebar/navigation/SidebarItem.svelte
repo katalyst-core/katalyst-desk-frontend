@@ -15,8 +15,10 @@
 
 	let { label, icon: Icon, path, hasChildren, open = $bindable(false) }: Props = $props();
 
+	let activeOrgId = $derived($page.params.org);
 	let browserPath = $derived($page.url.pathname);
-	let isSelected = $derived(browserPath.startsWith(orgTarget(path) || '#'));
+	let target = $derived(`/app/${activeOrgId}${path}`);
+	let isSelected = $derived(browserPath.startsWith(target || '#'));
 
 	onMount(() => {
 		open = hasChildren ? isSelected : false;
@@ -25,7 +27,7 @@
 
 <li class="sidebar-item">
 	<a
-		href={!hasChildren ? orgTarget(path) : null}
+		href={!hasChildren ? target : null}
 		onclick={() => (open = !open)}
 		class="justify-between {isSelected ? 'sidebar-item-selected' : ''}"
 	>
