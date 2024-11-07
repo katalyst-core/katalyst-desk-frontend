@@ -1,14 +1,16 @@
 <script lang="ts">
-	import { page } from "$app/stores";
 	import { onMount } from "svelte";
-	import type { PageData } from "../$types";
+	import { goto } from "$app/navigation";
 
-  onMount(() => {
-    
+	import { LoadingPage } from "$module/page";
 
-    // const newUrl = '/';
-		// window.location.href = newUrl;
+	import { orgTarget } from "$utils/index";
+
+  onMount(async () => {
+		await goto(orgTarget(`/dashboard`) || '#', {
+			invalidateAll: true
+		})
   });
 </script>
 
-<h1>hello</h1>
+<LoadingPage />
