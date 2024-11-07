@@ -14,7 +14,9 @@
       await ChannelAPI.sendInstagramAuth(code, state);
     }
 
-    goto('/app/channel');
+    goto(`/app/${state}/channel`, {
+      invalidateAll: true
+    });
   });
 </script>
 

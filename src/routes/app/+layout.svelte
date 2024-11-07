@@ -26,6 +26,8 @@
 
 		const { data: organizations } = response;
 		availableOrganizations.set(organizations);
+
+		openCreateOrganizationDialog = organizations.length <= 0;
 	};
 
 	onMount(async () => {

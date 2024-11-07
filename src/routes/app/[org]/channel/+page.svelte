@@ -7,13 +7,17 @@
 
 	import * as Dialog from '$ui/dialog';
 	import * as SideMenu from '$module/navigation/side-menu';
-	import Skeleton from '$ui/skeleton/skeleton.svelte';
 	import { LoadingPage } from '$module/page';
 	import { Separator } from '$ui/separator';
-	import InstagramIcon from '$lib/images/icons/instagram.svg';
-	import WhatsAppIcon from '$lib/images/icons/whatsapp.svg';
-	import InstagramOutlineIcon from '$lib/images/icons/instagram-outline.svg';
-	import WhatsAppOutlineIcon from '$lib/images/icons/whatsapp-outline.svg';
+	import { Skeleton } from '$ui/skeleton';
+	import {
+		Instagram,
+		WhatsApp,
+		Facebook,
+		InstagramWhite,
+		WhatsAppWhite,
+		FacebookWhite
+	} from '$lib/images/icons';
 
 	import { PUBLIC_INSTAGRAM_AUTH_URL } from '$env/static/public';
 	import { Button } from '$ui/button';
@@ -25,22 +29,23 @@
 	let disconnectDialogOpen: boolean = $state(false);
 
 	const ChannelIcons: Record<string, string> = {
-		instagram: InstagramIcon,
-		whatsapp: WhatsAppIcon
+		instagram: Instagram,
+		whatsapp: WhatsApp,
+		facebook: Facebook
 	};
 
 	const ChannelConnections = [
 		{
 			label: 'Login with Instagram',
-			icon: InstagramOutlineIcon,
+			icon: InstagramWhite,
 			color:
 				'bg-gradient-to-r from-[#f09433] via-[#e6683c] via-[#dc2743] via-[#cc2366] to-[#bc1888]',
 			href: `${PUBLIC_INSTAGRAM_AUTH_URL}&state=${orgId}`
 		},
 		{
-			label: 'WhatsApp',
-			icon: WhatsAppOutlineIcon,
-			color: 'bg-[#25D366]',
+			label: 'Login with Facebook',
+			icon: FacebookWhite,
+			color: 'bg-[#0866FF]',
 			disabled: true
 		}
 	];
@@ -115,11 +120,11 @@
 								<a
 									href={connection.href || '#'}
 									class={cn(
-										`flex items-center px-4 py-2 space-x-6 text-base font-semibold text-white rounded-full ${connection.disabled ? 'brightness-90 cursor-not-allowed' : 'hover:brightness-90'} transition-all`,
+										`flex items-center px-4 py-2 space-x-6 text-base font-semibold text-white rounded-md ${connection.disabled ? 'brightness-90 cursor-not-allowed' : 'hover:brightness-90'} transition-all`,
 										connection.color
 									)}
 								>
-									<img src={connection.icon} alt="" class="w-8 h-8" />
+									<img src={connection.icon} alt="" class="w-7 h-7" />
 									<span>{connection.label}</span>
 								</a>
 							{/each}

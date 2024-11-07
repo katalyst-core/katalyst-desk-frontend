@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
 	import { page } from '$app/stores';
 	import { House, Layers3, Cog, Plug } from 'lucide-svelte';
 
@@ -9,6 +10,12 @@
 	import { OrganizationDropdown } from './organization';
 
 	import type { SidebarObject } from '$types/sidebar-type';
+
+	interface Props {
+		children: Snippet;
+	};
+
+	let { children }: Props = $props();
 
 	let activeOrgId = $derived($page.params.org);
 
@@ -129,5 +136,5 @@
 			<UserBox />
 		</div>
 	</div>
-	<slot />
+	{@render children()}
 </div>
