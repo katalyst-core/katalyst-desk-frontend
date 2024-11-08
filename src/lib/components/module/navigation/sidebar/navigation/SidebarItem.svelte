@@ -2,7 +2,6 @@
 	import { ChevronDown } from 'lucide-svelte';
 	import type { Component } from 'lucide-svelte';
 	import { page } from '$app/stores';
-	import { orgTarget } from '$utils/index';
 	import { onMount } from 'svelte';
 
 	interface Props {
@@ -10,7 +9,7 @@
 		icon: typeof Component;
 		path: string;
 		hasChildren: boolean;
-		open: boolean;
+		open: boolean | undefined;
 	}
 
 	let { label, icon: Icon, path, hasChildren, open = $bindable(false) }: Props = $props();

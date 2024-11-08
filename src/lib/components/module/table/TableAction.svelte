@@ -1,13 +1,17 @@
 <script lang="ts">
-	import type { ComponentType } from 'svelte';
+	import type { Component } from 'svelte';
 
 	import { Ellipsis } from 'lucide-svelte';
 	import * as DropdownMenu from '$ui/dropdown-menu';
 	import { Button } from '$ui/button';
 
-	export let refresh: () => void;
-	export let content: ComponentType;
-	export let prop: any | null;
+	interface Props {
+		refresh: () => void;
+		content: Component;
+		prop: any | null;
+	}
+
+	let { refresh, content: Content, prop }: Props = $props();
 </script>
 
 <DropdownMenu.Root>
@@ -18,6 +22,6 @@
 			</Button>
 		</DropdownMenu.Trigger>
 
-		<svelte:component this={content} {refresh} {prop} />
+		<Content {refresh} {prop}></Content>
 	{/if}
 </DropdownMenu.Root>

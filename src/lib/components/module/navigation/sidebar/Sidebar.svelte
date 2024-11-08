@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import { page } from '$app/stores';
-	import { House, Layers3, Cog, Plug } from 'lucide-svelte';
+	import { House, Layers3, Cog, Plug, Satellite } from 'lucide-svelte';
 
 	import * as Collapsible from '$ui/collapsible';
 	import { Separator } from '$ui/separator';
@@ -9,17 +9,18 @@
 	import { UserBox } from './user';
 	import { OrganizationDropdown } from './organization';
 
+	import { socket } from '$stores/socket-store';
 	import type { SidebarObject } from '$types/sidebar-type';
 
 	interface Props {
 		children: Snippet;
-	};
+	}
 
 	let { children }: Props = $props();
 
 	let activeOrgId = $derived($page.params.org);
 
-	const items = [
+	const items: SidebarObject[] = $state([
 		{
 			label: 'Dashboard',
 			icon: House,
@@ -45,9 +46,9 @@
 		// 		}
 		// 	]
 		// },
-	] as SidebarObject[];
+	]);
 
-	const bottomItems = [
+	const bottomItems: SidebarObject[] = $state([
 		{
 			label: 'Manage Channels',
 			icon: Plug,
@@ -58,7 +59,7 @@
 			icon: Cog,
 			path: '/organization'
 		}
-	] as SidebarObject[];
+	]);
 
 	items.forEach((item: SidebarObject) => {
 		item.open = !!item.children;
@@ -130,6 +131,10 @@
 				</div>
 			{/if}
 		</div>
+
+		<!-- <span>
+			<Satellite class={$socket?.connected ? 'text-green-500' : 'text-red-500'} />
+		</span> -->
 
 		<!-- Bottom -->
 		<div class="">
