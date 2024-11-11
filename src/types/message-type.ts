@@ -1,3 +1,4 @@
+export type MessageStatus = 'sent' | 'received' | 'read';
 
 export type MessageContent = {
   body: string;
@@ -7,7 +8,7 @@ export type TicketMessage = {
   message_id: string;
   content: MessageContent;
   is_customer: boolean;
-  is_read: boolean;
+  message_status: MessageStatus;
   timestamp: Date;
 };
 
@@ -15,7 +16,7 @@ export type MessageObject = {
   message_id: string;
   content: MessageContent;
   is_customer: boolean;
-  is_read: boolean;
+  message_status: MessageStatus;
   timestamp: Date;
 };
 

@@ -75,11 +75,11 @@
 			return null;
 		}
 
-		const { content, timestamp, is_customer, is_read } = data;
+		const { content, timestamp, is_customer, message_status } = data;
 
 		ticket.last_message = content;
 		ticket.is_customer = is_customer;
-		ticket.is_read = is_read;
+		ticket.message_status = message_status;
 		ticket.last_message_timestamp = timestamp;
 
 		// Update active chat window

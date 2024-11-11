@@ -1,4 +1,4 @@
-import type { MessageContent } from "./message-type";
+import type { MessageContent, MessageStatus } from "./message-type";
 
 export type TicketStatus = 'open' | 'close';
 
@@ -7,7 +7,7 @@ export type TicketListItem = {
   display_name: string;
   last_message: MessageContent;
   is_customer: boolean;
-  is_read: boolean;
+  message_status: MessageStatus;
   unread_count: number;
   last_message_timestamp: Date;
 }
@@ -24,7 +24,7 @@ export type WsNewTicket = {
   display_name: string;
   last_message: MessageContent;
   is_customer: boolean;
-  is_read: boolean;
+  message_status: MessageStatus;
   unread_count: number;
   last_message_timestamp: Date;
 }

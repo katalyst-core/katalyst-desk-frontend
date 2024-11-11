@@ -11,7 +11,7 @@
     const state = urlParams.get('state');
 
     if (code && state) {
-      await ChannelAPI.sendInstagramAuth(code, state);
+      await ChannelAPI.authenticateInstagram(code, state);
     }
 
     goto(`/app/${state}/channel`, {

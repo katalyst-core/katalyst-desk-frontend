@@ -4,17 +4,47 @@ import { fetchApi } from '$lib/custom-fetch';
 import type { ApiResponse } from '$types/api-type';
 import type { ChannelAccount } from '$types/channel-type';
 
-export const sendInstagramAuth = async (code: string, organizationId: string) => {
+export const authenticateInstagram = async (code: string, organizationId: string) => {
 	try {
 		const response: ApiResponse | null = await fetchApi('/channel/instagram/auth', {
 			method: 'POST',
 			body: JSON.stringify({
 				code,
-				organization_id: organizationId,
+				organization_id: organizationId
 			})
 		});
 
 		if (!response) {
+			toast.error('Failed to authenticate');
+			return null;
+		}
+
+		return response;
+	} catch (err) {
+		void err;
+		toast.error('Failed to add channel');
+		return null;
+	}
+};
+
+export const authenticateWhatsApp = async (
+	phoneNumberId: string,
+	wabaId: string,
+	code: string,
+	organizationId: string
+) => {
+	try {
+		const response: ApiResponse = await fetchApi('/channel/whatsapp/auth', {
+			method: 'POST',
+			body: JSON.stringify({
+				phone_number_id: phoneNumberId,
+				waba_id: wabaId,
+				code,
+				organization_id: organizationId
+			})
+		});
+
+		if (!response.ok) {
 			toast.error('Failed to authenticate');
 			return null;
 		}
@@ -49,7 +79,7 @@ export const getChannelAccounts = async (organizationId: string) => {
 		void err;
 		toast.error('Failed to get channel accounts');
 	}
-}
+};
 
 export const deleteChannelAccount = async (channelAccountId: string) => {
 	try {
@@ -74,4 +104,4 @@ export const deleteChannelAccount = async (channelAccountId: string) => {
 		void err;
 		toast.error('Failed to get channel accounts');
 	}
-}
+};

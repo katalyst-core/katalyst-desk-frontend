@@ -11,8 +11,8 @@
 </script>
 
 <div class="w-full h-full flex flex-col justify-center items-center space-y-6">
-	<h1>Pick an organization to get started</h1>
-	<ul class="grid grid-cols-2 gap-2">
+	<h1 class="text-center">Pick an organization to get started</h1>
+	<ul class="flex flex-wrap max-w-[50rem] justify-center gap-2">
 		{#if orgs}
 			{#each orgs as org}
 				{@const { name, organization_id } = org}

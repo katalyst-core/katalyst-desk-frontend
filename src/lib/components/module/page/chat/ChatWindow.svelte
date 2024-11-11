@@ -133,7 +133,7 @@
 				{#each messages as message, index}
 					{@const {
 						is_customer: isCustomer,
-						is_read: isRead,
+						message_status: messageStatus,
 						timestamp,
 						content: { body: text }
 					} = message}
@@ -154,7 +154,11 @@
 								<p class="text-white text-base">{text}</p>
 								<div class="flex items-center space-x-1">
 									<p class="text-[10px] text-gray-300">{getTimeFormat(timestamp)}</p>
-									<CheckCheck class="w-4 h-4 text-gray-400 {isRead ? 'text-blue-500' : ''}" />
+									{#if messageStatus === 'received'}
+										<CheckCheck class="w-4 h-4 text-gray-400" />
+									{:else if messageStatus === 'read'}
+										<CheckCheck class="w-4 h-4 text-blue-500" />
+									{/if}
 								</div>
 							</div>
 						</li>

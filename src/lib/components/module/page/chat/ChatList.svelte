@@ -92,7 +92,11 @@
 							<div class="flex w-full items-center">
 								<div class="flex space-x-1 flex-1">
 									{#if !ticket.is_customer}
-										<CheckCheck class="w-5 h-5 {ticket.is_read ? 'text-blue-600' : ''}" />
+										{#if ticket.message_status === 'received'}
+											<CheckCheck class="w-5 h-5" />
+										{:else if ticket.message_status === 'read'}
+											<CheckCheck class="w-5 h-5 text-blue-600" />
+										{/if}
 									{/if}
 									<p
 										class="w-36 text-sm text-gray-500 whitespace-nowrap text-ellipsis overflow-hidden"
