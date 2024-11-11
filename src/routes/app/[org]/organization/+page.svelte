@@ -12,7 +12,7 @@
 		//... you could also do this:
 		const global: any = globalThis; // if using Typescript
 		setTimeout(() => (FB = global.FB), 0);
-		
+
 		FB.login(
 			(response) => {
 				if (response.authResponse) {
@@ -33,25 +33,6 @@
 	};
 
 	let FB: any;
-	const loadFBJS = (w: any, d: any, s: string, id: string) => {
-		w.fbAsyncInit = function () {
-			FB.init({
-				appId: '2907775516040467',
-				autoLogAppEvents: true,
-				xfbml: true,
-				version: 'v21.0'
-			});
-		};
-
-		if (d.getElementById(id)) return;
-
-		const fjs = d.getElementsByTagName(s)[0];
-		const js = d.createElement(s);
-		js.id = id;
-
-		js.src = 'https://connect.facebook.net/en_US/sdk.js';
-		fjs.parentNode?.insertBefore(js, fjs);
-	};
 	onMount(() => {
 		// loadFBJS(window, document, 'script', 'facebook-jssdk');
 		

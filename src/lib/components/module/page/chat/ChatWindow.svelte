@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { format } from 'date-fns';
-	import { SendHorizontal, CheckCheck, X } from 'lucide-svelte';
+	import { SendHorizontal, CheckCheck, X, Check } from 'lucide-svelte';
 
 	import { InfiniteScroll } from '$module/util';
 	import { Skeleton } from '$ui/skeleton';
@@ -154,7 +154,9 @@
 								<p class="text-white text-base">{text}</p>
 								<div class="flex items-center space-x-1">
 									<p class="text-[10px] text-gray-300">{getTimeFormat(timestamp)}</p>
-									{#if messageStatus === 'received'}
+									{#if messageStatus === 'sent'}
+										<Check class="w-4 h-4 text-gray-400" />
+									{:else if messageStatus === 'received'}
 										<CheckCheck class="w-4 h-4 text-gray-400" />
 									{:else if messageStatus === 'read'}
 										<CheckCheck class="w-4 h-4 text-blue-500" />

@@ -97,7 +97,7 @@
 		const { ticket_id } = data;
 		const ticketIdx = tickets.findIndex((t) => t.ticket_id === ticket_id);
 
-		if (ticketIdx) {
+		if (ticketIdx !== -1) {
 			tickets.splice(ticketIdx, 1);
 		}
 

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onDestroy, onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { X } from 'lucide-svelte';
 
