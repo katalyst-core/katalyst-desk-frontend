@@ -50,14 +50,19 @@
 
 	const bottomItems: SidebarObject[] = $state([
 		{
+			label: 'Manage Team',
+			icon: Plug,
+			path: '/team'
+		},
+		{
 			label: 'Manage Channels',
 			icon: Plug,
 			path: '/channel'
 		},
 		{
-			label: 'Manage Org',
+			label: 'Manage',
 			icon: Cog,
-			path: '/organization'
+			path: '/manage'
 		}
 	]);
 

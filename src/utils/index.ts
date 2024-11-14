@@ -30,6 +30,14 @@ export const orgTarget = (target: string) => {
 	return `/app/${orgId}${target}`;
 }
 
+export const pathTarget = (target: string) => {
+	const pathname = get(page).url.pathname;
+
+	if (!pathname) return;
+
+	return `${pathname}${target}`;
+}
+
 export const getTextInitials = (name: string) => {
 	if (!name) {
 		return '';

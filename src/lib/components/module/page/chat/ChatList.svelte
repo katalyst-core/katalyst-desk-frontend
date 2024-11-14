@@ -17,7 +17,7 @@
 
 	let { fetchTickets, tickets }: Props = $props();
 
-	let ticketElement: HTMLDivElement | undefined = $state();
+	let ticketElement: HTMLDivElement | null = $state(null);
 
 	let activeTicketId: string = $derived($page.params.ticket);
 

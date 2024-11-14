@@ -1,24 +1,14 @@
 <script lang="ts">
-	import { getFormControl } from "formsnap";
-	import { Input, type ExtendedInputProps } from "$lib/components/ui/input";
-	import { cn } from "$lib/utils.js";
+	import * as Input from '$lib/components/ui/input';
+	import type { WithElementRef } from 'bits-ui';
+	import type { HTMLInputAttributes } from 'svelte/elements';
 
-	type $$Props = ExtendedInputProps;
+	interface Props {
+		suffix?: string;
+	}
 
-	let className: $$Props["class"] = undefined;
-	export let type: $$Props["type"] = undefined;
-  export let value: $$Props["value"] = undefined;
-	export let suffix: string = '';
-	export { className as class };
-
-	const { attrs } = getFormControl();
+	let { ref = $bindable(null), value = $bindable(), ...restProps }: WithElementRef<HTMLInputAttributes> & Props =
+		$props();
 </script>
 
-<Input
-  {...$attrs}
-  class={cn("data-[fs-error]:border-red-600", className)}
-  bind:value
-	{type}
-	{suffix}
-  {...$$restProps}
-/>
+<Input.Root bind:ref bind:value {...restProps} />

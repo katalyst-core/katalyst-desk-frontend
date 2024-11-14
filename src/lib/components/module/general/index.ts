@@ -1,3 +1,3 @@
-import BrandLogo from './BrandLogo.svelte';
+import BrandLogo from './brand-logo.svelte';
 
 export { BrandLogo };

@@ -5,7 +5,6 @@
 
 	import { InfiniteScroll } from '$module/util';
 	import { Skeleton } from '$ui/skeleton';
-	import { Button } from '$ui/button';
 	import { Input } from '$ui/input';
 	import { ScrollArea } from '$ui/scroll-area';
 
@@ -22,7 +21,7 @@
 	let { rawMessages = null, fetchMessages, sendMessage, disabled }: Props = $props();
 
 	let autoScrollThreshold = 200;
-	let messageElement: HTMLDivElement | undefined = $state();
+	let messageElement: HTMLDivElement | null = $state(null);
 	let isMessageSending: boolean = $state(false);
 	let messageText: string = $state('');
 	let hasNewMessages: boolean = $state(true);

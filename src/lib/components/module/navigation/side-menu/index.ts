@@ -1,9 +1,3 @@
-import Trigger from './Trigger.svelte';
-import List from './List.svelte';
-import Content from './Content.svelte';
+import SideMenu from './side-menu.svelte';
 
-export {
-  Trigger,
-  List,
-  Content,
-}
+export { SideMenu };

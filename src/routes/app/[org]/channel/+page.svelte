@@ -6,7 +6,7 @@
 	import { Tabs } from 'bits-ui';
 
 	import * as Dialog from '$ui/dialog';
-	import * as SideMenu from '$module/navigation/side-menu';
+	import * as SideMenu from '$module/navigation/side-tabs';
 	import { LoadingPage } from '$module/page';
 	import { Separator } from '$ui/separator';
 	import { Skeleton } from '$ui/skeleton';

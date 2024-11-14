@@ -3,7 +3,7 @@
 	import { Button } from '$ui/button';
 	import * as Card from '$ui/card';
 	import * as Tabs from '$ui/tabs';
-	import * as Accordion from '$lib/components/ui/accordion';
+	import * as Accordion from '$ui/accordion';
 
 	import { BrandLogo } from '$module/general';
 	import InboxGraphic from '$lib/images/graphics/inbox.png';
@@ -141,19 +141,19 @@
 	<BrandLogo />
 
 	<!-- Burger Menu Button -->
-	<button class="md:hidden flex items-center px-2 text-gray-800" on:click={toggleMenu}>
+	<button class="md:hidden flex items-center px-2 text-gray-800" onclick={toggleMenu}>
 		<Menu class="w-10 h-10" />
 	</button>
 
 	<!-- Menu Items -->
 	<nav class="hidden md:flex space-x-8 items-center justify-end">
-		<a href="#landing-features" on:click|preventDefault={scrollIntoView} class="hidden sm:block"
+		<a href="#landing-features" onclick={scrollIntoView} class="hidden sm:block"
 			>Features</a
 		>
-		<a href="#landing-pricing" on:click|preventDefault={scrollIntoView} class="hidden sm:block"
+		<a href="#landing-pricing" onclick={scrollIntoView} class="hidden sm:block"
 			>Pricing</a
 		>
-		<a href="#landing-contact" on:click|preventDefault={scrollIntoView} class="hidden sm:block"
+		<a href="#landing-contact" onclick={scrollIntoView} class="hidden sm:block"
 			>Contact Us</a
 		>
 		<div class="space-x-2">
@@ -171,13 +171,13 @@
 	>
 		<ul class="flex flex-col items-start space-y-4 py-4 w-full px-4 [&>li]:py-2 [&>li]:px-2">
 			<li>
-				<a href="#landing-features" on:click={closeMenu} class="text-lg">Features</a>
+				<a href="#landing-features" onclick={closeMenu} class="text-lg">Features</a>
 			</li>
 			<li>
-				<a href="#landing-pricing" on:click={closeMenu} class="text-lg">Pricing</a>
+				<a href="#landing-pricing" onclick={closeMenu} class="text-lg">Pricing</a>
 			</li>
 			<li>
-				<a href="#landing-contact" on:click={closeMenu} class="text-lg">Contact Us</a>
+				<a href="#landing-contact" onclick={closeMenu} class="text-lg">Contact Us</a>
 			</li>
 			<li class="grid grid-cols-2 w-full space-x-2">
 				<!-- <Button
@@ -418,7 +418,7 @@
 <div class="flex w-full justify-center">
 	<div class="flex flex-col w-full max-w-[100em] px-8">
 		<p class="text-4xl font-semibold pb-4">FAQs</p>
-		<Accordion.Root class="w-full pb-8">
+		<Accordion.Root type="single" class="w-full pb-8">
 			<Accordion.Item value="item-1">
 				<Accordion.Trigger class="text-xl text-left">
 					What is an omnichannel customer support?

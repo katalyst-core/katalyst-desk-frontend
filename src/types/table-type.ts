@@ -19,3 +19,12 @@ export type TableActionOption<T> = {
   href?: string;
   action?: (props: T) => void
 };
+
+export type TableQueryOption = {
+	page?: number;
+	limit?: number;
+	sort?: {
+		name: string;
+		direction: 'asc' | 'desc';
+	}
+};

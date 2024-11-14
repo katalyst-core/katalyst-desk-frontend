@@ -1,20 +1,21 @@
 <script lang="ts">
+	import type { Snippet } from "svelte";
 	import { ArrowDown } from "lucide-svelte";
 
-  export let label: string;
-  export let order: string | undefined;
-  export let toggle: (ev: Event) => void;
+  interface Props {
+    order: string | undefined;
+    toggle: ((ev: unknown) => void) | undefined;
+    children: Snippet;
+  }
+
+  let { order, toggle, children }: Props = $props();
 </script>
 
 <button
-  on:click={toggle}
+  onclick={toggle}
   class="flex items-center gap-1"
 >
-  <span
-    class="font-semibold"
-  >
-    {label}
-  </span>
+  {@render children()}
   <ArrowDown
     class="
       w-4

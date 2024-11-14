@@ -1,29 +1,41 @@
+<!-- Modified -->
+
 <script lang="ts">
+	import type { HTMLInputAttributes } from 'svelte/elements';
+	import type { WithElementRef } from 'bits-ui';
 	import { Eye, EyeOff } from 'lucide-svelte';
-	import { BaseInput, type ExtendedInputProps } from './index.js';
 	import { cn } from '$lib/utils.js';
 
-	type $$Props = ExtendedInputProps;
+	interface Props {
+		suffix?: string;
+	}
 
-	let className: $$Props['class'] = undefined;
-	export let type: $$Props['type'] = 'text';
-	export let value: $$Props['value'] = undefined;
-	export let suffix: $$Props['suffix'] = '';
-	export { className as class };
+	let {
+		ref = $bindable(null),
+		value = $bindable(),
+		class: className,
+		type = 'text',
+		suffix = '',
+		...restProps
+	}: WithElementRef<HTMLInputAttributes> & Props = $props();
 
-	let isHidden = true;
+	let isHidden = $state(true);
 </script>
 
 <div class="relative flex items-center w-full">
 	{#if type === 'password-toggle'}
-		<BaseInput
-			class={cn('pr-9', className)}
+		<input
+			bind:this={ref}
+			class={cn(
+				'border-input placeholder:text-muted-foreground focus-visible:ring-ring flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50',
+				className
+			)}
 			type={isHidden ? 'password' : 'text'}
 			bind:value
-			{...$$restProps}
+			{...restProps}
 		/>
 		<div class="absolute right-0 flex items-center mr-2">
-			<button type="button" on:click|preventDefault={() => (isHidden = !isHidden)}>
+			<button type="button" onclick={() => (isHidden = !isHidden)}>
 				{#if isHidden}
 					<Eye />
 				{:else}
@@ -32,23 +44,26 @@
 			</button>
 		</div>
 	{:else}
-		{#if type === 'price'}
+		<!-- {#if type === 'price'}
 			<span class="absolute left-0 ml-3 text-base">Rp</span>
-		{/if}
+		{/if} -->
 
-		<BaseInput
+		<input
+			bind:this={ref}
 			class={cn(
-				`${type === 'price' ? 'pl-9' : ''}`,
+				'border-input placeholder:text-muted-foreground focus-visible:ring-ring flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50',
 				className
 			)}
-			price={type === 'price'}
 			bind:value
-			{type}
-			{...$$restProps}
+			{...restProps}
 		/>
 
 		{#if suffix}
-			<span class="absolute right-0 text-sm text-gray-400 select-none { type === 'number' ? 'mr-10' : 'mr-3' }">{suffix}</span>
+			<span
+				class="absolute right-0 text-sm text-gray-400 select-none {type === 'number'
+					? 'mr-10'
+					: 'mr-3'}">{suffix}</span
+			>
 		{/if}
 	{/if}
 </div>

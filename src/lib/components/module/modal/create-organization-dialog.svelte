@@ -51,8 +51,8 @@
 	});
 </script>
 
-<Dialog.Root bind:open closeOnEscape={closeable} closeOnOutsideClick={closeable}>
-	<Dialog.Content class="max-w-[425px]" closeButton={closeable}>
+<Dialog.Root bind:open>
+	<Dialog.Content class="max-w-[425px]" interactOutsideBehavior="ignore">
 		<Dialog.Header>
 			<Dialog.Title>Create new organization</Dialog.Title>
 			<!-- <Dialog.Description>Specify the name of your organization</Dialog.Description> -->

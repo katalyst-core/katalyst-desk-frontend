@@ -2,7 +2,6 @@
 	import { onDestroy, onMount, type Snippet } from 'svelte';
 
 	import Sidebar from '$module/navigation/sidebar/Sidebar.svelte';
-	import LoadingPage from '$lib/components/module/page/LoadingPage.svelte';
 	import { CreateOrganizationDialog } from '$module/modal';
 
 	import * as OrganizationAPI from '$api/organization-api';
@@ -42,7 +41,7 @@
 </script>
 
 <Sidebar>
-		<div class="w-full h-full bg-muted overflow-auto">
+		<div class="w-full h-full bg-white overflow-auto">
 			{@render children()}
 		</div>
 </Sidebar>
