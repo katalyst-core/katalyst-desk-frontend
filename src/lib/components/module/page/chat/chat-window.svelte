@@ -184,11 +184,11 @@
 	<div class="w-full">
 		<form
 			onsubmit={sendMessageFunction}
-			class="h-16 w-full flex items-center px-4 bg-white space-x-2 border-t border-gray-400 border-opacity-35"
+			class="h-16 w-full flex items-center px-4 bg-background space-x-2 border-t border-border border-opacity-35"
 		>
 			<Input
 				bind:value={messageText}
-				class="bg-gray-100 rounded-full"
+				class="bg-secondary rounded-full"
 				placeholder="Say something"
 				disabled={disableMessageArea}
 			/>

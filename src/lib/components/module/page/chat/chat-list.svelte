@@ -46,7 +46,7 @@
 </script>
 
 <ScrollArea bind:element={ticketElement} orientation="vertical">
-	<ul class="w-80 h-full bg-white p-2 space-y-1">
+	<ul class="w-80 h-full p-2 space-y-1">
 		{#if tickets == null}
 			{#each [3, 4, 2] as _}
 				<li class="w-full">
@@ -67,15 +67,13 @@
 						href={orgTarget(`/ticket/${ticketId}`)}
 						class="w-full h-[4.5rem] items-center px-3 flex text-start space-x-2 rounded-lg cursor-pointer transition-colors {activeTicketId &&
 						activeTicketId == ticket.ticket_id
-							? 'bg-gray-300'
-							: 'hover:bg-gray-200'}"
+							? 'bg-accent'
+							: 'hover:bg-accent'}"
 					>
 						<Avatar.Root class="w-12 h-12">
 							<Avatar.Image src="" alt="" />
 							<Avatar.Fallback
-								class="font-medium text-xl {activeTicketId && activeTicketId == ticket.ticket_id
-									? 'bg-gray-200'
-									: 'bg-gray-300'}">{getTextInitials(ticket.display_name)}</Avatar.Fallback
+								class="font-medium text-xl bg-gray-200 text-muted">{getTextInitials(ticket.display_name)}</Avatar.Fallback
 							>
 						</Avatar.Root>
 						<div class="w-full">
@@ -85,7 +83,7 @@
 								>
 									{ticket.display_name}
 								</h3>
-								<p class="text-xs text-gray-400">
+								<p class="text-xs text-foreground">
 									{getTimeFormat(String(ticket.last_message_timestamp))}
 								</p>
 							</div>

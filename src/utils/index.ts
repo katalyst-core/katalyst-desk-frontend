@@ -30,14 +30,6 @@ export const orgTarget = (target: string) => {
 	return `/app/${orgId}${target}`;
 }
 
-export const pathTarget = (target: string) => {
-	const pathname = get(page).url.pathname;
-
-	if (!pathname) return;
-
-	return `${pathname}${target}`;
-}
-
 export const getTextInitials = (name: string) => {
 	if (!name) {
 		return '';
@@ -56,13 +48,13 @@ export const textToColor = (text: string) => {
 	chars.forEach((char) => count += char.charCodeAt(0));
 
 	const colors = [
-		'bg-red-500',
-		'bg-orange-500',
-		'bg-yellow-500',
-		'bg-green-500',
-		'bg-blue-500',
-		'bg-pink-500',
-		'bg-purple-500',
+		'bg-red-600',
+		'bg-orange-600',
+		'bg-yellow-600',
+		'bg-green-600',
+		'bg-blue-600',
+		'bg-pink-600',
+		'bg-purple-600',
 	];
 
 	return colors[(count % colors.length)];

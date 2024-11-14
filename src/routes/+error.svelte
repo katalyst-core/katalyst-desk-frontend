@@ -1,8 +1,8 @@
 <script>
-	import { onMount } from "svelte";
+	import { onMount } from 'svelte';
 
-  onMount(() => {
-    const newUrl = '/';
-      window.location.href = newUrl;
-  });
+	onMount(() => {
+		const newUrl = '/';
+		window.location.href = newUrl;
+	});
 </script>

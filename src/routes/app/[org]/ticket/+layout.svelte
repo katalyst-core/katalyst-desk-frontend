@@ -120,8 +120,8 @@
 </script>
 
 <div class="w-full h-full flex">
-	<div class="h-full bg-white flex flex-col border-r border-gray-400 border-opacity-35">
-		<div class="h-20 flex items-center px-4 border-b border-gray-400 border-opacity-35">
+	<div class="h-full bg-background flex flex-col border-r border-border border-opacity-35">
+		<div class="h-20 flex items-center px-4 border-b border-border border-opacity-35">
 			<h1 class="text-3xl font-semibold">Tickets</h1>
 		</div>
 		<ChatList {tickets} fetchTickets={getMoreTickets} />

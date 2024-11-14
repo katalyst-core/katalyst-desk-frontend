@@ -9,14 +9,19 @@
 
 
 	interface Props {
-		buttonWidth: number;
 		disabled: boolean;
 		organizationList: OrganizationListItem[] | null;
 		selectedOrganization: OrganizationListItem | null;
-		children: Snippet;
+		children: Snippet<
+			[
+				{
+					props: Record<string, unknown>;
+				}
+			]
+		>;
 	}
 
-	let { buttonWidth, disabled = false, organizationList = null, selectedOrganization, children }: Props = $props();
+	let { disabled = false, organizationList = null, selectedOrganization, children }: Props = $props();
 
 	let openCreateOrganizationDialog: boolean = $state(false);
 
@@ -27,24 +32,28 @@
 
 <DropdownMenu.Root>
 	<DropdownMenu.Trigger class="w-full" {disabled}>
-		{@render children()}
+		{#snippet child(props)}
+			{@render children(props)}
+		{/snippet}
 	</DropdownMenu.Trigger>
 
-	<DropdownMenu.Content style="width: {buttonWidth}px">
+	<DropdownMenu.Content class="w-[--bits-dropdown-menu-anchor-width]">
 		<DropdownMenu.Label>My Organizations</DropdownMenu.Label>
 		<DropdownMenu.Separator />
 		{#if organizationList}
 			{#each organizationList as org}
 			{@const { organization_id: orgId } = org}
-				<DropdownMenu.Item href="/app/{orgId}/dashboard">
-					<OrganizationItem
-						name={org.name}
-						active={org.organization_id === selectedOrganization?.organization_id}
-					/>
+				<DropdownMenu.Item>
+					<a href="/app/{orgId}/dashboard">
+						<OrganizationItem
+							name={org.name}
+							active={org.organization_id === selectedOrganization?.organization_id}
+						/>
+					</a>
 				</DropdownMenu.Item>
 			{/each}
 		{/if}
-		<DropdownMenu.Item on:click={toggleCreateStoreDialog}>
+		<DropdownMenu.Item onclick={toggleCreateStoreDialog}>
 			<OrganizationItem name={null} />
 		</DropdownMenu.Item>
 	</DropdownMenu.Content>

@@ -30,7 +30,7 @@
   <div class="flex gap-2">
     <Avatar.Root class="w-8 h-8">
       <Avatar.Image src="" alt=""/>
-      <Avatar.Fallback class="font-semibold text-gray-700 border-dotted border-gray-500 {color} {!name ? 'border-2' : ''}">
+      <Avatar.Fallback class="font-semibold text-foreground border-dotted border-gray-500 {color} {!name ? 'border-2' : ''}">
         {#if name}
           {initials}
         {:else}

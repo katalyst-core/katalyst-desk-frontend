@@ -1,18 +1,17 @@
 <script lang="ts">
-	import { onDestroy, onMount, type Snippet } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 
-	import Sidebar from '$module/navigation/sidebar/Sidebar.svelte';
+	import { Sidebar, SidebarProvider, SidebarTrigger } from '$module/navigation/sidebar';
 	import { CreateOrganizationDialog } from '$module/modal';
 
 	import * as OrganizationAPI from '$api/organization-api';
 	import { connectSocket, disconnectSocket } from '$lib/socket-handler';
 	import { availableOrganizations } from '$stores/organization-store';
+	import { House, Inbox, Calendar, Search, Settings } from 'lucide-svelte';
+	import { cn } from '$lib/utils';
+	import type { ClassValue } from 'tailwind-variants';
 
-	interface Props {
-		children: Snippet;
-	}
-
-	let { children }: Props = $props();
+	let { children } = $props();
 
 	let openCreateOrganizationDialog = $state(false);
 
@@ -30,20 +29,26 @@
 	};
 
 	onMount(async () => {
-	  await setOrganizationList();
-	  await connectSocket();
+		await setOrganizationList();
+		await connectSocket();
 		console.log('socket connected');
 	});
 
 	onDestroy(() => {
-	  disconnectSocket();
-	})
+		disconnectSocket();
+	});
 </script>
 
-<Sidebar>
-		<div class="w-full h-full bg-white overflow-auto">
-			{@render children()}
+<SidebarProvider class="w-full h-full bg-background text-foreground  dark">
+	<Sidebar />
+	<div class="flex flex-col w-full h-full">
+		<div class="w-full h-12 flex items-center px-2 border-b border-border">
+			<SidebarTrigger />
 		</div>
-</Sidebar>
+		<main class="w-full h-full overflow-auto">
+			{@render children()}
+		</main>
+	</div>
+</SidebarProvider>
 
 <CreateOrganizationDialog bind:open={openCreateOrganizationDialog} closeable={false} />

@@ -125,7 +125,7 @@
 
 <div class="flex flex-col w-full h-full">
 	<div
-		class="flex items-center justify-between w-full h-20 px-4 bg-white border-b border-gray-400 border-opacity-35 flex-shrink-0"
+		class="flex items-center justify-between w-full h-20 px-4 bg-background border-b border-border border-opacity-35 flex-shrink-0"
 	>
 		{#if !ticketDetails}
 			<Skeleton class="w-32 h-8" />
