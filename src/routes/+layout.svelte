@@ -3,7 +3,7 @@
 	import { Toaster } from 'svelte-french-toast';
 	import { onMount } from 'svelte';
 
-	import LoadingPage from '$module/page/LoadingPage.svelte';
+	import { LoadingPage } from '$module/page';
 
 	import * as AgentAPI from '$api/agent-api';
 

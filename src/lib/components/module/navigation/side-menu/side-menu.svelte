@@ -1,38 +1,32 @@
-<script lang="ts">
-	import { page } from "$app/stores";
-  import { Button } from "$ui/button";
-	import { orgTarget } from "$utils/index";
+<script lang="ts" module>
+	export interface SidebarItem {
+		title: string;
+		icon: any;
+		target: string;
+	}
 
-  let pathName = $derived($page.url.pathname);
-
-  type SideMenuItem = {
-    name: string;
-    target: string;
-  };
-
-  let items = [
-    {
-      name: 'Agents',
-      target: '/manage/agents'
-    },
-    {
-      name: 'Teams',
-      target: '/manage/teams'
-    }
-  ];
-
+	interface SidebarGroupItems {
+		label?: string;
+		items: SidebarItem[];
+	}
 </script>
 
-<ul class="flex flex-col w-full space-y-1">
-  {#each items as item}
-  {@const isActive = pathName === orgTarget(item.target)}
+<script lang="ts">
+	import * as Sidebar from '$ui/sidebar';
+	import SideMenuItem from './side-menu-item.svelte';
 
-    <li class="w-full">
-      <Button href={orgTarget(item.target)} variant="ghost" size="lg" class="w-full justify-start { isActive && 'bg-muted' }">
-        <span>
-          {item.name}
-        </span>
-      </Button>
-    </li>
-  {/each}
-</ul>
+	interface Props {
+    prefix?: string;
+		items: SidebarGroupItems[];
+	}
+
+	let { items, prefix }: Props = $props();
+</script>
+
+<Sidebar.Root collapsible="none" class="hidden md:flex">
+	<Sidebar.Content>
+		{#each items as item (item.label)}
+      <SideMenuItem {prefix} label={item.label} items={item.items} />
+    {/each}
+	</Sidebar.Content>
+</Sidebar.Root>

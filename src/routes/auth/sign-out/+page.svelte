@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 
-	import LoadingPage from '$lib/components/module/page/LoadingPage.svelte';
+	import { LoadingPage } from '$module/page';
 
 	import * as AuthAPI from '$api/auth-api';
 

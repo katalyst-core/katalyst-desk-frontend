@@ -1,4 +1,4 @@
-import LoadingPage from './LoadingPage.svelte';
+import LoadingPage from './loading-page.svelte';
 
 export {
   LoadingPage
