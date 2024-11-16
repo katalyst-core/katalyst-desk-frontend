@@ -6,6 +6,7 @@
 	import { InfiniteScroll } from '$module/util';
 	import { Skeleton } from '$ui/skeleton';
 	import { Input } from '$ui/input';
+	import { Textarea } from '$ui/textarea';
 	import { ScrollArea } from '$ui/scroll-area';
 
 	import { scrollToBottom } from '$utils/index';
@@ -150,7 +151,7 @@
 							<div
 								class="flex items-end w-fit bg-gray-950 px-3 py-2 rounded-2xl rounded-br space-x-2"
 							>
-								<p class="text-white text-base">{text}</p>
+								<p class="text-white text-base whitespace-pre-line">{text}</p>
 								<div class="flex items-center space-x-1">
 									<p class="text-[10px] text-gray-300">{getTimeFormat(timestamp)}</p>
 									{#if messageStatus === 'sent'}
@@ -168,7 +169,7 @@
 							<div
 								class="flex items-end w-fit bg-gray-200 px-3 py-2 rounded-2xl rounded-bl space-x-2"
 							>
-								<p class="text-black text-base">{text}</p>
+								<p class="text-black text-base whitespace-pre-line">{text}</p>
 								<div class="flex items-center space-x-1">
 									<p class="text-[10px] text-gray-800">{getTimeFormat(timestamp)}</p>
 								</div>
@@ -184,11 +185,11 @@
 	<div class="w-full">
 		<form
 			onsubmit={sendMessageFunction}
-			class="h-16 w-full flex items-center px-4 bg-background space-x-2 border-t border-border border-opacity-35"
+			class="w-full py-2 flex items-end px-4 bg-background space-x-2 border-t border-border border-opacity-35"
 		>
-			<Input
+			<Textarea
 				bind:value={messageText}
-				class="bg-secondary rounded-full"
+				class="bg-secondary max-h-36"
 				placeholder="Say something"
 				disabled={disableMessageArea}
 			/>

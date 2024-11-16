@@ -27,11 +27,6 @@
 		}, 10);
 	};
 
-	const Rupiah = Intl.NumberFormat('en-ID', {
-		style: 'currency',
-		currency: 'IDR'
-	});
-
 	const pricing = [
 		{
 			label: 'Basic Plan',
@@ -136,7 +131,7 @@
 </script>
 
 <header
-	class="sticky top-0 z-50 flex items-center p-6 h-24 justify-between text-lg bg-white border-b-2 shadow"
+	class="sticky top-0 z-50 flex items-center p-6 h-24 justify-between text-lg bg-background border-b-2 shadow"
 >
 	<BrandLogo />
 
@@ -197,7 +192,7 @@
 	<div class="flex flex-col items-center px-4 py-12 sm:py-24">
 		<div>
 			<h1
-				class="font-bold leading-[1em] text-slate-800 text-center sm:py-4"
+				class="font-bold leading-[1em] text-foreground text-center sm:py-4"
 				style="font-size: clamp(32px,7vw,100px);"
 			>
 				<span class="bg-gradient-to-r bg-clip-text text-transparent from-blue-500 to-blue-600">
@@ -209,14 +204,14 @@
 				</span>
 			</h1>
 			<p
-				class="font-semibold text-slate-500 text-xl sm:text-2xl py-2 text-center"
+				class="font-semibold text-secondary-foreground text-xl sm:text-2xl py-2 text-center"
 				style="font-size: clamp(16px,2.5vw,100px);"
 			>
 				Transform the way you connect with your customer.
 			</p>
 		</div>
 		<div class="flex flex-col sm:flex-row justify-center items-center sm:space-x-8">
-			<Button size="lg" class="text-xl my-6 font-semibold">Try for free</Button>
+			<Button size="lg" class="h-12 text-xl my-6 font-semibold">Try for free</Button>
 			<a href="/demo" class="text-xl font-semibold">Get a demo ></a>
 		</div>
 	</div>
@@ -310,7 +305,7 @@
 					<img class="h-36" src={feature.icon} alt="" />
 					<div class="flex flex-col items-center">
 						<h3 class="text-xl font-semibold py-2">{feature.label}</h3>
-						<p class="text-sm text-center text-gray-700">{feature.desc}</p>
+						<p class="text-sm text-center text-secondary-foreground">{feature.desc}</p>
 					</div>
 				</div>
 			{/each}
@@ -320,14 +315,14 @@
 
 <div id="landing-pricing" class="flex flex-col py-32 items-center">
 	<h1 class="font-bold text-[3.2em] pt-5 pb-5 text-center">Katalyst Desk Pricing</h1>
-	<p class="text-slate-500 px-2 text-center">Affordable plans for any needs. Cancel anytime.</p>
+	<p class="text-secondary-foreground px-2 text-center">Affordable plans for any needs. Cancel anytime.</p>
 	<div>
 		<Tabs.Root
 			value="yearly"
 			onValueChange={(value) => (isAnnualPayment = value === 'yearly')}
 			class="flex justify-center items-center p-4"
 		>
-			<Tabs.List>
+			<Tabs.List class="px-2 py-6 space-x-1">
 				<Tabs.Trigger value="monthly" class="text-sm min-[425px]:text-lg px-4">Monthly plans</Tabs.Trigger>
 				<Tabs.Trigger value="yearly" class="text-sm min-[425px]:text-lg px-4">Annual plans</Tabs.Trigger>
 			</Tabs.List>
@@ -418,7 +413,7 @@
 <div class="flex w-full justify-center">
 	<div class="flex flex-col w-full max-w-[100em] px-8">
 		<p class="text-4xl font-semibold pb-4">FAQs</p>
-		<Accordion.Root type="single" class="w-full pb-8">
+		<Accordion.Root type="multiple" class="w-full pb-8">
 			<Accordion.Item value="item-1">
 				<Accordion.Trigger class="text-xl text-left">
 					What is an omnichannel customer support?
@@ -483,6 +478,6 @@
 	</div>
 </div>
 
-<footer class="flex w-full h-20 bg-gray-200 justify-center items-center shadow-lg">
+<footer class="flex w-full h-20 bg-accent justify-center items-center shadow-lg">
 	© 2024, PT Global Integritas Teknologi
 </footer>

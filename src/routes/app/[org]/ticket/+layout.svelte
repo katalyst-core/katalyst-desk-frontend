@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { onDestroy, onMount, type Snippet } from 'svelte';
+	import { onMount, type Snippet } from 'svelte';
 	import { page } from '$app/stores';
 
-	import * as OrganizationAPI from '$api/organization-api';
+	import { OrganizationAPI } from '$api/.';
 	import { ChatList } from '$module/page/chat';
 
 	import type { TicketListItem, WsNewTicket } from '$types/ticket-type';
@@ -37,10 +37,10 @@
 	};
 
 	const getTickets = async () => {
-		const _tickets = await OrganizationAPI.getTicketsByOrgId(activeOrgId, 1);
-		if (_tickets?.ok) {
-			tickets = _tickets.data.result;
-		}
+		const response = await OrganizationAPI.getTickets(activeOrgId, 1);
+		if (!response.ok) return;
+
+		tickets = response.data.result;
 	};
 
 	const getMoreTickets = async () => {
@@ -48,19 +48,20 @@
 			return;
 		}
 
-		const _tickets = await OrganizationAPI.getTicketsByOrgId(activeOrgId, ++currentTicketsPage);
-		if (tickets && _tickets?.ok) {
-			const {
-				result: newTickets,
-				pagination: { total_page: totalPage }
-			} = _tickets.data;
-			if (currentTicketsPage > totalPage) {
-				return;
-			}
+		const response = await OrganizationAPI.getTickets(activeOrgId, ++currentTicketsPage);
 
-			tickets.push(...newTickets);
-			currentTicketsPage = Math.min(currentTicketsPage, totalPage);
+		if (!response.ok) return;
+
+		const {
+			result: newTickets,
+			pagination: { total_page: totalPage }
+		} = response.data;
+		if (currentTicketsPage > totalPage) {
+			return;
 		}
+
+		tickets?.push(...newTickets);
+		currentTicketsPage = Math.min(currentTicketsPage, totalPage);
 	};
 
 	const wsUpdateTicketData = (data: WsTicketMessage) => {

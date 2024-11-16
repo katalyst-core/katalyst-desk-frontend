@@ -1,9 +1,8 @@
 <script lang="ts">
 	import { Ellipsis } from 'lucide-svelte';
-	import { page } from '$app/stores';
 
 	import * as DropdownMenu from '$ui/dropdown-menu/index.js';
-	import { OrganizationAPI } from '$api/index';
+	import { TeamAPI } from '$api/index';
 	import { Button } from '$ui/button';
 
 	interface Props {
@@ -15,12 +14,10 @@
 
 	let isLoading: boolean = $state(false);
 
-	let activeOrgId = $derived($page.params.org);
-
 	const deleteTeam = async () => {
 		isLoading = true;
 
-		await OrganizationAPI.deleteTeam(teamId, activeOrgId);
+		await TeamAPI.deleteTeam(teamId);
 
 		callback?.();
 

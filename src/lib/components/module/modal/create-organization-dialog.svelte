@@ -8,7 +8,7 @@
 	import { Input } from '$ui/input';
 	import { Label } from '$ui/label';
 
-	import * as OrganizationAPI from '$api/organization-api';
+	import { OrganizationAPI } from '$api/.';
 	import { createOrganizationSchema } from '$schema/organization-schema';
 
   interface Props {

@@ -22,9 +22,9 @@
 	const fetchData = async () => {
 		isLoading = true;
 
-		const response = await OrganizationAPI.getTeamsByOrgId(activeOrgId);
+		const response = await OrganizationAPI.getTeams(activeOrgId);
 
-		if (!response || !response.ok) return;
+		if (!response.ok) return;
 
 		data = response.data;
 

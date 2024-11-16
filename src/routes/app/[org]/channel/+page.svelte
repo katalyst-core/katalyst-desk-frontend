@@ -10,17 +10,11 @@
 	import { LoadingPage } from '$module/page';
 	import { Separator } from '$ui/separator';
 	import { Skeleton } from '$ui/skeleton';
-	import {
-		Instagram,
-		WhatsApp,
-		Facebook,
-		InstagramWhite,
-		FacebookWhite
-	} from '$lib/images/icons';
+	import { Instagram, WhatsApp, Facebook, InstagramWhite, FacebookWhite } from '$lib/images/icons';
 
 	import { PUBLIC_INSTAGRAM_AUTH_URL } from '$env/static/public';
 	import { Button } from '$ui/button';
-	import { ChannelAPI } from '$api/index';
+	import { ChannelAPI, OrganizationAPI } from '$api/index';
 	import type { ChannelAccount } from '$types/channel-type';
 
 	interface WhatsAppAuth {
@@ -42,11 +36,9 @@
 	});
 
 	const deleteAccount = async (channelAccountId: string) => {
-		const response = await ChannelAPI.deleteChannelAccount(channelAccountId);
+		const response = await ChannelAPI.deleteChannel(channelAccountId);
 
-		if (!response) {
-			return;
-		}
+		if (!response.ok) return;
 
 		disconnectDialogOpen = false;
 		getChannelAccounts();
@@ -58,11 +50,9 @@
 		}
 
 		accounts = null;
-		const response = await ChannelAPI.getChannelAccounts(activeOrgId);
+		const response = await OrganizationAPI.getChannels(activeOrgId);
 
-		if (!response?.ok) {
-			return;
-		}
+		if (!response.ok) return;
 
 		accounts = response.data;
 	};

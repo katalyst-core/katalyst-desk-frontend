@@ -7,7 +7,7 @@
 	import { Button } from '$ui/button';
 	import { ChatWindow } from '$module/page/chat';
 
-	import * as TicketAPI from '$api/ticket-api';
+	import { TicketAPI } from '$api/.';
 	import { goto } from '$app/navigation';
 	import { orgTarget } from '$utils/index';
 	import { socket } from '$stores/socket-store';
@@ -39,7 +39,7 @@
 
 		const response = await TicketAPI.getTicketDetails(ticketId);
 
-		if (!response) return redirectOut();
+		if (!response.ok) return redirectOut();
 
 		ticketDetails = response.data;
 	};
@@ -52,23 +52,19 @@
 		currentMessagesPage = 1;
 		messages = null;
 
-		const response = await TicketAPI.getMessagesByTicketId(ticketId, 1);
+		const response = await TicketAPI.getMessages(ticketId, 1);
 
-		if (!response || !response.ok) {
-			return redirectOut();
-		}
+		if (!response.ok) return redirectOut();
 
 		messages = response.data.result;
-
-		TicketAPI.wsReadMessagesByTicketId(ticketId);
 	};
 
 	const getMoreMessages = async () => {
 		if (!ticketId || !messages) return redirectOut();
 		if (currentMessagesPage === -1) return;
 
-		const response = await TicketAPI.getMessagesByTicketId(ticketId, ++currentMessagesPage);
-		if (!response || !response.ok) return redirectOut();
+		const response = await TicketAPI.getMessages(ticketId, ++currentMessagesPage);
+		if (!response.ok) return redirectOut();
 
 		const {
 			result: newMessages,
@@ -100,7 +96,7 @@
 
 		closeTicketDialogOpen = false;
 		getTicketDetails();
-	}
+	};
 
 	const wsAddNewMessage = (data: WsTicketMessage) => {
 		const { ticket_id: wsTicketId } = data;
@@ -111,7 +107,6 @@
 
 		const newMessage = data;
 		messages.unshift(newMessage);
-		TicketAPI.wsReadMessagesByTicketId(ticketId);
 	};
 
 	$effect.pre(() => {

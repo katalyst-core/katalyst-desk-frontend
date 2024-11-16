@@ -4,6 +4,8 @@ export type TicketStatus = 'open' | 'close';
 
 export type TicketListItem = {
   ticket_id: string;
+  ticket_code: string;
+  ticket_status: TicketStatus;
   display_name: string;
   last_message: MessageContent;
   is_customer: boolean;
@@ -21,6 +23,8 @@ export type TicketDetails = {
 
 export type WsNewTicket = {
   ticket_id: string;
+  ticket_code: string;
+  ticket_status: TicketStatus;
   display_name: string;
   last_message: MessageContent;
   is_customer: boolean;

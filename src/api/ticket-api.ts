@@ -6,57 +6,23 @@ import type { ApiResponse, TableOptions } from '$types/api-type';
 import type { TicketMessage } from '$types/message-type';
 import { socket as _socket } from '$stores/socket-store';
 import type { TicketDetails } from '$types/ticket-type';
-import type { TableQueryOption } from '$types/table-type';
 
-export const getMessagesByTicketId = async (ticketId: string, page: number, limit: number = 25) => {
-	try {
-		const response: ApiResponse<TableOptions<TicketMessage[]>> = await fetchApi(
-			`/ticket/${ticketId}/messages?` +
-				new URLSearchParams({
-					page: String(page),
-					limit: String(limit)
-				})
-		);
+export const getMessages = async (ticketId: string, page: number, limit: number = 25) => {
+	const response: ApiResponse<TableOptions<TicketMessage[]>> = await fetchApi(
+		`/ticket/${ticketId}/messages?` +
+			new URLSearchParams({
+				page: String(page),
+				limit: String(limit)
+			})
+	);
 
-		if (!response.ok) {
-			const message = response.message;
+	if (!response.ok) {
+		const message = response.message;
 
-			toast.error(message);
-			return null;
-		}
-
-		return response;
-	} catch (err) {
-		void err;
-		toast.error('An error occurred');
-		return null;
+		toast.error(message);
 	}
-};
 
-export const getMessagesByTicketIdTest = async (ticketId: string, options?: TableQueryOption) => {
-	try {
-		const response: ApiResponse<TableOptions<TicketMessage[]>> = await fetchApi(
-			`/ticket/${ticketId}/messages?` +
-				new URLSearchParams({
-					...(options?.page !== undefined && { page: String(options.page) }),
-					...(options?.limit !== undefined && { limit: String(options.limit) }),
-					...(options?.sort !== undefined && { sort: `${options.sort.name}:${options.sort.direction}` }),
-				})
-		);
-
-		if (!response.ok) {
-			const message = response.message;
-
-			toast.error(message);
-			return null;
-		}
-
-		return response;
-	} catch (err) {
-		void err;
-		toast.error('An error occurred');
-		return null;
-	}
+	return response;
 };
 
 export const sendMessage = async (ticketId: string, text: string) => {
@@ -81,22 +47,15 @@ export const sendMessage = async (ticketId: string, text: string) => {
 };
 
 export const getTicketDetails = async (ticketId: string) => {
-	try {
-		const response: ApiResponse<TicketDetails> = await fetchApi(`/ticket/${ticketId}/details`);
+	const response: ApiResponse<TicketDetails> = await fetchApi(`/ticket/${ticketId}/details`);
 
-		if (!response.ok) {
-			const message = response.message;
+	if (!response.ok) {
+		const message = response.message;
 
-			toast.error(message);
-			return null;
-		}
-
-		return response;
-	} catch (err) {
-		void err;
-		toast.error('Error getting ticket details');
-		return null;
+		toast.error(message);
 	}
+
+	return response;
 };
 
 export const closeTicket = async (ticketId: string) => {
@@ -118,7 +77,7 @@ export const closeTicket = async (ticketId: string) => {
 	}
 };
 
-export const wsReadMessagesByTicketId = async (ticketId: string) => {
+export const wsReadMessages = async (ticketId: string) => {
 	const socket = get(_socket);
 
 	try {
