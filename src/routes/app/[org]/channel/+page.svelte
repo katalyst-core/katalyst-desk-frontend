@@ -187,7 +187,7 @@
 </svelte:head>
 
 <div class="flex w-full h-full justify-center px-4 py-8">
-	<div class="flex w-full max-w-[960px] h-full py-4 bg-white border rounded-md shadow-md">
+	<div class="flex w-full max-w-[960px] h-full py-4 bg-background border rounded-md shadow-md">
 		<Tabs.Root value="outbound" class="flex w-full h-full px-4">
 			<SideMenu.List class="w-60">
 				{#if accounts == null}
@@ -212,7 +212,7 @@
 
 				<Dialog.Root bind:open={addChannelDialogOpen}>
 					<Dialog.Trigger
-						class="flex space-x-2 justify-center items-center h-10 rounded-md hover:bg-gray-200 transition-colors"
+						class="flex space-x-2 justify-center items-center h-10 rounded-md hover:bg-sidebar-accent transition-colors"
 					>
 						<Plus class="w-4 h-4" /><span>Add channel</span>
 					</Dialog.Trigger>

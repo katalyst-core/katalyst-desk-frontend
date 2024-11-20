@@ -103,8 +103,7 @@ export async function fetchApi<T>(
 			ok,
 			...data
 		};
-	} catch (err) {
-		void err;
+	} catch {
 		throw new Error('Failed to fetch data');
 	}
 }

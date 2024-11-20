@@ -94,18 +94,13 @@ export const refresh = async () => {
 };
 
 export const getGatewayToken = async () => {
-	const response: ApiResponse<AuthToken> | null = await fetchApi('/auth/gateway', {
+	const response: ApiResponse<AuthToken> = await fetchApi('/auth/gateway', {
 		method: 'POST'
 	});
-
-	if (!response) {
-		return null;
-	}
 
 	if (!response.ok) {
 		const { message } = response;
 		toast.error(message);
-		return response;
 	}
 
 	return response;

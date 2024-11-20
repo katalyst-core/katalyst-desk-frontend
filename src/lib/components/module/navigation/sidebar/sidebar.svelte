@@ -25,11 +25,6 @@
 
 	const bottomNav = [
 		{
-			title: 'Manage Team',
-			icon: Plug,
-			target: '/team'
-		},
-		{
 			title: 'Manage Channels',
 			icon: Plug,
 			target: '/channel'

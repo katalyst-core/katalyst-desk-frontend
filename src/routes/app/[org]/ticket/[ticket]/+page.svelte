@@ -76,7 +76,7 @@
 			return;
 		}
 
-		messages.push(...newMessages);
+		messages?.push(...newMessages);
 	};
 
 	const sendMessage = async (text: string) => {

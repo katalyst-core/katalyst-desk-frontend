@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { format } from 'date-fns';
-	import { createRawSnippet, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 	import { type ColumnDef } from '@tanstack/table-core';
 	import { page } from '$app/stores';
 
-	import { renderComponent, renderSnippet } from '$ui/data-table';
+	import { renderComponent } from '$ui/data-table';
 	import { Separator } from '$ui/separator';
 	import { Button } from '$ui/button';
 	import { DataTable } from '$module/table';
@@ -15,7 +15,7 @@
 	import type { TeamListItem } from '$types/team-type';
 
 	let isLoading: boolean = $state(true);
-	let data: TeamListItem[] | null = $state([]);
+	let data: TeamListItem[] = $state([]);
 
 	let activeOrgId = $derived($page.params.org);
 
@@ -31,7 +31,7 @@
 		isLoading = false;
 	};
 
-	const columns: ColumnDef<any>[] = [
+	const columns: ColumnDef<TeamListItem>[] = [
 		{
 			accessorKey: 'name',
 			header: 'Name'
@@ -56,10 +56,6 @@
 			}
 		}
 	];
-
-	onMount(() => {
-		fetchData();
-	});
 </script>
 
 <h1 class="p-4">Teams</h1>
@@ -68,7 +64,7 @@
 
 <div class="flex flex-col items-end px-4 py-6 space-y-4">
 	<CreateTeamDialog callback={fetchData}>
-		<Button>Add Team</Button>
+		<Button>Create Team</Button>
 	</CreateTeamDialog>
 	<DataTable {columns} {data} onChange={fetchData} {isLoading} />
 </div>

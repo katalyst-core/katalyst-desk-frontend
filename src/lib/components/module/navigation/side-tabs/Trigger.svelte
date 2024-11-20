@@ -16,7 +16,7 @@
 <Tabs.Trigger
 	{value}
 	class={cn(
-		'flex items-center w-full h-10 px-2 rounded-md hover:bg-gray-200 data-[state=active]:bg-gray-200 transition-colors text-nowrap overflow-hidden',
+		'flex items-center w-full h-10 px-2 rounded-md hover:bg-accent data-[state=active]:bg-accent transition-colors text-nowrap overflow-hidden',
 		className
 	)}
 >

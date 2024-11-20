@@ -16,12 +16,15 @@
 	interface Props<T> {
 		columns: ColumnDef<T>[];
 		data: T[];
+
 		pageLimit?: number;
 		itemCount?: number;
-		pagination: boolean;
-		sorting: boolean;
-    isLoading?: boolean;
-		onChange?: (options: TableQueryOption) => void;
+		pagination?: boolean;
+
+		sorting?: boolean;
+		isLoading?: boolean;
+		tableOptions?: TableQueryOption;
+		onChange?: (...args: any[]) => any;
 	}
 
 	let {
@@ -31,7 +34,8 @@
 		itemCount,
 		pagination = false,
 		sorting = false,
-    isLoading = false,
+		isLoading = false,
+		tableOptions = $bindable(),
 		onChange
 	}: Props<T> = $props();
 
@@ -39,9 +43,7 @@
 	let pageIndex: number = $state(1);
 
 	$effect(() => {
-		if (!onChange) return;
-
-		onChange({
+		tableOptions = {
 			...(pageLimit && { limit: pageLimit }),
 			page: pageIndex,
 			...(sortingState.length > 0 && {
@@ -50,7 +52,11 @@
 					direction: sortingState[0].desc ? 'desc' : 'asc'
 				}
 			})
-		});
+		};
+
+		if (!onChange) return;
+
+		onChange();
 	});
 
 	const table = createSvelteTable({

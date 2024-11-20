@@ -6,6 +6,8 @@ import type { CreateOrganizationResponse, OrganizationListItem } from '$types/or
 import type { TicketListItem } from '$types/ticket-type';
 import type { TeamListItem } from '$types/team-type';
 import type { ChannelAccount } from '$types/channel-type';
+import type { AgentListItem } from '$types/agent-type';
+import type { TableQueryOption } from '$types/table-type';
 
 export const getOrganizations = async () => {
 	const response: ApiResponse<OrganizationListItem[]> = await fetchApi('/agent/organizations');
@@ -85,6 +87,108 @@ export const createTeam = async (name: string, orgId: string) => {
 			name
 		})
 	});
+
+	if (!response.ok) {
+		const message = response.message;
+
+		toast.error(message);
+	}
+
+	return response;
+};
+
+export const getAgents = async (orgId: string, tableOptions: TableQueryOption) => {
+	const { page } = tableOptions;
+
+	const response: ApiResponse<TableOptions<AgentListItem[]>> = await fetchApi(
+		`/organization/${orgId}/agents`,
+		{
+			params: {
+				page: String(page || '1')
+			}
+		}
+	);
+
+	if (!response.ok) {
+		const message = response.message;
+
+		toast.error(message);
+	}
+
+	return response;
+};
+
+export const addAgent = async (email: string, orgId: string) => {
+	const response: ApiResponse = await fetchApi(`/organization/${orgId}/agent`, {
+		method: 'POST',
+		body: JSON.stringify({
+			email
+		})
+	});
+
+	return response;
+};
+
+export const removeAgent = async (agentId: string, orgId: string) => {
+	const response: ApiResponse = await fetchApi(`/organization/${orgId}/agent/${agentId}`, {
+		method: 'DELETE'
+	});
+
+	if (!response.ok) {
+		const message = response.message;
+
+		toast.error(message);
+	}
+
+	return response;
+};
+
+export const getUnassignedTeams = async (orgId: string, agentId: string) => {
+	const response: ApiResponse<TeamListItem[]> = await fetchApi(
+		`/organization/${orgId}/agent/${agentId}/unassigned-teams`
+	);
+
+	if (!response.ok) {
+		const message = response.message;
+
+		toast.error(message);
+	}
+
+	return response;
+};
+
+export const assignTeamToAgent = async (orgId: string, agentId: string, teamId: string) => {
+	const response: ApiResponse = await fetchApi(
+		`/organization/${orgId}/assign-team`,
+		{
+			method: 'POST',
+			body: JSON.stringify({
+				team_id: teamId,
+				agent_id: agentId
+			})
+		}
+	);
+
+	if (!response.ok) {
+		const message = response.message;
+
+		toast.error(message);
+	}
+
+	return response;
+};
+
+export const unassignTeamFromAgent = async (orgId: string, agentId: string, teamId: string) => {
+	const response: ApiResponse = await fetchApi(
+		`/organization/${orgId}/unassign-team`,
+		{
+			method: 'POST',
+			body: JSON.stringify({
+				team_id: teamId,
+				agent_id: agentId
+			})
+		}
+	);
 
 	if (!response.ok) {
 		const message = response.message;

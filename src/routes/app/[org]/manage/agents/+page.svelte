@@ -1,5 +1,90 @@
-<div class="flex flex-1 flex-col gap-4 overflow-y-auto p-4 pt-0">
-  {#each Array.from({ length: 10 }) as _, i (i)}
-    <div class="bg-red-400 aspect-video max-w-3xl rounded-xl"></div>
-  {/each}
+<script lang="ts">
+	import { format } from 'date-fns';
+	import { onMount } from 'svelte';
+	import { type ColumnDef } from '@tanstack/table-core';
+	import { page } from '$app/stores';
+
+	import { Separator } from '$ui/separator';
+	import { Button } from '$ui/button';
+	import { DataTable } from '$module/table';
+
+	import { OrganizationAPI } from '$api/index';
+	import { renderComponent } from '$ui/data-table';
+	import TableAction from './table-action.svelte';
+	import AddAgentDialog from './add-agent-dialog.svelte';
+	import TeamsColumn from './teams-column.svelte';
+	import type { AgentListItem } from '$types/agent-type';
+	import type { TableQueryOption } from '$types/table-type';
+
+	let isLoading: boolean = $state(true);
+	let data: AgentListItem[] = $state([]);
+	let itemCount: number = $state(0);
+	let tableOptions: TableQueryOption = $state({});
+
+	let activeOrgId = $derived($page.params.org);
+
+	const fetchData = async () => {
+		isLoading = true;
+
+		const { ok, data: resData } = await OrganizationAPI.getAgents(activeOrgId, tableOptions);
+
+		if (!ok) return;
+
+		data = resData.result;
+		itemCount = resData.pagination.total_item;
+
+		isLoading = false;
+	};
+
+	const columns: ColumnDef<AgentListItem>[] = [
+		{
+			accessorKey: 'name',
+			header: 'Name'
+		},
+		{
+			accessorKey: 'email',
+			header: 'Email'
+		},
+		{
+			accessorKey: 'teams',
+			header: 'Teams',
+			cell: ({ row }) => {
+				return renderComponent(TeamsColumn, {
+					teams: row.original.teams,
+					agentId: row.original.agent_id,
+					callback: fetchData
+				});
+			}
+		},
+		{
+			accessorKey: 'timestamp',
+			header: 'Joined on',
+			size: 100,
+			cell: (row) => {
+				return format(new Date(row.getValue() as string), 'MMM d, yyyy');
+			}
+		},
+		{
+			id: 'actions',
+			enableHiding: false,
+			size: 40,
+			cell: ({ row }) => {
+				return renderComponent(TableAction, {
+					agentId: row.original.agent_id,
+					callback: fetchData
+				});
+			}
+		}
+	];
+</script>
+
+<h1 class="p-4">Agents</h1>
+
+<Separator />
+
+<div class="flex flex-col items-end px-4 py-6 space-y-4">
+	<AddAgentDialog callback={fetchData}>
+		<Button>Add Agent</Button>
+	</AddAgentDialog>
+	<DataTable {columns} {data} onChange={fetchData} {isLoading} {itemCount} pagination />
 </div>

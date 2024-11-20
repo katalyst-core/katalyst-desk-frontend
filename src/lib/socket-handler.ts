@@ -1,6 +1,6 @@
 import { io, Socket } from 'socket.io-client';
 import * as AuthAPI from '$api/auth-api';
-import { socket as socketStore } from '$stores/socket-store';
+import { socket as socketStore, isSockedConnected } from '$stores/socket-store';
 import { PUBLIC_BASE_GATEWAY } from '$env/static/public';
 import { get } from 'svelte/store';
 
@@ -24,12 +24,16 @@ export async function connectSocket() {
 		withCredentials: true
 	});
 
-	socket.on('connect_error', async () => {
-		setTimeout(async () => await reconnectSocket(socket), 5000);
+	socket.on('connect', () => {
+		isSockedConnected.set(true);
+	});
+
+	socket.on('connect_error', () => {
+		reconnectSocket(socket)
 	});
 
 	socket.on('disconnect', () => {
-		reconnectSocket(socket);
+		reconnectSocket(socket)
 	});
 
 	socketStore.set(socket);
@@ -44,22 +48,27 @@ export async function disconnectSocket() {
 }
 
 export async function reconnectSocket(socket: Socket) {
-	console.warn('Reconnecting to websocket server');
+	isSockedConnected.set(false);
 
-	const response = await AuthAPI.getGatewayToken();
+	try {
+		console.warn('Reconnecting to websocket server');
 
-	if (!response || !response.ok) {
+		const response = await AuthAPI.getGatewayToken();
+
+		if (!response.ok) throw new Error();
+
+		console.log('socket connected again');
+
+		const data = response.data;
+		const { auth_token: authToken } = data;
+
+		socket.io.opts.query = {
+			authorization: `Bearer ${authToken}`
+		};
+
+		socket.connect();
+	} catch {
 		console.error('Unable to obtain gateway token');
-		setTimeout(async () => await reconnectSocket(socket), 5000);
-		return;
+		setTimeout(() => reconnectSocket(socket), 10000);
 	}
-
-	const data = response.data;
-	const { auth_token: authToken } = data;
-
-	socket.io.opts.query = {
-		authorization: `Bearer ${authToken}`
-	};
-
-	socket.connect();
 }
