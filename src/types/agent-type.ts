@@ -11,5 +11,9 @@ export type AgentListItem = {
 		team_id: string;
 		name: string;
 	}[];
+	roles: {
+		role_id: string;
+		name: string;
+	}[];
 	timestamp: Date;
 };

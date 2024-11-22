@@ -4,10 +4,11 @@ import { fetchApi } from '$lib/custom-fetch';
 import type { ApiResponse, TableOptions } from '$types/api-type';
 import type { CreateOrganizationResponse, OrganizationListItem } from '$types/organization-type';
 import type { TicketListItem } from '$types/ticket-type';
-import type { TeamListItem } from '$types/team-type';
+import type { TeamListItem, UnassignedTeamItem } from '$types/team-type';
 import type { ChannelAccount } from '$types/channel-type';
 import type { AgentListItem } from '$types/agent-type';
 import type { TableQueryOption } from '$types/table-type';
+import type { UnassignedRoleItem } from '$types/role-type';
 
 export const getOrganizations = async () => {
 	const response: ApiResponse<OrganizationListItem[]> = await fetchApi('/agent/organizations');
@@ -144,7 +145,7 @@ export const removeAgent = async (agentId: string, orgId: string) => {
 };
 
 export const getUnassignedTeams = async (orgId: string, agentId: string) => {
-	const response: ApiResponse<TeamListItem[]> = await fetchApi(
+	const response: ApiResponse<UnassignedTeamItem[]> = await fetchApi(
 		`/organization/${orgId}/agent/${agentId}/unassigned-teams`
 	);
 
@@ -185,6 +186,62 @@ export const unassignTeamFromAgent = async (orgId: string, agentId: string, team
 			method: 'POST',
 			body: JSON.stringify({
 				team_id: teamId,
+				agent_id: agentId
+			})
+		}
+	);
+
+	if (!response.ok) {
+		const message = response.message;
+
+		toast.error(message);
+	}
+
+	return response;
+};
+
+export const getUnassignedRoles = async (orgId: string, agentId: string) => {
+	const response: ApiResponse<UnassignedRoleItem[]> = await fetchApi(
+		`/organization/${orgId}/agent/${agentId}/unassigned-roles`
+	);
+
+	if (!response.ok) {
+		const message = response.message;
+
+		toast.error(message);
+	}
+
+	return response;
+};
+
+export const addRoleToAgent = async (orgId: string, agentId: string, roleId: string) => {
+	const response: ApiResponse = await fetchApi(
+		`/organization/${orgId}/add-role`,
+		{
+			method: 'POST',
+			body: JSON.stringify({
+				role_id: roleId,
+				agent_id: agentId
+			})
+		}
+	);
+
+	if (!response.ok) {
+		const message = response.message;
+
+		toast.error(message);
+	}
+
+	return response;
+};
+
+export const removeRoleFromAgent = async (orgId: string, agentId: string, roleId: string) => {
+	const response: ApiResponse = await fetchApi(
+		`/organization/${orgId}/remove-role`,
+		{
+			method: 'POST',
+			body: JSON.stringify({
+				role_id: roleId,
 				agent_id: agentId
 			})
 		}

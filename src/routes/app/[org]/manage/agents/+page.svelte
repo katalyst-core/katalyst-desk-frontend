@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { format } from 'date-fns';
-	import { onMount } from 'svelte';
 	import { type ColumnDef } from '@tanstack/table-core';
 	import { page } from '$app/stores';
 
@@ -10,11 +9,12 @@
 
 	import { OrganizationAPI } from '$api/index';
 	import { renderComponent } from '$ui/data-table';
+	import type { AgentListItem } from '$types/agent-type';
+	import type { TableQueryOption } from '$types/table-type';
 	import TableAction from './table-action.svelte';
 	import AddAgentDialog from './add-agent-dialog.svelte';
 	import TeamsColumn from './teams-column.svelte';
-	import type { AgentListItem } from '$types/agent-type';
-	import type { TableQueryOption } from '$types/table-type';
+	import RolesColumn from './roles-column.svelte';
 
 	let isLoading: boolean = $state(true);
 	let data: AgentListItem[] = $state([]);
@@ -51,6 +51,17 @@
 			cell: ({ row }) => {
 				return renderComponent(TeamsColumn, {
 					teams: row.original.teams,
+					agentId: row.original.agent_id,
+					callback: fetchData
+				});
+			}
+		},
+		{
+			accessorKey: 'roles',
+			header: 'Roles',
+			cell: ({ row }) => {
+				return renderComponent(RolesColumn, {
+					roles: row.original.roles,
 					agentId: row.original.agent_id,
 					callback: fetchData
 				});

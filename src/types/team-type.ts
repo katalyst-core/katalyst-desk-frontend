@@ -4,3 +4,8 @@ export type TeamListItem = {
   timestamp: string;
   total_agent: string;
 }
+
+export type UnassignedTeamItem = {
+  team_id: string;
+  name: string;
+}
