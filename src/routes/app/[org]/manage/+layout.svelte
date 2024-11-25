@@ -1,11 +1,12 @@
 <script lang="ts">
-	import { SquareUserRound, UsersRound } from 'lucide-svelte';
+	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
+	import { Plug, SquareUserRound, UsersRound } from 'lucide-svelte';
 
 	import * as Sidebar from '$ui/sidebar';
 	import { ScrollArea } from '$ui/scroll-area';
 	import { SideMenu } from '$module/navigation/side-menu';
-	import { onMount } from 'svelte';
-	import { goto } from '$app/navigation';
+
 	import { orgTarget } from '$utils/index';
 
 	const nav = [
@@ -21,7 +22,17 @@
 					title: 'Agents',
 					icon: SquareUserRound,
 					target: '/agents'
-				}
+				},
+			]
+		},
+		{
+			label: 'Organization',
+			items: [
+				{
+					title: 'Channels',
+					icon: Plug,
+					target: '/channels'
+				},
 			]
 		}
 	];
@@ -39,7 +50,7 @@
 	});
 </script>
 
-<Sidebar.Provider class="items-start w-full h-full">
+<Sidebar.Provider class="items-start w-full h-full min-h-full">
 	<SideMenu prefix="/manage" items={nav} />
 	<main class="w-full h-full">
 		<ScrollArea class="w-full h-full">
