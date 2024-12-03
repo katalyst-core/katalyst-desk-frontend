@@ -1,11 +1,9 @@
 <script lang="ts">
-	import { CheckCheck } from 'lucide-svelte';
 	import { differenceInDays, format } from 'date-fns';
 	import { page } from '$app/stores';
 
-	import * as Avatar from '$ui/avatar';
 	import { Skeleton } from '$ui/skeleton';
-	import { getTextInitials, orgTarget } from '$utils/index';
+	import { orgTarget } from '$utils/index';
 	import type { TicketListItem } from '$types/ticket-type';
 	import { InfiniteScroll } from '$module/util';
 	import { ScrollArea } from '$ui/scroll-area';
@@ -65,12 +63,12 @@
 				<li class="w-full">
 					<a
 						href={orgTarget(`/ticket/${ticket.ticket_id}`)}
-						class="w-full h-[4.5rem] items-center px-3 flex text-start space-x-2 rounded-lg cursor-pointer transition-colors border border-border {activeTicketId &&
+						class="w-full py-2 items-center px-3 flex text-start space-x-2 rounded-lg cursor-pointer transition-colors border border-border {activeTicketId &&
 						activeTicketId == ticket.ticket_id
 							? 'bg-accent'
 							: 'hover:bg-accent'}"
 					>
-						<div class="w-full h-full flex flex-col justify-center space-y-1">
+						<div class="w-full h-full flex flex-col justify-center space-y-2">
 							<div class="flex items-center justify-between space-x-2">
 								<h3 class="text-base font-medium line-clamp-1">
 									{ticket.display_name}
@@ -91,6 +89,13 @@
 									<Badge class="bg-orange-500/70 text-foreground">Responded</Badge>
 								{/if}
 							</div>
+							{#if ticket.teams.length > 0}
+								<div class="flex flex-wrap gap-2">
+									{#each ticket.teams as team}
+										<Badge>{team.name}</Badge>
+									{/each}
+								</div>
+							{/if}
 						</div>
 					</a>
 				</li>

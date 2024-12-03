@@ -1,6 +1,8 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
-	import { X } from 'lucide-svelte';
+	import { Clock, X } from 'lucide-svelte';
+	import { differenceInMinutes } from 'date-fns';
 
 	import * as Dialog from '$ui/dialog';
 	import { Skeleton } from '$ui/skeleton';
@@ -12,19 +14,57 @@
 	import { orgTarget } from '$utils/index';
 	import { socket } from '$stores/socket-store';
 	import type { TicketMessage, WsTicketMessage } from '$types/message-type';
-	import type { TicketDetails } from '$types/ticket-type';
+	import type { TicketDetails, WsTicketUpdate } from '$types/ticket-type';
+	import TicketTeams from './ticket-teams.svelte';
 
 	let messages: TicketMessage[] | null = $state(null);
 	let ticketDetails: TicketDetails | null = $state(null);
 	let currentMessagesPage = $state(1);
 	let closeTicketDialogOpen = $state(false);
+	let remainingTime: string | null = $state(null);
+	let remainingTimeInterval: NodeJS.Timeout | undefined = $state();
 
+	let orgId = $derived($page.params.org);
 	let ticketId = $derived($page.params.ticket);
 
 	$effect(() => {
 		getMessages();
 		getTicketDetails();
 	});
+
+	$effect(() => {
+		const expiration = ticketDetails?.expiration;
+		if (!expiration) {
+			remainingTime = null;
+			clearTimeout(remainingTimeInterval);
+			return;
+		}
+
+		console.log(remainingTimeInterval);
+
+		if (remainingTimeInterval) {
+			updateRemainingTime();
+			return;
+		}
+
+		remainingTimeInterval = setInterval(updateRemainingTime, 1000);
+	});
+
+	const updateRemainingTime = () => {
+		const now = new Date(Date.now());
+		const expiration = new Date(ticketDetails?.expiration || 0);
+		const minutes = differenceInMinutes(expiration, now);
+
+		if (minutes <= 0) {
+			remainingTime = '00:00';
+			clearInterval(remainingTimeInterval);
+			return;
+		}
+
+		const hours = Math.floor(minutes / 60);
+		const remainingMinutes = minutes % 60;
+		remainingTime = `${String(hours).padStart(2, '0')}:${String(remainingMinutes).padStart(2, '0')}`;
+	};
 
 	const redirectOut = async () => {
 		return await goto(orgTarget('/ticket') || '/app', {
@@ -109,11 +149,36 @@
 		messages.unshift(newMessage);
 	};
 
+	const wsTicketWindowUpdate = (data: WsTicketUpdate) => {
+		const { ticket_id, message_id, message_status, expiration } = data;
+
+		if (!ticketId || !messages || !ticketDetails || ticketId !== ticket_id) return;
+
+		if (expiration) {
+			ticketDetails.expiration = expiration;
+		}
+
+		if (message_id && message_status) {
+			const message = messages.find((m) => m.message_id === message_id);
+			if (!message) return;
+
+			message.message_status = message_status;
+		}
+	};
+
 	$effect.pre(() => {
 		$socket?.on('ticket-message', wsAddNewMessage);
+		$socket?.on('ticket-update', wsTicketWindowUpdate);
 
 		return () => {
 			$socket?.off('ticket-message', wsAddNewMessage);
+			$socket?.off('ticket-update', wsTicketWindowUpdate);
+		};
+	});
+
+	onMount(() => {
+		return () => {
+			clearInterval(remainingTimeInterval);
 		};
 	});
 </script>
@@ -131,40 +196,52 @@
 				ticket_code: ticketCode,
 				ticket_status: ticketStatus
 			} = ticketDetails}
-			<div>
-				<h3 class="font-medium">{customerName}</h3>
-				<p class="text-gray-400">#{ticketCode}</p>
+			<div class="">
+				<div class="flex space-x-2 items-center">
+					<h3 class="font-medium">{customerName}</h3>
+					<p class="text-gray-400">#{ticketCode}</p>
+				</div>
+				{#if remainingTime}
+					<div class="flex items-center space-x-2">
+						<Clock class="w-4 h-4" />
+						<span>{remainingTime}</span>
+					</div>
+				{/if}
 			</div>
 
-			{#if ticketStatus !== 'close'}
-				<Dialog.Root bind:open={closeTicketDialogOpen}>
-					<Dialog.Trigger>
-						<Button variant="outline" class="hover:text-red-500">
-							<span>Close Ticket</span>
-							<X class="w-5 h-5" />
-						</Button>
-					</Dialog.Trigger>
-					<Dialog.Content class="max-w-[400px]">
-						<Dialog.Header>
-							<Dialog.Title>Confirm Closing Ticket</Dialog.Title>
-							<Dialog.Description
-								>This will close the ticket. The action is irreversible</Dialog.Description
-							>
-						</Dialog.Header>
-						<Dialog.Footer>
-							<Dialog.Close>
-								<Button variant="secondary">Cancel</Button>
-							</Dialog.Close>
-							<Button variant="destructive" click={closeTicket}>Close Ticket</Button>
-						</Dialog.Footer>
-					</Dialog.Content>
-				</Dialog.Root>
-			{:else}
-				<Button variant="outline" class="text-red-500 !opacity-100" disabled>
-					<span>Closed</span>
-					<X class="w-5 h-5" />
-				</Button>
-			{/if}
+			<div>
+				<TicketTeams ticketId={ticketId} orgId={orgId} teams={ticketDetails.teams} />
+
+				{#if ticketStatus !== 'close'}
+					<Dialog.Root bind:open={closeTicketDialogOpen}>
+						<Dialog.Trigger>
+							<Button variant="outline" class="hover:text-red-500">
+								<span>Close Ticket</span>
+								<X class="w-5 h-5" />
+							</Button>
+						</Dialog.Trigger>
+						<Dialog.Content class="max-w-[400px]">
+							<Dialog.Header>
+								<Dialog.Title>Confirm Closing Ticket</Dialog.Title>
+								<Dialog.Description
+									>This will close the ticket. The action is irreversible</Dialog.Description
+								>
+							</Dialog.Header>
+							<Dialog.Footer>
+								<Dialog.Close>
+									<Button variant="secondary">Cancel</Button>
+								</Dialog.Close>
+								<Button variant="destructive" click={closeTicket}>Close Ticket</Button>
+							</Dialog.Footer>
+						</Dialog.Content>
+					</Dialog.Root>
+				{:else}
+					<Button variant="outline" class="text-red-500 !opacity-100" disabled>
+						<span>Closed</span>
+						<X class="w-5 h-5" />
+					</Button>
+				{/if}
+			</div>
 		{/if}
 	</div>
 	<div class="w-full h-0 flex-grow">

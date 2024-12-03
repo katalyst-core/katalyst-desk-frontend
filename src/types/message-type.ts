@@ -1,4 +1,4 @@
-export type MessageStatus = 'sent' | 'received' | 'read';
+export type MessageStatus = 'sent' | 'delivered' | 'read';
 
 export type MessageContent = {
   body: string;
