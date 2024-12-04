@@ -1,11 +1,9 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { format } from 'date-fns';
-	import { SendHorizontal, CheckCheck, X, Check } from 'lucide-svelte';
+	import { CheckCheck, Check, ArrowUp } from 'lucide-svelte';
 
 	import { InfiniteScroll } from '$module/util';
 	import { Skeleton } from '$ui/skeleton';
-	import { Input } from '$ui/input';
 	import { Textarea } from '$ui/textarea';
 	import { ScrollArea } from '$ui/scroll-area';
 
@@ -99,6 +97,17 @@
 	};
 
 	const getRandomNumber = (n: number) => Math.floor(Math.random() * n) + 1;
+
+	const adjustTextareaSize = (event: any) => {
+		const textarea = event.target;
+		textarea.style.height = 'auto';
+		textarea.style.height = `${textarea.scrollHeight}px`;
+	};
+
+	const handleTextareaKeyDown = async (event: any) => {
+		if (event.key !== 'Enter' || event.shiftKey) return;
+		await sendMessageFunction();
+	};
 </script>
 
 <div class="w-full h-full flex flex-col justify-between">
@@ -156,7 +165,7 @@
 									<p class="text-[10px] text-gray-300">{getTimeFormat(timestamp)}</p>
 									{#if messageStatus === 'sent'}
 										<Check class="w-4 h-4 text-gray-400" />
-									{:else if messageStatus === 'received'}
+									{:else if messageStatus === 'delivered'}
 										<CheckCheck class="w-4 h-4 text-gray-400" />
 									{:else if messageStatus === 'read'}
 										<CheckCheck class="w-4 h-4 text-blue-500" />
@@ -182,24 +191,31 @@
 	</ScrollArea>
 
 	<!-- Chat input -->
-	<div class="w-full">
+	<div class="w-full p-4">
 		<form
 			onsubmit={sendMessageFunction}
-			class="w-full py-2 flex items-end px-4 bg-background space-x-2 border-t border-border border-opacity-35"
+			class="w-full py-2 flex items-center px-4 rounded-xl bg-accent space-x-2"
 		>
 			<Textarea
 				bind:value={messageText}
-				class="bg-secondary max-h-36"
+				oninput={adjustTextareaSize}
+				onkeydown={handleTextareaKeyDown}
+				class="bg-transparent border-none shadow-none resize-none overflow-y-auto flex-grow rounded-md p-2 max-h-36"
 				placeholder="Say something"
 				disabled={disableMessageArea}
 			/>
-			<button
-				class="p-3 flex justify-center items-center bg-blue-500 rounded-full transition-all {disableMessageArea
-					? 'brightness-75'
-					: 'hover:brightness-90'}"
-			>
-				<SendHorizontal class="w-4 h-4 text-white" />
-			</button>
+			<div class="flex justify-between items-center">
+				<div class="flex items-center"></div>
+				<div class="flex items-center">
+					<button
+						class="p-2 flex justify-center items-center bg-blue-500 rounded-full transition-all {disableMessageArea
+							? 'brightness-75'
+							: 'hover:brightness-90'}"
+					>
+						<ArrowUp class="w-6 h-6 text-white" />
+					</button>
+				</div>
+			</div>
 		</form>
 	</div>
 </div>

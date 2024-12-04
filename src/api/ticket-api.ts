@@ -1,10 +1,8 @@
 import { toast } from 'svelte-french-toast';
-import { get } from 'svelte/store';
 
 import { fetchApi } from '$lib/custom-fetch';
 import type { ApiResponse, TableOptions } from '$types/api-type';
 import type { TicketMessage } from '$types/message-type';
-import { socket as _socket } from '$stores/socket-store';
 import type { TicketDetails } from '$types/ticket-type';
 
 export const getMessages = async (ticketId: string, page: number, limit: number = 25) => {
@@ -77,14 +75,3 @@ export const closeTicket = async (ticketId: string) => {
 	}
 };
 
-export const wsReadMessages = async (ticketId: string) => {
-	const socket = get(_socket);
-
-	try {
-		socket?.emit('ticket:read-message', { ticket_id: ticketId });
-	} catch (err) {
-		void err;
-		toast.error('An error occurred');
-		return null;
-	}
-};

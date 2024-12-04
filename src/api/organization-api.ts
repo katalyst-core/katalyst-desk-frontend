@@ -51,13 +51,19 @@ export const getChannels = async (orgId: string) => {
 	return response;
 };
 
-export const getTickets = async (orgId: string, page: number, limit: number = 25) => {
+export const getTickets = async (orgId: string, page: number, limit: number = 25, teams: string[]) => {
+	const searchParam = new URLSearchParams({
+		page: String(page),
+		limit: String(limit),
+	});
+
+	teams.forEach((t) => {
+		searchParam.append('filter[]', `team:${t}`);
+	});
+
 	const response: ApiResponse<TableOptions<TicketListItem[]>> = await fetchApi(
 		`/organization/${orgId}/tickets?` +
-			new URLSearchParams({
-				page: String(page),
-				limit: String(limit)
-			})
+			searchParam
 	);
 
 	if (!response.ok) {
@@ -255,3 +261,37 @@ export const removeRoleFromAgent = async (orgId: string, agentId: string, roleId
 
 	return response;
 };
+
+export const addTeamToTicket = async (orgId: string, ticketId: string, teamId: string) => {
+	const response: ApiResponse = await fetchApi(
+		`/organization/${orgId}/add-ticket-team`,
+		{
+			method: 'POST',
+			body: JSON.stringify({
+				ticket_id: ticketId,
+				team_id: teamId
+			})
+		}
+	);
+
+	if (!response.ok) toast.error(response.message);
+
+	return response;
+}
+
+export const removeTeamFromTicket = async (orgId: string, ticketId: string, teamId: string) => {
+	const response: ApiResponse = await fetchApi(
+		`/organization/${orgId}/remove-ticket-team`,
+		{
+			method: 'POST',
+			body: JSON.stringify({
+				ticket_id: ticketId,
+				team_id: teamId
+			})
+		}
+	);
+
+	if (!response.ok) toast.error(response.message);
+
+	return response;
+}
