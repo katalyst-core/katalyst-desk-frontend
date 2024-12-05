@@ -105,3 +105,14 @@ export const getGatewayToken = async () => {
 
 	return response;
 };
+
+export const verifyEmail = async (token: string) => {
+	const response: ApiResponse = await fetchApi('/auth/verify-email', {
+		method: 'POST',
+		body: JSON.stringify({
+			token
+		})
+	});
+
+	return response;
+};
