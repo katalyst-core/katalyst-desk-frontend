@@ -20,3 +20,11 @@ export const signUpSchema = z.object({
 export const addAgentToOrganization = z.object({
 	email: z.string().email('Must be a valid email')
 });
+
+export const forgetPasswordSchema = z.object({
+	email: z.string().email('Must be a valid email')
+});
+
+export const resetPasswordSchema = z.object({
+	newPassword: z.string().min(1, 'Password is required')
+});

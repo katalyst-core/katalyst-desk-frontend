@@ -116,3 +116,26 @@ export const verifyEmail = async (token: string) => {
 
 	return response;
 };
+
+export const requestForgetPassword = async (email: string) => {
+	const response: ApiResponse = await fetchApi('/auth/forget-password', {
+		method: 'POST',
+		body: JSON.stringify({
+			email
+		})
+	});
+
+	return response;
+};
+
+export const resetPassword = async (token: string, newPassword: string) => {
+	const response: ApiResponse = await fetchApi('/auth/reset-password', {
+		method: 'POST',
+		body: JSON.stringify({
+			token,
+			new_password: newPassword
+		})
+	});
+
+	return response;
+};
