@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte';
-	import { Satellite } from 'lucide-svelte';
+	import { Signal, Sun, Moon } from 'lucide-svelte';
+	import { toggleMode } from 'mode-watcher';
 
 	import { Sidebar, SidebarProvider, SidebarTrigger } from '$module/navigation/sidebar';
+	import { Button } from '$ui/button';
 
 	import { OrganizationAPI } from '$api/.';
 	import { connectSocket, disconnectSocket } from '$lib/socket-handler';
@@ -36,7 +38,17 @@
 	<div class="flex flex-col w-full h-full">
 		<div class="w-full h-12 flex justify-between items-center px-2 border-b border-border">
 			<SidebarTrigger />
-			<Satellite class={$isSockedConnected ? 'text-green-500' : 'text-red-500'} />
+			<div class="flex space-x-2 items-center">
+				<Signal class={$isSockedConnected ? 'text-green-500' : 'text-red-500'} />
+				<Button onclick={toggleMode} variant="ghost" size="icon">
+					<Sun
+						class="h-6 w-6 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
+					/>
+					<Moon
+						class="absolute h-6 w-6 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
+					/>
+				</Button>
+			</div>
 		</div>
 		<main class="w-full h-full overflow-auto">
 			{@render children()}

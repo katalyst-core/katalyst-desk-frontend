@@ -2,7 +2,11 @@ import { toast } from 'svelte-french-toast';
 import { fetchApi } from '$lib/custom-fetch';
 
 import type { ApiResponse, TableOptions } from '$types/api-type';
-import type { CreateOrganizationResponse, OrganizationListItem } from '$types/organization-type';
+import type {
+	CreateOrganizationResponse,
+	OrganizationDashboard,
+	OrganizationListItem
+} from '$types/organization-type';
 import type { TicketListItem } from '$types/ticket-type';
 import type { TeamListItem, UnassignedTeamItem } from '$types/team-type';
 import type { ChannelAccount } from '$types/channel-type';
@@ -51,10 +55,15 @@ export const getChannels = async (orgId: string) => {
 	return response;
 };
 
-export const getTickets = async (orgId: string, page: number, limit: number = 25, teams: string[]) => {
+export const getTickets = async (
+	orgId: string,
+	page: number,
+	limit: number = 25,
+	teams: string[]
+) => {
 	const searchParam = new URLSearchParams({
 		page: String(page),
-		limit: String(limit),
+		limit: String(limit)
 	});
 
 	teams.forEach((t) => {
@@ -62,8 +71,7 @@ export const getTickets = async (orgId: string, page: number, limit: number = 25
 	});
 
 	const response: ApiResponse<TableOptions<TicketListItem[]>> = await fetchApi(
-		`/organization/${orgId}/tickets?` +
-			searchParam
+		`/organization/${orgId}/tickets?` + searchParam
 	);
 
 	if (!response.ok) {
@@ -165,16 +173,13 @@ export const getUnassignedTeams = async (orgId: string, agentId: string) => {
 };
 
 export const assignTeamToAgent = async (orgId: string, agentId: string, teamId: string) => {
-	const response: ApiResponse = await fetchApi(
-		`/organization/${orgId}/assign-team`,
-		{
-			method: 'POST',
-			body: JSON.stringify({
-				team_id: teamId,
-				agent_id: agentId
-			})
-		}
-	);
+	const response: ApiResponse = await fetchApi(`/organization/${orgId}/assign-team`, {
+		method: 'POST',
+		body: JSON.stringify({
+			team_id: teamId,
+			agent_id: agentId
+		})
+	});
 
 	if (!response.ok) {
 		const message = response.message;
@@ -186,16 +191,13 @@ export const assignTeamToAgent = async (orgId: string, agentId: string, teamId: 
 };
 
 export const unassignTeamFromAgent = async (orgId: string, agentId: string, teamId: string) => {
-	const response: ApiResponse = await fetchApi(
-		`/organization/${orgId}/unassign-team`,
-		{
-			method: 'POST',
-			body: JSON.stringify({
-				team_id: teamId,
-				agent_id: agentId
-			})
-		}
-	);
+	const response: ApiResponse = await fetchApi(`/organization/${orgId}/unassign-team`, {
+		method: 'POST',
+		body: JSON.stringify({
+			team_id: teamId,
+			agent_id: agentId
+		})
+	});
 
 	if (!response.ok) {
 		const message = response.message;
@@ -221,16 +223,13 @@ export const getUnassignedRoles = async (orgId: string, agentId: string) => {
 };
 
 export const addRoleToAgent = async (orgId: string, agentId: string, roleId: string) => {
-	const response: ApiResponse = await fetchApi(
-		`/organization/${orgId}/add-role`,
-		{
-			method: 'POST',
-			body: JSON.stringify({
-				role_id: roleId,
-				agent_id: agentId
-			})
-		}
-	);
+	const response: ApiResponse = await fetchApi(`/organization/${orgId}/add-role`, {
+		method: 'POST',
+		body: JSON.stringify({
+			role_id: roleId,
+			agent_id: agentId
+		})
+	});
 
 	if (!response.ok) {
 		const message = response.message;
@@ -242,16 +241,13 @@ export const addRoleToAgent = async (orgId: string, agentId: string, roleId: str
 };
 
 export const removeRoleFromAgent = async (orgId: string, agentId: string, roleId: string) => {
-	const response: ApiResponse = await fetchApi(
-		`/organization/${orgId}/remove-role`,
-		{
-			method: 'POST',
-			body: JSON.stringify({
-				role_id: roleId,
-				agent_id: agentId
-			})
-		}
-	);
+	const response: ApiResponse = await fetchApi(`/organization/${orgId}/remove-role`, {
+		method: 'POST',
+		body: JSON.stringify({
+			role_id: roleId,
+			agent_id: agentId
+		})
+	});
 
 	if (!response.ok) {
 		const message = response.message;
@@ -263,35 +259,45 @@ export const removeRoleFromAgent = async (orgId: string, agentId: string, roleId
 };
 
 export const addTeamToTicket = async (orgId: string, ticketId: string, teamId: string) => {
-	const response: ApiResponse = await fetchApi(
-		`/organization/${orgId}/add-ticket-team`,
-		{
-			method: 'POST',
-			body: JSON.stringify({
-				ticket_id: ticketId,
-				team_id: teamId
-			})
-		}
-	);
+	const response: ApiResponse = await fetchApi(`/organization/${orgId}/add-ticket-team`, {
+		method: 'POST',
+		body: JSON.stringify({
+			ticket_id: ticketId,
+			team_id: teamId
+		})
+	});
 
 	if (!response.ok) toast.error(response.message);
 
 	return response;
-}
+};
 
 export const removeTeamFromTicket = async (orgId: string, ticketId: string, teamId: string) => {
-	const response: ApiResponse = await fetchApi(
-		`/organization/${orgId}/remove-ticket-team`,
+	const response: ApiResponse = await fetchApi(`/organization/${orgId}/remove-ticket-team`, {
+		method: 'POST',
+		body: JSON.stringify({
+			ticket_id: ticketId,
+			team_id: teamId
+		})
+	});
+
+	if (!response.ok) toast.error(response.message);
+
+	return response;
+};
+
+export const getDashboardDetails = async (orgId: string, month: number, year: number) => {
+	const response: ApiResponse<OrganizationDashboard> = await fetchApi(
+		`/organization/${orgId}/dashboard`,
 		{
-			method: 'POST',
-			body: JSON.stringify({
-				ticket_id: ticketId,
-				team_id: teamId
-			})
+			params: {
+				month: String(month),
+				year: String(year)
+			}
 		}
 	);
 
 	if (!response.ok) toast.error(response.message);
 
 	return response;
-}
+};
