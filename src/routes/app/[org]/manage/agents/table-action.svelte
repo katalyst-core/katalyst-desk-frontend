@@ -6,6 +6,8 @@
 	import { Button } from '$ui/button';
 
 	import { OrganizationAPI } from '$api/.';
+	import { agentHasPermission } from '$utils/index';
+	import { AGENT_MANAGE } from '$lib/permissions';
 
 	interface Props {
 		agentId: string;
@@ -44,6 +46,6 @@
 		{/snippet}
 	</DropdownMenu.Trigger>
 	<DropdownMenu.Content class="min-w-40">
-		<DropdownMenu.Item onclick={removeAgent} class="text-red-500">Remove</DropdownMenu.Item>
+		<DropdownMenu.Item disabled={!agentHasPermission(AGENT_MANAGE)} onclick={removeAgent} class="text-red-500">Remove</DropdownMenu.Item>
 	</DropdownMenu.Content>
 </DropdownMenu.Root>

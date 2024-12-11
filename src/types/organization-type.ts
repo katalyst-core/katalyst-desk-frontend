@@ -3,6 +3,12 @@ export type OrganizationListItem = {
   name: string;
 }
 
+export type OrganizationInfo = {
+  organization_id: string;
+  name: string;
+  permission: string;
+};
+
 export type OrganizationObject = {
   organization_id: string;
   name: string;

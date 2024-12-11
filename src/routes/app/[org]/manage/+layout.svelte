@@ -1,13 +1,14 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
-	import { Plug, SquareUserRound, UsersRound } from 'lucide-svelte';
+	import { Plug, SquareUserRound, UsersRound, Cog } from 'lucide-svelte';
 
 	import * as Sidebar from '$ui/sidebar';
 	import { ScrollArea } from '$ui/scroll-area';
 	import { SideMenu } from '$module/navigation/side-menu';
 
 	import { orgTarget } from '$utils/index';
+	import { CHANNEL_MANAGE, ORG_MANAGE } from '$lib/permissions';
 
 	const nav = [
 		{
@@ -22,7 +23,7 @@
 					title: 'Agents',
 					icon: SquareUserRound,
 					target: '/agents'
-				},
+				}
 			]
 		},
 		{
@@ -31,8 +32,15 @@
 				{
 					title: 'Channels',
 					icon: Plug,
-					target: '/channels'
+					target: '/channels',
+					permission: CHANNEL_MANAGE
 				},
+				{
+					title: 'Settings',
+					icon: Cog,
+					target: '/settings',
+					permission: ORG_MANAGE
+				}
 			]
 		}
 	];

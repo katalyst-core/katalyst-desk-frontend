@@ -3,6 +3,7 @@
 		title: string;
 		icon: any;
 		target: string;
+		permission?: bigint;
 	}
 
 	interface SidebarGroupItems {

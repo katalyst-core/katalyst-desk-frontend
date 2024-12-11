@@ -13,6 +13,8 @@
 
 	import { OrganizationAPI } from '$api/index';
 	import type { TeamListItem } from '$types/team-type';
+	import { agentHasPermission } from '$utils/index';
+	import { TEAM_MANAGE } from '$lib/permissions';
 
 	let isLoading: boolean = $state(true);
 	let data: TeamListItem[] = $state([]);
@@ -63,8 +65,12 @@
 <Separator />
 
 <div class="flex flex-col items-end px-4 py-6 space-y-4">
-	<CreateTeamDialog callback={fetchData}>
-		<Button>Create Team</Button>
-	</CreateTeamDialog>
+	{#if agentHasPermission(TEAM_MANAGE)}
+		<CreateTeamDialog callback={fetchData}>
+			<Button>Create Team</Button>
+		</CreateTeamDialog>
+	{:else}
+		<Button disabled>Create Team</Button>
+	{/if}
 	<DataTable {columns} {data} onChange={fetchData} {isLoading} />
 </div>

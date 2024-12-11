@@ -5,6 +5,7 @@ import type { ApiResponse, TableOptions } from '$types/api-type';
 import type {
 	CreateOrganizationResponse,
 	OrganizationDashboard,
+	OrganizationInfo,
 	OrganizationListItem
 } from '$types/organization-type';
 import type { TicketListItem } from '$types/ticket-type';
@@ -19,6 +20,16 @@ export const getOrganizations = async () => {
 
 	if (!response.ok) {
 		toast.error('Unable to get organizations');
+	}
+
+	return response;
+};
+
+export const getOrganization = async (orgId: string) => {
+	const response: ApiResponse<OrganizationInfo> = await fetchApi(`/organization/${orgId}/info`);
+
+	if (!response.ok) {
+		toast.error('Unable to get organization data');
 	}
 
 	return response;
@@ -43,6 +54,29 @@ export const createOrganization = async (name: string) => {
 
 	return response;
 };
+
+export const modifyOrganization = async (orgId: string, name: string) => {
+	const response: ApiResponse = await fetchApi(`/organization/${orgId}/modify`, {
+		method: 'POST',
+		body: JSON.stringify({
+			name
+		})
+	});
+
+	if (!response.ok) toast.error(response.message);
+
+	return response;
+};
+
+export const deleteOrganization = async (orgId: string) => {
+	const response: ApiResponse = await fetchApi(`/organization/${orgId}`, {
+		method: 'DELETE',
+	});
+
+	if (!response.ok) toast.error(response.message);
+
+	return response;
+}
 
 export const getChannels = async (orgId: string) => {
 	const response: ApiResponse<ChannelAccount[]> = await fetchApi(`/organization/${orgId}/channels`);

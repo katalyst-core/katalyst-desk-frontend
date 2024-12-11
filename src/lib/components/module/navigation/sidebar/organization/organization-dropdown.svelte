@@ -10,10 +10,10 @@
 
 	import { getTextInitials, textToColor } from '$utils/index';
 	import type { OrganizationObject } from '$types/organization-type';
-	import { availableOrganizations } from '$stores/organization-store';
+	import { availableOrganizations, selectedOrganization } from '$stores/organization-store';
+	import { OrganizationAPI } from '$api/index';
 
 	let organizationList: OrganizationObject[] | null = $state(null);
-	let selectedOrganization: OrganizationObject | null = $state(null);
 	let organizationName = $state('Pick one');
 	let buttonWidth: number = $state(0);
 
@@ -27,20 +27,21 @@
 		const { org: orgId } = $page.params;
 
 		if (!orgId || !organizationList) {
-			selectedOrganization = null;
+			$selectedOrganization = null;
 			return;
 		}
 
-		selectedOrganization = organizationList.find((org) => org.organization_id === orgId) || null;
+		const response = await OrganizationAPI.getOrganization(orgId);
 
-		if (!selectedOrganization) {
+		if (!response.ok) {
 			const newUrl = '/app';
 			window.location.href = newUrl;
 
 			return;
 		}
 
-		organizationName = selectedOrganization.name;
+		$selectedOrganization = response.data;
+		organizationName = response.data.name;
 	};
 
 	$effect(() => {
@@ -52,7 +53,7 @@
 	});
 </script>
 
-<OrganizationMenu {organizationList} {selectedOrganization} disabled={!organizationList}>
+<OrganizationMenu {organizationList} selectedOrganization={$selectedOrganization} disabled={!organizationList}>
 	{#snippet children({ props })}
 		<Sidebar.MenuButton
 			{...props}

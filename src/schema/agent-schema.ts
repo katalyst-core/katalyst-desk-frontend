@@ -28,3 +28,10 @@ export const forgetPasswordSchema = z.object({
 export const resetPasswordSchema = z.object({
 	newPassword: z.string().min(1, 'Password is required')
 });
+
+export const modifyAgentSchema = z.object({
+	name: z
+		.string()
+		.min(1, 'Name must at least be 1 character')
+		.max(100, 'Name must not exceed 100 characters')
+});

@@ -11,6 +11,8 @@
 	import { OrganizationAPI } from '$api/index';
 	import type { OrganizationDashboard } from '$types/organization-type';
 	import { LoadingPage } from '$module/page';
+	import { agentHasPermission } from '$utils/index';
+	import { TEAM_MANAGE, TICKET_DETAIL } from '$lib/permissions';
 
 	const availableMonths = [
 		{
@@ -133,6 +135,8 @@
 
 	onMount(() => {
 		setMonthAndYear();
+		agentHasPermission(TICKET_DETAIL);
+		agentHasPermission(TEAM_MANAGE);
 	});
 </script>
 

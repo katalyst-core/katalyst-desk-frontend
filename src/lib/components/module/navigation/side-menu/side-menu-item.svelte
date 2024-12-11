@@ -5,10 +5,11 @@
 	import * as Sidebar from '$ui/sidebar';
 	import type { SidebarItem } from './side-menu.svelte';
 	import { cn } from '$lib/utils';
+	import { agentHasPermission } from '$utils/index';
 
 	interface Props {
 		label?: string;
-    prefix?: string;
+		prefix?: string;
 		items: SidebarItem[];
 	}
 
@@ -17,21 +18,24 @@
 	let activeOrgId = $derived($page.params.org);
 	let pathName = $derived($page.url.pathname);
 	let orgTarget = $derived(`/app/${activeOrgId}`);
+	let newItems = $derived(
+		items.filter((item) => (item.permission ? agentHasPermission(item.permission) : true))
+	);
 </script>
 
 <Sidebar.Group>
-  {#if label}
+	{#if label && newItems.length > 0}
 		<Sidebar.GroupLabel>{label}</Sidebar.GroupLabel>
 	{/if}
 	<Sidebar.GroupContent>
 		<Sidebar.Menu>
-			{#each items as item (item.title)}
-        {@const target = `${orgTarget}${prefix || ''}${item.target}`}
+			{#each newItems as item (item.title)}
+				{@const target = `${orgTarget}${prefix || ''}${item.target}`}
 				{@const isSelected = pathName.startsWith(target)}
 				<Sidebar.MenuItem>
 					<Sidebar.MenuButton isActive={isSelected}>
 						{#snippet child({ props })}
-						 {@const classValue = props.class as ClassValue}
+							{@const classValue = props.class as ClassValue}
 							<a href={target} {...props} class={cn(classValue, 'h-9 transition-all')}>
 								<item.icon />
 								<span>{item.title}</span>

@@ -4,6 +4,7 @@ import type { ApiResponse } from '$types/api-type';
 import type { AgentInfoResponse } from '$types/agent-type';
 import { agent } from '$stores/agent';
 import { redirect } from '$utils/index';
+import toast from 'svelte-french-toast';
 
 export const fetchAgent = async () => {
 	const response: ApiResponse<AgentInfoResponse> | null = await fetchApi('/agent/info');
@@ -26,4 +27,25 @@ export const fetchAgent = async () => {
 
 	const data = response.data;
 	agent.set(data);
+};
+
+export const getAgentInfo = async () => {
+	const response: ApiResponse<AgentInfoResponse> = await fetchApi('/agent/info');
+
+	if (!response.ok) toast.error(response.message);
+
+	return response;
+};
+
+export const modifyAgent = async (name: string) => {
+	const response: ApiResponse = await fetchApi('/agent/modify', {
+		method: 'POST',
+		body: JSON.stringify({
+			name
+		})
+	});
+
+	if (!response.ok) toast.error(response.message);
+
+	return response;
 };

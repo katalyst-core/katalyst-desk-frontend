@@ -6,6 +6,8 @@
 	import { Combobox, type ComboboxItem } from '$ui/combobox';
 
 	import { OrganizationAPI } from '$api/.';
+	import { TEAM_MANAGE } from '$lib/permissions';
+	import { agentHasPermission } from '$utils/index';
 
 	interface Props {
 		teams: {
@@ -41,7 +43,7 @@
 
 		await OrganizationAPI.assignTeamToAgent(orgId, agentId, teamId);
 
-    callback();
+		callback();
 
 		isLoading = false;
 	};
@@ -51,24 +53,28 @@
 
 		await OrganizationAPI.unassignTeamFromAgent(orgId, agentId, teamId);
 
-    callback();
+		callback();
 
 		isLoading = false;
-	}
+	};
 </script>
 
 <div class="flex flex-wrap gap-1">
 	{#each teams as team (team.team_id)}
 		<Badge class="flex items-center px-2 gap-1"
 			>{team.name}
-			<button onclick={() => deleteClick(team.team_id)} disabled={isLoading}>
-				<X class="w-3 h-3" />
-			</button>
+			{#if agentHasPermission(TEAM_MANAGE)}
+				<button onclick={() => deleteClick(team.team_id)} disabled={isLoading}>
+					<X class="w-3 h-3" />
+				</button>
+			{/if}
 		</Badge>
 	{/each}
-	<Combobox {items} {onSelect} bind:open disabled={isLoading}>
-		<button disabled={isLoading}>
-			<Badge class="p-1"><Plus class="w-3 h-3" /></Badge>
-		</button>
-	</Combobox>
+	{#if agentHasPermission(TEAM_MANAGE)}
+		<Combobox {items} {onSelect} bind:open disabled={isLoading}>
+			<button disabled={isLoading}>
+				<Badge class="p-1"><Plus class="w-3 h-3" /></Badge>
+			</button>
+		</Combobox>
+	{/if}
 </div>

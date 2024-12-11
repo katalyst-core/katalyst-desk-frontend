@@ -15,6 +15,8 @@
 	import AddAgentDialog from './add-agent-dialog.svelte';
 	import TeamsColumn from './teams-column.svelte';
 	import RolesColumn from './roles-column.svelte';
+	import { agentHasPermission } from '$utils/index';
+	import { AGENT_MANAGE } from '$lib/permissions';
 
 	let isLoading: boolean = $state(true);
 	let data: AgentListItem[] = $state([]);
@@ -94,8 +96,12 @@
 <Separator />
 
 <div class="flex flex-col items-end px-4 py-6 space-y-4">
-	<AddAgentDialog callback={fetchData}>
-		<Button>Add Agent</Button>
-	</AddAgentDialog>
+	{#if agentHasPermission(AGENT_MANAGE)}
+		<AddAgentDialog callback={fetchData}>
+			<Button>Add Agent</Button>
+		</AddAgentDialog>
+	{:else}
+		<Button disabled>Add Agent</Button>
+	{/if}
 	<DataTable {columns} {data} onChange={fetchData} {isLoading} {itemCount} pagination />
 </div>

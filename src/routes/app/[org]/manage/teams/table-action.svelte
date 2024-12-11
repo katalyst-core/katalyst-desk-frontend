@@ -4,6 +4,8 @@
 	import * as DropdownMenu from '$ui/dropdown-menu/index.js';
 	import { TeamAPI } from '$api/index';
 	import { Button } from '$ui/button';
+	import { agentHasPermission } from '$utils/index';
+	import { TEAM_MANAGE } from '$lib/permissions';
 
 	interface Props {
 		teamId: string;
@@ -34,6 +36,6 @@
 		{/snippet}
 	</DropdownMenu.Trigger>
 	<DropdownMenu.Content class="min-w-40">
-		<DropdownMenu.Item onclick={deleteTeam} class="text-red-500">Delete</DropdownMenu.Item>
+		<DropdownMenu.Item disabled={!agentHasPermission(TEAM_MANAGE)} onclick={deleteTeam} class="text-red-500">Delete</DropdownMenu.Item>
 	</DropdownMenu.Content>
 </DropdownMenu.Root>
