@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { defaults, setError, superForm } from 'sveltekit-superforms';
 	import { zod, zodClient } from 'sveltekit-superforms/adapters';
-	import { toast } from 'svelte-french-toast';
+	import type { Snippet } from 'svelte';
 
 	import * as Dialog from '$ui/dialog';
 	import { Button } from '$ui/button';
@@ -14,9 +14,10 @@
   interface Props {
     open?: boolean;
     closeable?: boolean;
+		children?: Snippet;
   }
 
-  let { open = $bindable(), closeable = true }: Props = $props();
+  let { open = $bindable(false), closeable = true, children }: Props = $props();
 
 	let isRequestLoading = $state(false);
 
@@ -52,6 +53,11 @@
 </script>
 
 <Dialog.Root bind:open>
+	{#if children}
+	<Dialog.Trigger>
+		{@render children()}
+	</Dialog.Trigger>
+	{/if}
 	<Dialog.Content class="max-w-[425px]" interactOutsideBehavior="ignore">
 		<Dialog.Header>
 			<Dialog.Title>Create new organization</Dialog.Title>

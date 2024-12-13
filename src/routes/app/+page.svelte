@@ -6,6 +6,7 @@
 
 	import { availableOrganizations } from '$stores/organization-store';
 	import { getTextInitials, textToColor } from '$utils/index';
+	import { CreateOrganizationDialog } from '$module/modal';
 
 	let orgs = $derived($availableOrganizations);
 </script>
@@ -13,6 +14,21 @@
 <div class="w-full h-full flex flex-col justify-center items-center space-y-6">
 	{#if orgs && orgs.length === 0}
 		<h1 class="text-center px-8">Create a new organization, or be invited into one to start</h1>
+		<CreateOrganizationDialog>
+			<Button variant="outline" class="w-[400px] h-18 space-x-2">
+				<Avatar.Root class="w-8 h-8">
+					<Avatar.Image src="" alt="" />
+					<Avatar.Fallback
+						class="font-semibold text-gray-700 border-dotted border-gray-500 
+							? 'border-2'
+							: ''}"
+					>
+						<Plus class="w-3 h-3" />
+					</Avatar.Fallback>
+				</Avatar.Root>
+				<span class="text-lg">Create a new organization</span>
+			</Button>
+		</CreateOrganizationDialog>
 	{:else}
 		<h1 class="text-center">Pick an organization to get started</h1>
 		<ul class="flex flex-wrap max-w-[50rem] justify-center gap-2">
