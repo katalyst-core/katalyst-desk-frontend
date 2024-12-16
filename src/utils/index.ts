@@ -76,7 +76,5 @@ export const agentHasPermission = (permission: bigint) => {
 
 	if (org.permission == '-1') return true;
 
-	const permissions = BigInt(org.permission);
-
 	return !!(permissions & permission);
 };

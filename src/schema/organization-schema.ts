@@ -13,3 +13,10 @@ export const modifyOrganizationSchema = z.object({
 		.min(2, 'Name must be at least 2 characters')
 		.max(128, 'Name must not exceed 128 characters')
 });
+
+export const updateWelcomeMessageSchema = z.object({
+	message: z
+		.string()
+		.min(2, 'Welcome message must be at least 2 characters')
+		.max(320, 'Welcome message must not exceed 320 characters')
+});

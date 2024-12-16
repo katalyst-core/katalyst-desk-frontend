@@ -6,7 +6,8 @@ import type {
 	CreateOrganizationResponse,
 	OrganizationDashboard,
 	OrganizationInfo,
-	OrganizationListItem
+	OrganizationListItem,
+	WelcomeMessageResponse
 } from '$types/organization-type';
 import type { TicketListItem } from '$types/ticket-type';
 import type { TeamListItem, UnassignedTeamItem } from '$types/team-type';
@@ -330,6 +331,27 @@ export const getDashboardDetails = async (orgId: string, month: number, year: nu
 			}
 		}
 	);
+
+	if (!response.ok) toast.error(response.message);
+
+	return response;
+};
+
+export const getWelcomeMessage = async (orgId: string) => {
+	const response: ApiResponse<WelcomeMessageResponse> = await fetchApi(`/organization/${orgId}/welcome-message`);
+
+	if (!response.ok) toast.error(response.message);
+
+	return response;
+}
+
+export const updateWelcomeMessage = async (orgId: string, message: string) => {
+	const response: ApiResponse = await fetchApi(`/organization/${orgId}/welcome-message`, {
+		method: 'POST',
+		body: JSON.stringify({
+			message
+		})
+	});
 
 	if (!response.ok) toast.error(response.message);
 

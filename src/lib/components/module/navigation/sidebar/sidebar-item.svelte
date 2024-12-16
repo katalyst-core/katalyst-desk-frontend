@@ -4,11 +4,13 @@
 
 	import * as Sidebar from '$ui/sidebar';
 	import { cn } from '$lib/utils';
+	import { agentHasPermission } from '$utils/index';
 
 	interface SidebarItem {
 		title: string;
 		icon: any;
 		target: string;
+		permission?: bigint;
 	}
 
 	interface Props {
@@ -22,15 +24,18 @@
 	let activeOrgId = $derived($page.params.org);
 	let pathName = $derived($page.url.pathname);
 	let orgTarget = $derived(`/app/${activeOrgId}`);
+	let newItems = $derived(
+		items.filter((item) => (item.permission ? agentHasPermission(item.permission) : true))
+	);
 </script>
 
 <Sidebar.Group class={className}>
-	{#if label}
+	{#if label && newItems.length > 0}
 		<Sidebar.GroupLabel>{label}</Sidebar.GroupLabel>
 	{/if}
 	<Sidebar.GroupContent>
 		<Sidebar.Menu>
-			{#each items as item (item.title)}
+			{#each newItems as item (item.title)}
 				{@const target = `${orgTarget}${item.target}`}
 				{@const isSelected = pathName.startsWith(target)}
 				<Sidebar.MenuItem>

@@ -7,6 +7,7 @@
 	import { Separator } from '$ui/separator';
 	import { OrganizationDropdown } from './organization';
 	import { UserBox } from './user';
+	import { ORG_MANAGE } from '$lib/permissions';
 
 	let activeOrgId = $derived($page.params.org);
 
@@ -20,6 +21,12 @@
 			title: 'Ticket',
 			target: '/ticket',
 			icon: Inbox
+		},
+		{
+			title: 'Welcome Message',
+			target: '/welcome-message',
+			icon: Inbox,
+			permission: ORG_MANAGE
 		}
 	];
 
