@@ -4,14 +4,14 @@ export const createOrganizationSchema = z.object({
 	name: z
 		.string()
 		.min(2, 'Name must be at least 2 characters')
-		.max(128, 'Name must not exceed 128 characters')
+		.max(64, 'Name must not exceed 64 characters')
 });
 
 export const modifyOrganizationSchema = z.object({
 	name: z
 		.string()
 		.min(2, 'Name must be at least 2 characters')
-		.max(128, 'Name must not exceed 128 characters')
+		.max(64, 'Name must not exceed 64 characters')
 });
 
 export const updateWelcomeMessageSchema = z.object({
