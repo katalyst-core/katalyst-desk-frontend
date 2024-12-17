@@ -106,7 +106,6 @@
 
 		if (!ok) return;
 
-		console.log(data);
 		dashboard = data;
 		dashboard.ticket_overview = dashboard.ticket_overview.map((t) => ({
 			Instagram: t.Instagram,
@@ -114,7 +113,7 @@
 			date: new Date(t.date)
 		}));
 
-		let recentDate = dashboard.ticket_overview[0].date || new Date(Date.now());
+		let recentDate = dashboard.ticket_overview[0]?.date || new Date(Date.now());
 		for (let i = 1; i <= 5; i++) {
 			dashboard.ticket_overview.unshift({
 				date: subMonths(recentDate, i),

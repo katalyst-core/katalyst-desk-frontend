@@ -15,7 +15,6 @@
 
 	let organizationList: OrganizationObject[] | null = $state(null);
 	let organizationName = $state('Pick one');
-	let buttonWidth: number = $state(0);
 
 	let initials = $derived(getTextInitials(organizationName));
 	let avatarColor = $derived(textToColor(organizationName));

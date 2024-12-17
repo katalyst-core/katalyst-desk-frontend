@@ -40,8 +40,6 @@
 			return;
 		}
 
-		console.log(remainingTimeInterval);
-
 		if (remainingTimeInterval) {
 			updateRemainingTime();
 			return;

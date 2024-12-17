@@ -5,6 +5,7 @@
 	import * as Sidebar from '$ui/sidebar';
 	import { cn } from '$lib/utils';
 	import { agentHasPermission } from '$utils/index';
+	import { selectedOrganization } from '$stores/organization-store';
 
 	interface SidebarItem {
 		title: string;
@@ -21,12 +22,12 @@
 
 	let { label, items, class: className }: Props = $props();
 
+	let newItems = $state(items);
 	let activeOrgId = $derived($page.params.org);
 	let pathName = $derived($page.url.pathname);
 	let orgTarget = $derived(`/app/${activeOrgId}`);
-	let newItems = $derived(
-		items.filter((item) => (item.permission ? agentHasPermission(item.permission) : true))
-	);
+
+	selectedOrganization.subscribe(() => items.filter((item) => (item.permission ? agentHasPermission(item.permission) : true)))
 </script>
 
 <Sidebar.Group class={className}>
